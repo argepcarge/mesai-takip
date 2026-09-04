@@ -6,12 +6,11 @@
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
 
-<!-- BURAYA EKLENDİ: html2pdf kütüphanesi -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 *{box-sizing:border-box} 
-body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
+body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px}
 .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
 .header-controls{background:#fff;border:1px solid #aaa;border-radius:6px;padding:12px 16px;margin-bottom:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px #0001}
 .header-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
@@ -439,100 +438,6 @@ col.col-4 { width: 22% !important; }
   .alert-box{font-size:12px}
 }
 
-/* DARK MODE RENK AYARLARI */
-@media (prefers-color-scheme: dark) {
-  body{background:#15181c;color:#e7e9ec}
-
-  .header-controls, .quick-bar, .sheet{
-    background:#1f2328;
-    border-color:#33383f;
-    box-shadow:0 2px 8px rgba(0,0,0,.35);
-  }
-  .header-controls label{color:#d7dadd}
-  .header-controls select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
-  .quick-bar span{color:#c7cbd0}
-
-  .tab{background:#262b31;border-color:#3a4048;color:#c7cbd0}
-  .tab.active{background:#1f2328;color:#fff;border-bottom-color:#1f2328}
-
-  .excel-page-border{background:#1f2328;border-color:#3a4048}
-  table#tableSheet1{border-color:#3a4048 !important}
-  table#tableSheet1 td, table#tableSheet1 th{
-    border-color:#3a4048 !important;
-    color:#e7e9ec !important;
-    background:transparent !important;
-  }
-  #tableSheet1 .title, #tableSheet1 .label, #tableSheet1 th{background:#1f2328 !important}
-  #tableSheet1 input{color:#e7e9ec}
-  #tableSheet1 input:focus{background:#2a2f36;outline-color:#8ab4f8}
-  #tableSheet1 input.invalid{
-    background:#3a1616 !important;
-    color:#ffd7d7 !important;
-    outline-color:#ff6b6b !important;
-  }
-
-  .signature-area{color:#e7e9ec}
-
-  .empty-state-note{background:#152437;border-color:#2f5b8f;color:#8ab4f8}
-
-  #tableSheet2, #tableSheet3{background:#1f2328}
-  #tableSheet2 td, #tableSheet2 th, #tableSheet3 td, #tableSheet3 th{
-    border-color:#3a4048;
-    color:#e7e9ec;
-    background:#1f2328;
-  }
-  #tableSheet2 tbody tr:nth-child(even){background:#22262c}
-  #tableSheet2 tr.weekend{background:#2a2417}
-  #tableSheet2 tr.extra-row{background:#20242a}
-  #tableSheet2 .cell-header .day-text{color:#a9adb3}
-  #tableSheet2 select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
-
-  #tableSheet2 tfoot tr{background:#052e16 !important;color:#22C55E !important;border-color:#22C55E !important}
-  #tableSheet2 tfoot td{color:#22C55E !important}
-
-  /* DARK MODE ÜCRET KARTI */
-  .salary-block { background: #1f2328; border-color: #33383f; }
-  .salary-block-title { color: #94a3b8; border-bottom-color: #2d333b; }
-  .salary-label { color: #cbd5e1; }
-  .salary-input-wrapper { background: #262b31; border-color: #3a4048; }
-  .salary-input-wrapper input { color: #f1f5f9; }
-  .salary-input-wrapper.primary-input { background: #1e293b; border-color: #3b82f6; }
-  .salary-input-wrapper.green-bg { background: #052e16; border-color: #166534; }
-  .salary-input-wrapper.green-bg input { color: #4ade80; }
-  .salary-input-wrapper.red-bg { background: #450a0a; border-color: #991b1b; }
-  .salary-input-wrapper.red-bg input { color: #f87171; }
-
-  .note{color:#a9adb3}
-  .alert-box{background:#3a2e07;border-color:#5c4a0d;color:#ffdd6a}
-
-  .btn-secondary{background:#3a4048}
-  .btn-secondary:hover{background:#454c55}
-}
-
-@media (prefers-color-scheme: dark) and (max-width: 700px) {
-  #tableSheet2 td.cell-header{
-    background:#182620 !important;
-    color:#e7e9ec !important;
-    border-bottom-color:#2c4438 !important;
-  }
-  #tableSheet2 td.cell-header .date-text{ color:#e7e9ec; }
-  #tableSheet2 td.cell-header .day-text{ color:#9fb8ab; }
-
-  #tableSheet2 tr.weekend td.cell-header{
-    background:#332705 !important;
-    color:#ffdd6a !important;
-    border-bottom-color:#4d3c08 !important;
-  }
-  #tableSheet2 tr.weekend td.cell-header .day-text{ color:#e0c268; }
-
-  #tableSheet2 tr.extra-row td.cell-header{
-    background:#22262c !important;
-    color:#d6dae0 !important;
-    border-bottom-color:#3a4048 !important;
-  }
-  #tableSheet2 tr.extra-row td.cell-header .day-text{ color:#a9adb3; }
-}
-
 @media print {
   @page {
     size: A4 portrait;
@@ -742,12 +647,10 @@ col.col-4 { width: 22% !important; }
 </div>
 </div>
 
-<!-- YENİLENMİŞ MODERN ÜCRET SAYFASI (SHEET 4) -->
 <div id="sheet4" class="sheet hidden">
   <div class="salary-dashboard">
     
     <div class="salary-grid">
-      <!-- SOL BLOK: BAZ ÜCRET VE SAAT HESAPLARI -->
       <div class="salary-block">
         <div class="salary-block-title">Maaş ve Birim Ücretler</div>
         
@@ -792,7 +695,6 @@ col.col-4 { width: 22% !important; }
         </div>
       </div>
 
-      <!-- SAĞ BLOK: MESAİ VE KESİNTİ HESABI -->
       <div class="salary-block">
         <div class="salary-block-title">Hakediş ve Kesintiler</div>
 
@@ -830,7 +732,6 @@ col.col-4 { width: 22% !important; }
       </div>
     </div>
 
-    <!-- ALT BÖLÜM: DEV TOPLAM KART -->
     <div class="net-pay-card">
       <div class="net-pay-title">TOPLAM HAK EDİLEN NET MAAŞ</div>
       <div class="net-pay-value-wrap">
