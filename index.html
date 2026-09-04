@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
+<!-- jsPDF Kütüphanesi Eklendi -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box} 
@@ -538,7 +539,7 @@ col.col-4 { width: 22% !important; }
 
   @media (max-width: 700px) {
     @page {
-      margin: 1mm 1mm !important;
+      margin: 2mm 3mm !important;
     }
   }
 
@@ -1289,24 +1290,7 @@ function restore(){
   }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
 }
 
-
-
-function exportJSON() {
-  const data = {};
-  for(let i=0; i<localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if(key.startsWith('fazlaMesaiCizelgesi_')) {
-      data[key] = localStorage.getItem(key);
-    }
-  }
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'mesai_yedekleri.json';
-  a.click();
-}
-// ▼ BURAYA EKLEYİN ▼
+// GÜNCELLENMİŞ PDF PAYLAŞIM FONKSİYONU
 async function sharePdf() {
   updateDynamicTitle();
   const { jsPDF } = window.jspdf;
@@ -1354,7 +1338,23 @@ async function sharePdf() {
   link.download = fileName;
   link.click();
 }
-// ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲
+
+function exportJSON() {
+  const data = {};
+  for(let i=0; i<localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if(key.startsWith('fazlaMesaiCizelgesi_')) {
+      data[key] = localStorage.getItem(key);
+    }
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'mesai_yedekleri.json';
+  a.click();
+}
+
 function importJSON(event) {
   const file = event.target.files[0];
   if(!file) return;
