@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
-<!-- SheetJS (Excel) Kütüphanesi Eklendi -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box} 
 body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
@@ -648,8 +646,7 @@ col.col-4 { width: 22% !important; }
     <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Yedek Yükle</button>
     <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
     <button class="btn" onclick="printPDF()">İK Çıktısı Al (A4)</button>
-    <!-- PDF Paylaş yerine Excel İndir butonu eklendi -->
-    <button class="btn btn-secondary" onclick="exportExcel()">Excel İndir (.xlsx)</button>
+    <button class="btn btn-secondary" onclick="sharePdf()">PDF Paylaş</button>
   </div>
 </div>
 
@@ -1291,19 +1288,17 @@ function restore(){
   }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
 }
 
-// EXCEL DIŞARI AKTARMA FONKSİYONU
-function exportExcel() {
+function sharePdf() {
   updateDynamicTitle();
-  const table = document.getElementById('tableSheet1');
-  if (!table) return;
-
-  const wb = XLSX.utils.table_to_book(table, { sheet: "Mesai Çizelgesi" });
-  const name = (document.getElementById('name')?.value || 'Mesai_Raporu').trim();
-  const monthIdx = parseInt(document.getElementById('selectMonth').value);
-  const yearVal = document.getElementById('selectYear').value;
-  const fileName = `${name}_${monthNames[monthIdx]}_${yearVal}_FazlaMesai.xlsx`.replace(/\s+/g, '_');
-
-  XLSX.writeFile(wb, fileName);
+  if (navigator.share) {
+    const name = (document.getElementById('name')?.value || '').trim();
+    const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
+    navigator.share({
+      title: document.title,
+      text: name ? `${monthLabel} - ${name}` : monthLabel
+    }).catch(()=>{});
+  }
+  window.print();
 }
 
 function exportJSON() {
