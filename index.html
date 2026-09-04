@@ -530,22 +530,22 @@ col.col-4 { width: 22% !important; }
 }
 
 @media print {
-    zoom: 0.88;
-    -webkit-transform: scale(0.88);
-    transform: scale(0.88);
-    transform-origin: top left;
-  
+  zoom: 0.88;
+  -webkit-transform: scale(0.88);
+  transform: scale(0.88);
+  transform-origin: top left;
+
   @page {
     size: A4 portrait;
     margin: 6mm 8mm !important;
   }
-   }
+}
 
-  @media (max-width: 700px) {
-    @page {
-      margin: 2mm 3mm !important;
-    }
+@media print and (max-width: 700px) {
+  @page {
+    margin: 2mm 3mm !important;
   }
+}
 
   html, body {
     width: 100% !important;
