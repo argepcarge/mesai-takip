@@ -868,6 +868,35 @@ col.col-4 { width: 22% !important; }
 
 <div id="saveToast" class="save-toast">Kaydedildi ✓</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* Mobil PDF paylaşımı için, mevcut ekran/hesaplama sistemine dokunmadan A4 dışa aktarma alanı */
+.pdf-export-clone{
+  position:fixed !important; left:-100000px !important; top:0 !important;
+  width:794px !important; max-width:none !important;
+  background:#fff !important; color:#000 !important;
+  padding:0 !important; margin:0 !important; z-index:-1 !important;
+}
+.pdf-export-clone #sheet1{
+  display:block !important; padding:0 !important; border:none !important;
+  box-shadow:none !important; width:794px !important; background:#fff !important;
+}
+.pdf-export-clone .excel-page-border{
+  border:none !important; padding:6px !important; margin:0 !important;
+  min-height:0 !important; display:block !important;
+}
+.pdf-export-clone table#tableSheet1{width:100% !important; border:1.5px solid #000 !important; border-collapse:collapse !important;}
+.pdf-export-clone table#tableSheet1 td,.pdf-export-clone table#tableSheet1 th{
+  border:1px solid #000 !important; padding:0 2px !important;
+  height:25px !important; font-size:10pt !important; font-weight:bold !important;
+  line-height:1 !important; color:#000 !important; background:#fff !important;
+}
+.pdf-export-clone #tableSheet1 .title{font-size:11pt !important;height:7mm !important;font-family:Arial,sans-serif !important;}
+.pdf-export-clone #tableSheet1 input#name{font-size:10pt !important;color:#000 !important;background:#fff !important;}
+.pdf-export-clone .signature-area{margin-top:6px !important;margin-bottom:4px !important;font-size:10pt !important;line-height:1.2 !important;}
+.pdf-export-clone .signature-area .supervisor-display{font-size:10pt !important;color:#000 !important;}
+</style>
 <script>
 const monthNames = ["OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS", "EYLÜL", "EKİM", "KASIM", "ARALIK"];
 const weekDaysFullTR = ['PAZAR', 'PAZARTESİ', 'SALI', 'ÇARŞAMBA', 'PERŞEMBE', 'CUMA', 'CUMARTESİ'];
@@ -1315,17 +1344,127 @@ function restore(){
   }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
 }
 
-function sharePdf() {
+async function sharePdf() {
   updateDynamicTitle();
-  if (navigator.share) {
-    const name = (document.getElementById('name')?.value || '').trim();
-    const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
-    navigator.share({
+
+  const btn = Array.from(document.querySelectorAll('button')).find(b => b.textContent.trim() === 'PDF Paylaş');
+  const originalText = btn?.textContent;
+  if (btn) { btn.disabled = true; btn.textContent = 'PDF hazırlanıyor...'; }
+
+  let clone;
+  try {
+    if (!window.html2canvas || !window.jspdf?.jsPDF) {
+      throw new Error('PDF kütüphaneleri yüklenemedi.');
+    }
+
+    const source = document.getElementById('sheet1');
+    if (!source) throw new Error('Çizelge alanı bulunamadı.');
+
+    // Mevcut sayfanın kopyasını oluşturuyoruz; böylece çalışan ekran düzeni değişmez.
+    clone = source.cloneNode(true);
+    clone.classList.add('pdf-export-clone');
+    clone.removeAttribute('id');
+
+    // Kopyadaki input/select değerlerini görünür metne dönüştürmek, özellikle iPhone Safari'de
+    // PDF görüntüsünün boş çıkmasını engeller.
+    const originalFields = source.querySelectorAll('input, select, textarea');
+    const clonedFields = clone.querySelectorAll('input, select, textarea');
+    clonedFields.forEach((field, i) => {
+      const original = originalFields[i];
+      if (!original) return;
+      const value = original.value || '';
+      const span = document.createElement('span');
+      span.textContent = value;
+      span.style.cssText = 'display:block; width:100%; min-height:20px; line-height:20px; font:inherit; color:#000; background:#fff; white-space:pre-wrap;';
+      field.replaceWith(span);
+    });
+
+    document.body.appendChild(clone);
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const canvas = await html2canvas(clone, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      width: 794,
+      windowWidth: 794
+    });
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const marginX = 8;
+    const marginY = 6;
+    const usableWidth = pageWidth - marginX * 2;
+    const imageHeight = canvas.height * usableWidth / canvas.width;
+    const usableHeight = pageHeight - marginY * 2;
+
+    let y = marginY;
+    if (imageHeight <= usableHeight) {
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', marginX, y, usableWidth, imageHeight, undefined, 'FAST');
+    } else {
+      // Uzun çizelgelerde sayfa taşmasını önlemek için otomatik A4 sayfalama.
+      const pageCanvasHeight = Math.floor(canvas.width * usableHeight / usableWidth);
+      let offset = 0;
+      let pageNo = 0;
+      while (offset < canvas.height) {
+        const sliceHeight = Math.min(pageCanvasHeight, canvas.height - offset);
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.width = canvas.width;
+        pageCanvas.height = sliceHeight;
+        const ctx = pageCanvas.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+        ctx.drawImage(canvas, 0, offset, canvas.width, sliceHeight, 0, 0, canvas.width, sliceHeight);
+        if (pageNo > 0) pdf.addPage();
+        const h = sliceHeight * usableWidth / canvas.width;
+        pdf.addImage(pageCanvas.toDataURL('image/jpeg', 0.95), 'JPEG', marginX, marginY, usableWidth, h, undefined, 'FAST');
+        offset += sliceHeight;
+        pageNo++;
+      }
+    }
+
+    const pdfBlob = pdf.output('blob');
+    const safeName = ((document.getElementById('name')?.value || '').trim() || 'Fazla_Mesai_Cizelgesi')
+      .replace(/[\\/:*?"<>|]+/g, '_');
+    const fileName = `${safeName}.pdf`;
+    const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+    const shareData = {
       title: document.title,
-      text: name ? `${monthLabel} - ${name}` : monthLabel
-    }).catch(()=>{});
+      text: 'Fazla Mesai Çizelgesi',
+      files: [pdfFile]
+    };
+
+    // Android/iPhone: gerçek PDF dosyasını paylaşım menüsüne gönder.
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+      await navigator.share(shareData);
+      return;
+    }
+
+    // Dosya paylaşımı desteklenmiyorsa PDF'yi indir; kullanıcı buradan WhatsApp/e-posta vb.
+    // uygulamalara ekleyebilir.
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+
+    alert('Bu tarayıcı doğrudan PDF paylaşımını desteklemiyor. PDF indirildi; indirilen dosyayı WhatsApp, e-posta vb. ile paylaşabilirsiniz.');
+  } catch (err) {
+    if (err?.name !== 'AbortError') {
+      console.error('PDF paylaşma hatası:', err);
+      alert('PDF hazırlanırken bir hata oluştu. İnternet bağlantınızı kontrol edip tekrar deneyin.');
+    }
+  } finally {
+    if (clone) clone.remove();
+    if (btn) { btn.disabled = false; btn.textContent = originalText || 'PDF Paylaş'; }
   }
-  window.print();
 }
 
 function exportJSON() {
