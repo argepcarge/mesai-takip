@@ -1,0 +1,1382 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{box-sizing:border-box} 
+body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
+.wrap{max-width:1100px;margin:24px auto;padding:0 16px}
+.header-controls{background:#fff;border:1px solid #aaa;border-radius:6px;padding:12px 16px;margin-bottom:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px #0001}
+.header-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+
+/* SAYISAL INPUTLARDAKİ OKLARI GİZLEME */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* YENİ MODERN ÜCRET KARTI TASARIMI */
+.salary-dashboard {
+  max-width: 750px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.salary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .salary-grid { grid-template-columns: 1fr; }
+}
+
+.salary-block {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.salary-block-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 6px;
+}
+
+.salary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.salary-row:last-child { margin-bottom: 0; }
+
+.salary-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.salary-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 4px 8px;
+  width: 140px;
+}
+
+.salary-input-wrapper.primary-input {
+  background: #eff6ff;
+  border: 2px solid #3b82f6;
+}
+
+.salary-input-wrapper input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+  color: #0f172a;
+  outline: none;
+}
+
+.salary-unit {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  margin-left: 4px;
+}
+
+/* KAZANÇ VE KESİNTİ VURGULARI */
+.salary-input-wrapper.green-bg { background: #f0fdf4; border-color: #86efac; }
+.salary-input-wrapper.green-bg input { color: #22C55E; font-weight: 800; }
+
+.salary-input-wrapper.red-bg { background: #fef2f2; border-color: #fca5a5; }
+.salary-input-wrapper.red-bg input { color: #dc2626; font-weight: 800; }
+
+/* EN ALT ÖZET KARTI */
+.net-pay-card {
+  background: linear-gradient(135deg, #22C55E, #15803d);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+.net-pay-title { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; }
+.net-pay-value-wrap { display: flex; align-items: center; gap: 4px; }
+.net-pay-card input {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 900;
+  text-align: right;
+  width: 180px;
+  outline: none;
+}
+
+.header-controls label{font-weight:700;font-size:14px;color:#333}
+.header-controls select{padding:6px 10px;border:1px solid #ccc;border-radius:4px;background:#fff;font-size:14px;cursor:pointer}
+.btn{background:#0066cc;color:#fff;border:0;padding:7px 12px;border-radius:4px;cursor:pointer;font-size:13px;font-weight:700;transition:background .15s ease, box-shadow .15s ease}
+.btn:hover{background:#0052a3}
+.btn-secondary{background:#6c757d}
+.btn-secondary:hover{background:#5a6268}
+.quick-bar{background:#fff;border:1px solid #aaa;border-radius:6px;padding:8px 16px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.quick-bar span{font-size:13px;font-weight:700;color:#3d3d3d}
+
+.quick-bar .btn.armed{
+  background:#0066cc;
+  color:#fff;
+  box-shadow:0 0 0 3px rgba(0,102,204,.25);
+}
+.quick-bar .btn.armed::after{
+  content:" ✓";
+  font-weight:800;
+}
+
+.tabs{display:flex;gap:6px;margin-bottom:0}
+.tab{border:1px solid #aaa;background:#ddd;padding:9px 16px;border-radius:6px 6px 0 0;cursor:pointer;font-weight:700;transition:background .15s ease}
+.tab.active{background:#fff;border-bottom-color:#fff}
+.sheet{background:#fff;border:1px solid #aaa;border-radius:0 6px 6px 6px;padding:24px;box-shadow:0 2px 8px #0001;overflow-x:hidden !important}
+
+.excel-page-border {
+  border: 1px solid #000;
+  padding: 24px 20px;
+  background: #fff;
+}
+
+table#tableSheet1 {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+  border: 2px solid #000 !important;
+}
+
+table#tableSheet1 td, table#tableSheet1 th {
+  border: 1.5px solid #000 !important;
+  padding: 1px 4px !important;
+  height: 23px;
+  vertical-align: middle;
+  text-align: center !important;
+  font-weight: bold !important;
+  color: #000 !important;
+}
+
+#tableSheet1 .title {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  height: 30px !important;
+  background: #fff !important;
+  letter-spacing: 0.5px;
+}
+
+#tableSheet1 .label {
+  font-weight: 800 !important;
+  background: #fff !important;
+  text-align: center !important;
+  font-size: 13px !important;
+}
+
+#tableSheet1 th {
+  text-align: center !important;
+  font-size: 12px !important;
+  background: #fff !important;
+}
+
+#tableSheet1 input {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0 4px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
+  text-align: center !important;
+  box-sizing: border-box;
+}
+
+#tableSheet1 input:focus {
+  outline: 1px solid #000;
+  background: #f0f0f0;
+}
+
+#tableSheet1 input.invalid {
+  outline: 2px solid #d9534f !important;
+  background: #fdecea !important;
+}
+
+.signature-area {
+  margin-top: 18px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.signature-area .supervisor-display {
+  min-height: 18px;
+  font-weight: bold;
+}
+
+.empty-state-note {
+  display: none;
+  background: #eef6ff;
+  border: 1px dashed #99c2ea;
+  color: #0b4b8f;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+#tableSheet2 td, #tableSheet2 th {
+  font-weight: bold !important;
+  text-align: center !important;
+}
+#tableSheet2 th {
+  text-align: center !important;
+}
+#tableSheet2 th:first-child,
+#tableSheet2 td:first-child {
+  text-align: left !important;
+}
+#tableSheet2 td.cell-header {
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+#tableSheet2 th:last-child,
+#tableSheet2 td:last-child {
+  text-align: right !important;
+}
+#tableSheet2 select {
+  direction: ltr;
+}
+
+#tableSheet2 .cell-header {
+  font-weight: normal !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+#tableSheet2 .cell-header .date-text {
+  font-weight: bold;
+  font-size: 13px;
+}
+#tableSheet2 .cell-header .day-text {
+  font-size: 11px;
+  color: #3d3d3d;
+  font-weight: normal;
+}
+
+#tableSheet2 tfoot tr {
+  background: #f0fdf4 !important;
+  color: #22C55E !important;
+  border: 1.5px solid #22C55E !important;
+}
+#tableSheet2 tfoot td {
+  color: #22C55E !important;
+  display: table-cell !important;
+  font-weight: bold !important;
+  font-size: 13px !important;
+  text-align: center !important;
+}
+#tableSheet2 tfoot td:first-child {
+  text-align: right !important;
+}
+#tableSheet2 tfoot td:last-child {
+  text-align: right !important;
+}
+
+@media (min-width: 701px) {
+  #tableSheet2 tfoot {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+  }
+  #tableSheet2 tfoot tr {
+    box-shadow: 0 -3px 8px rgba(0,0,0,.10);
+  }
+}
+
+#tableSheet2, #tableSheet3 { border-collapse: collapse; width: 100%; }
+#tableSheet2 { table-layout: fixed; }
+#tableSheet2 td, #tableSheet2 th, #tableSheet3 td, #tableSheet3 th { border: 1px solid #777; padding: 5px; }
+#tableSheet2 td, #tableSheet2 th { overflow: hidden; text-overflow: ellipsis; }
+#tableSheet2 select { max-width: 100%; }
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#tableSheet2 { min-width: 640px; }
+
+.center{text-align:center !important} 
+.right{text-align:right !important}
+.note{font-size:12px;color:#4a4a4a;margin:10px 0}
+.hidden{display:none}
+.hidden-row { display: none !important; }
+.alert-box{background:#fff3cd;border:1px solid #ffeeba;color:#856404;padding:8px 12px;border-radius:4px;margin-bottom:12px;font-size:13px;font-weight:700;display:none}
+
+.save-toast{
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  background: #22C55E;
+  color: #fff;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 999;
+}
+.save-toast.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+col.col-1 { width: 22.5% !important; }
+col.col-2 { width: 37.5% !important; }
+col.col-3 { width: 18% !important; }
+col.col-4 { width: 22% !important; }
+
+@media (max-width: 700px) {
+  body{font-size:12px}
+  .wrap{margin:10px auto;padding:0 8px}
+
+  .header-controls{padding:10px;gap:10px;flex-direction:column;align-items:stretch}
+  .header-controls > div:not(.header-actions){width:100%}
+  .header-controls select{width:100%;font-size:16px;padding:10px}
+  .header-actions{margin-left:0;width:100%;flex-direction:column}
+  .header-actions .btn{width:100%;padding:12px;font-size:14px}
+
+  .quick-bar{flex-direction:column;align-items:stretch;padding:10px}
+  .quick-bar .btn{width:100%;padding:10px !important;font-size:13px !important}
+  #tplHint{text-align:center}
+
+  .tabs{flex-wrap:nowrap}
+  .tab{flex:1 1 0;text-align:center;padding:10px 6px;font-size:12px}
+
+  .sheet{padding:12px}
+  .excel-page-border{padding:14px 8px}
+
+  table#tableSheet1 td, table#tableSheet1 th{padding:1px 2px !important;font-size:10px !important;height:26px}
+  #tableSheet1 .title{font-size:11px !important;height:32px !important}
+  #tableSheet1 th{font-size:9.5px !important}
+  #tableSheet1 input{font-size:12px}
+  #tableSheet1 .label{font-size:11px !important}
+
+  .signature-area{font-size:10.5px}
+
+  #tableSheet3 td, #tableSheet3 th{padding:6px;font-size:12px}
+
+  .save-toast{left:12px;right:12px;bottom:12px;text-align:center}
+
+  .table-scroll{overflow-x:visible}
+  #tableSheet2{min-width:0;border:none;border-spacing:0 0}
+  #tableSheet2 thead{display:none}
+  #tableSheet2, #tableSheet2 tbody, #tableSheet2 tfoot, #tableSheet2 tr{display:block;width:100%}
+  #tableSheet2 tr{border:1.5px solid #ccc;border-right:4px solid #22C55E;border-radius:8px;margin-bottom:14px;padding:0;background:#fff;box-shadow:0 2px 6px #0002;overflow:hidden}
+  #tableSheet2 tr.hidden-row { display: none !important; }
+  #tableSheet2 tbody tr:nth-child(even):not(.weekend){background:#f7f9fb}
+  #tableSheet2 tr.weekend{border-right:4px solid #e0a020}
+  #tableSheet2 tr.extra-row{border-right:4px solid #6c757d}
+  #tableSheet2 tfoot{position:static}
+  #tableSheet2 tfoot tr{background:#f0fdf4 !important;border:1.5px solid #22C55E;border-right:4px solid #22C55E;color:#22C55E !important;display:block !important;box-shadow:none}
+  #tableSheet2 tfoot td{display:flex !important;justify-content:space-between !important;align-items:center !important;text-align:right !important;font-weight:bold !important;}
+  #tableSheet2 td{display:flex;justify-content:space-between;align-items:center;gap:8px;border:none;border-bottom:1px solid #eee;padding:7px 10px;font-size:13px;text-align:right;font-weight:bold !important}
+  #tableSheet2 tr td:last-child{border-bottom:none}
+  #tableSheet2 td::before{content:attr(data-label);font-weight:700;color:#555;font-size:11px;text-align:left;white-space:nowrap}
+  #tableSheet2 td[data-label=""]::before{content:none}
+  
+  #tableSheet2 td[data-label="ÜCRET"] {
+    font-weight: 800 !important;
+    font-size: 14px !important;
+  }
+
+  #tableSheet2 td.mobile-hide{display:none}
+  #tableSheet2 .weekday-tag{display:inline-block;margin-left:8px;font-size:11px;font-weight:700;color:#0066cc;background:#dceeff;padding:2px 7px;border-radius:10px;vertical-align:middle}
+  #tableSheet2 tr.weekend .weekday-tag{color:#8a6100;background:#ffe6a6}
+  #tableSheet2 select{font-size:14px;width:auto;text-align:right;font-weight:bold !important}
+
+  .note{font-size:11px}
+  .alert-box{font-size:12px}
+}
+
+/* DARK MODE RENK AYARLARI */
+@media (prefers-color-scheme: dark) {
+  body{background:#15181c;color:#e7e9ec}
+
+  .header-controls, .quick-bar, .sheet{
+    background:#1f2328;
+    border-color:#33383f;
+    box-shadow:0 2px 8px rgba(0,0,0,.35);
+  }
+  .header-controls label{color:#d7dadd}
+  .header-controls select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
+  .quick-bar span{color:#c7cbd0}
+
+  .tab{background:#262b31;border-color:#3a4048;color:#c7cbd0}
+  .tab.active{background:#1f2328;color:#fff;border-bottom-color:#1f2328}
+
+  .excel-page-border{background:#1f2328;border-color:#3a4048}
+  table#tableSheet1{border-color:#3a4048 !important}
+  table#tableSheet1 td, table#tableSheet1 th{
+    border-color:#3a4048 !important;
+    color:#e7e9ec !important;
+    background:transparent !important;
+  }
+  #tableSheet1 .title, #tableSheet1 .label, #tableSheet1 th{background:#1f2328 !important}
+  #tableSheet1 input{color:#e7e9ec}
+  #tableSheet1 input:focus{background:#2a2f36;outline-color:#8ab4f8}
+  #tableSheet1 input.invalid{
+    background:#3a1616 !important;
+    color:#ffd7d7 !important;
+    outline-color:#ff6b6b !important;
+  }
+
+  .signature-area{color:#e7e9ec}
+
+  .empty-state-note{background:#152437;border-color:#2f5b8f;color:#8ab4f8}
+
+  #tableSheet2, #tableSheet3{background:#1f2328}
+  #tableSheet2 td, #tableSheet2 th, #tableSheet3 td, #tableSheet3 th{
+    border-color:#3a4048;
+    color:#e7e9ec;
+    background:#1f2328;
+  }
+  #tableSheet2 tbody tr:nth-child(even){background:#22262c}
+  #tableSheet2 tr.weekend{background:#2a2417}
+  #tableSheet2 tr.extra-row{background:#20242a}
+  #tableSheet2 .cell-header .day-text{color:#a9adb3}
+  #tableSheet2 select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
+
+  #tableSheet2 tfoot tr{background:#052e16 !important;color:#22C55E !important;border-color:#22C55E !important}
+  #tableSheet2 tfoot td{color:#22C55E !important}
+
+  /* DARK MODE ÜCRET KARTI */
+  .salary-block { background: #1f2328; border-color: #33383f; }
+  .salary-block-title { color: #94a3b8; border-bottom-color: #2d333b; }
+  .salary-label { color: #cbd5e1; }
+  .salary-input-wrapper { background: #262b31; border-color: #3a4048; }
+  .salary-input-wrapper input { color: #f1f5f9; }
+  .salary-input-wrapper.primary-input { background: #1e293b; border-color: #3b82f6; }
+  .salary-input-wrapper.green-bg { background: #052e16; border-color: #166534; }
+  .salary-input-wrapper.green-bg input { color: #4ade80; }
+  .salary-input-wrapper.red-bg { background: #450a0a; border-color: #991b1b; }
+  .salary-input-wrapper.red-bg input { color: #f87171; }
+
+  .note{color:#a9adb3}
+  .alert-box{background:#3a2e07;border-color:#5c4a0d;color:#ffdd6a}
+
+  .btn-secondary{background:#3a4048}
+  .btn-secondary:hover{background:#454c55}
+}
+
+@media (prefers-color-scheme: dark) and (max-width: 700px) {
+  #tableSheet2 td.cell-header{
+    background:#182620 !important;
+    color:#e7e9ec !important;
+    border-bottom-color:#2c4438 !important;
+  }
+  #tableSheet2 td.cell-header .date-text{ color:#e7e9ec; }
+  #tableSheet2 td.cell-header .day-text{ color:#9fb8ab; }
+
+  #tableSheet2 tr.weekend td.cell-header{
+    background:#332705 !important;
+    color:#ffdd6a !important;
+    border-bottom-color:#4d3c08 !important;
+  }
+  #tableSheet2 tr.weekend td.cell-header .day-text{ color:#e0c268; }
+
+  #tableSheet2 tr.extra-row td.cell-header{
+    background:#22262c !important;
+    color:#d6dae0 !important;
+    border-bottom-color:#3a4048 !important;
+  }
+  #tableSheet2 tr.extra-row td.cell-header .day-text{ color:#a9adb3; }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 6mm 8mm !important;
+  }
+
+  @media (max-width: 700px) {
+    @page {
+      margin: 2mm 3mm !important;
+    }
+  }
+
+  html, body {
+    width: 100% !important;
+    height: 100% !important;
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .header-controls, .quick-bar, .tabs, .btn, .alert-box, .note, .save-toast, .empty-state-note, #sheet2, #sheet3, #sheet4 {
+    display: none !important;
+  }
+
+  #sheet1 {
+    display: block !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .excel-page-border {
+    border: none !important;
+    padding: 6px 6px 10px 6px !important;
+    box-sizing: border-box !important;
+    min-height: 0 !important;
+    display: block !important;
+  }
+
+  table#tableSheet1 {
+    width: 100% !important;
+    border: 1.5px solid #000 !important;
+  }
+
+  table#tableSheet1 td, table#tableSheet1 th {
+    border: 1px solid #000 !important;
+    padding: 0 2px !important;
+    height: 25px !important;
+    font-size: 10pt !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+  }
+
+  #tableSheet1 .title {
+    font-size: 11pt !important;
+    height: 7mm !important;
+    font-family: Arial, sans-serif !important;
+  }
+
+  #tableSheet1 input#name {
+    font-size: 10pt !important;
+  }
+  .signature-area {
+    margin-top: 6px !important;
+    margin-bottom: 4px !important;
+    font-size: 10pt !important;
+    line-height: 1.2 !important;
+  }
+  .signature-area .supervisor-display {
+    font-size: 10pt !important;
+  }
+
+  input::-webkit-input-placeholder { color: transparent !important; }
+  input:-moz-placeholder { color: transparent !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="header-controls">
+  <div>
+    <label for="selectYear">Yıl: </label>
+    <select id="selectYear" onchange="updateMonthDays()"></select>
+  </div>
+  <div>
+    <label for="selectMonth">Ay: </label>
+    <select id="selectMonth" onchange="updateMonthDays()">
+      <option value="0">OCAK</option>
+      <option value="1">ŞUBAT</option>
+      <option value="2">MART</option>
+      <option value="3">NİSAN</option>
+      <option value="4">MAYIS</option>
+      <option value="5">HAZİRAN</option>
+      <option value="6">TEMMUZ</option>
+      <option value="7">AĞUSTOS</option>
+      <option value="8">EYLÜL</option>
+      <option value="9">EKİM</option>
+      <option value="10">KASIM</option>
+      <option value="11">ARALIK</option>
+    </select>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-secondary" onclick="exportJSON()">Yedek İndir</button>
+    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Yedek Yükle</button>
+    <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
+    <button class="btn" onclick="printPDF()">İK Çıktısı Al (A4)</button>
+    <button class="btn btn-secondary" onclick="sharePdf()">PDF Paylaş</button>
+  </div>
+</div>
+
+<div class="quick-bar">
+  <span>Hızlı Şablon:</span>
+  <button class="btn btn-secondary" id="tpl-1730" style="padding:4px 8px;font-size:12px;" onclick="armTemplate(this,'17:30-20:30','')">17:30-20:30 (Molasız)</button>
+  <button class="btn btn-secondary" id="tpl-0800" style="padding:4px 8px;font-size:12px;" onclick="armTemplate(this,'08:00-16:00','')">08:00-16:00 (Molasız)</button>
+  <span id="tplHint" style="font-size:12px;color:#0066cc;font-weight:700;"></span>
+</div>
+
+<div id="limitAlert" class="alert-box">Dikkat: Bu yıl içinde toplam fazla çalışma süreniz yasal sınır olan 270 saati aşmıştır!</div>
+
+<div class="tabs">
+<button class="tab active" onclick="showSheet(1)">Çizelge</button>
+<button class="tab" onclick="showSheet(2)">Hesap</button>
+<button class="tab" onclick="showSheet(4)">Ücret</button>
+<button class="tab" onclick="showSheet(3)">Yıllık Özet</button>
+</div>
+
+<div id="sheet1" class="sheet">
+  <p class="empty-state-note" id="emptyStateNote">Bu ay için henüz mesai kaydı girilmemiş. Aşağıdaki tabloya başlangıç-bitiş saatlerini girerek başlayabilirsiniz.</p>
+  <div class="excel-page-border">
+    <table id="tableSheet1">
+      <colgroup>
+        <col class="col-1">
+        <col class="col-2">
+        <col class="col-3">
+        <col class="col-4">
+      </colgroup>
+      <thead>
+        <tr><th colspan="4" class="title" id="title1">ŞENGÜN MAKİNA XXXXXX AYI FAZLA MESAİ ÇİZELGESİ</th></tr>
+        <tr><td class="label">ADI-SOYADI</td><td colspan="3"><input id="name" aria-label="Adı Soyadı" oninput="syncName();save()"></td></tr>
+        <tr><th>TARİH</th><th>MESAİ SAATLERİ</th><th>MOLA(DK)</th><th>YOL-YEMEK</th></tr>
+      </thead>
+      <tbody id="tbodySheet1"></tbody>
+    </table>
+    
+    <div class="signature-area">
+      <div>SORUMLU AD SOYAD</div>
+      <div id="supervisorDisplay" class="supervisor-display"></div>
+      <div style="margin-top: 2px;">İMZA</div>
+    </div>
+  </div>
+  <p class="note">Mesai saatini doğrudan "2120" yazarak canlı olarak "21:20" yapabilir veya "10001200" yazarak "10:00-12:00" formatına dönüştürebilirsiniz. "00:00-00:00" girişi tam 24 saat kabul edilir.</p>
+</div>
+
+<div id="sheet2" class="sheet hidden">
+<div class="table-scroll">
+<table id="tableSheet2">
+<colgroup>
+  <col style="width:14%">
+  <col style="width:10%">
+  <col style="width:10%">
+  <col style="width:9%">
+  <col style="width:14%">
+  <col style="width:7%">
+  <col style="width:9%">
+  <col style="width:9%">
+  <col style="width:18%">
+</colgroup>
+<thead>
+  <tr>
+    <th>TARİH</th><th>BAŞLANGIÇ</th><th>BİTİŞ</th><th>MOLA(DK)</th>
+    <th>MESAİ TİPİ</th><th>ÇARPAN</th><th>TOPLAM SAAT</th><th>TOPLAM DAKİKA</th><th>ÜCRET</th>
+  </tr>
+</thead>
+<tbody id="tbodySheet2"></tbody>
+<tfoot>
+  <tr>
+    <td colspan="5" data-label=""><b>TOPLAM SÜRE :</b></td><td class="mobile-hide"></td>
+    <td class="center" id="totalHours" data-label="TOPLAM SAAT"></td>
+    <td class="center" id="totalMins" data-label="TOPLAM DAKİKA"></td>
+    <td class="right" id="totalPay" data-label="ÜCRET"></td>
+  </tr>
+</tfoot>
+</table>
+</div>
+</div>
+
+<div id="sheet3" class="sheet hidden">
+<div class="table-scroll">
+<table id="tableSheet3">
+<thead>
+  <tr><th colspan="3" class="title" id="titleAnnual">YILLIK FAZLA MESAİ ÖZETİ</th></tr>
+  <tr><th>AY</th><th>TOPLAM MESAİ SAATİ</th><th>TAHMİNİ TOPLAM ÜCRET</th></tr>
+</thead>
+<tbody id="tbodySheet3"></tbody>
+</table>
+</div>
+</div>
+
+<!-- YENİLENMİŞ MODERN ÜCRET SAYFASI (SHEET 4) -->
+<div id="sheet4" class="sheet hidden">
+  <div class="salary-dashboard">
+    
+    <div class="salary-grid">
+      <!-- SOL BLOK: BAZ ÜCRET VE SAAT HESAPLARI -->
+      <div class="salary-block">
+        <div class="salary-block-title">Maaş ve Birim Ücretler</div>
+        
+        <div class="salary-row">
+          <span class="salary-label">Aylık Net Maaş</span>
+          <div class="salary-input-wrapper primary-input">
+            <input id="salary" type="text" value="0" aria-label="Aylık maaş" oninput="save();calc()">
+            <span class="salary-unit">₺</span>
+          </div>
+        </div>
+
+        <div class="salary-row">
+          <span class="salary-label">Normal Saat Ücreti</span>
+          <div class="salary-input-wrapper">
+            <input id="normalHour" type="text" readonly aria-label="Normal saat ücreti">
+            <span class="salary-unit">₺</span>
+          </div>
+        </div>
+
+        <div class="salary-row">
+          <span class="salary-label">Normal Dakika Ücreti</span>
+          <div class="salary-input-wrapper">
+            <input id="normalMin" type="text" readonly aria-label="Normal dakika ücreti">
+            <span class="salary-unit">₺</span>
+          </div>
+        </div>
+
+        <div class="salary-row">
+          <span class="salary-label">Mesai Saat Ücreti (%50)</span>
+          <div class="salary-input-wrapper">
+            <input id="overtimeHour" type="text" readonly aria-label="Mesai saat ücreti">
+            <span class="salary-unit">₺</span>
+          </div>
+        </div>
+
+        <div class="salary-row">
+          <span class="salary-label">Mesai Dakika Ücreti</span>
+          <div class="salary-input-wrapper">
+            <input id="overtimeMin" type="text" readonly aria-label="Mesai dakika ücreti">
+            <span class="salary-unit">₺</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAĞ BLOK: MESAİ VE KESİNTİ HESABI -->
+      <div class="salary-block">
+        <div class="salary-block-title">Hakediş ve Kesintiler</div>
+
+        <div class="salary-row">
+          <span class="salary-label" style="font-weight: 800; color: #22C55E;">Alınan Mesai Ücreti</span>
+          <div class="salary-input-wrapper green-bg">
+            <input id="overtimePay" type="text" readonly aria-label="Toplam mesai ücreti">
+            <span class="salary-unit" style="color: #22C55E;">₺</span>
+          </div>
+        </div>
+
+        <div class="salary-row" style="margin-top: 12px;">
+          <span class="salary-label" style="color: #dc2626;">Kesinti Saati</span>
+          <div class="salary-input-wrapper red-bg">
+            <input id="deductionHours" type="text" value="0" aria-label="Kesinti Saati" oninput="save();calc()" onblur="ensureNumber(this)">
+            <span class="salary-unit" style="color: #dc2626;">Sa</span>
+          </div>
+        </div>
+
+        <div class="salary-row">
+          <span class="salary-label" style="color: #dc2626;">Kesinti Dakikası</span>
+          <div class="salary-input-wrapper red-bg">
+            <input id="deductionMinutes" type="text" value="0" aria-label="Kesinti Dakikası" oninput="save();calc()" onblur="ensureNumber(this)">
+            <span class="salary-unit" style="color: #dc2626;">Dk</span>
+          </div>
+        </div>
+
+        <div class="salary-row">
+          <span class="salary-label" style="font-weight: 800; color: #dc2626;">Yapılan Toplam Kesinti</span>
+          <div class="salary-input-wrapper red-bg">
+            <input id="deduction" type="text" readonly aria-label="Yapılan toplam kesinti ücreti">
+            <span class="salary-unit" style="color: #dc2626;">₺</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALT BÖLÜM: DEV TOPLAM KART -->
+    <div class="net-pay-card">
+      <div class="net-pay-title">TOPLAM HAK EDİLEN NET MAAŞ</div>
+      <div class="net-pay-value-wrap">
+        <input id="netPay" type="text" readonly aria-label="Toplam hak edilen net ücret">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<div id="saveToast" class="save-toast">Kaydedildi ✓</div>
+
+<script>
+const monthNames = ["OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS", "EYLÜL", "EKİM", "KASIM", "ARALIK"];
+const weekDaysFullTR = ['PAZAR', 'PAZARTESİ', 'SALI', 'ÇARŞAMBA', 'PERŞEMBE', 'CUMA', 'CUMARTESİ'];
+
+function updateDynamicTitle() {
+  const nameVal = (document.getElementById('name')?.value || '').trim();
+  const monthIdx = parseInt(document.getElementById('selectMonth').value);
+  const monthName = monthNames[monthIdx];
+  const yearVal = document.getElementById('selectYear').value;
+  
+  if (nameVal) {
+    document.title = `${nameVal}_${monthName}_${yearVal}_MESAİ ÇİZELGESİ`;
+  } else {
+    document.title = `MESAİ ÇİZELGESİ ${monthName}_${yearVal}`;
+  }
+}
+
+function printPDF() {
+  updateDynamicTitle();
+  window.print();
+}
+
+function syncName() {
+  const nameVal = document.getElementById('name').value;
+  document.getElementById('supervisorDisplay').textContent = nameVal;
+  updateDynamicTitle();
+}
+
+function initYearSelect() {
+  const sel = document.getElementById('selectYear');
+  sel.innerHTML = '';
+  const baseYear = 2026;
+  for(let y = baseYear; y <= baseYear + 5; y++) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    if(y === baseYear) opt.selected = true;
+    sel.appendChild(opt);
+  }
+  document.getElementById('selectMonth').value = new Date().getMonth();
+}
+
+function getDaysInMonth(year, month) {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+function getStorageKey() {
+  const year = document.getElementById('selectYear').value;
+  const month = document.getElementById('selectMonth').value;
+  return `fazlaMesaiCizelgesi_${year}_${month}`;
+}
+
+let currentDaysCount = 31;
+
+function formatHoursMinutes(totalMins) {
+  if (!totalMins || totalMins <= 0) return '';
+  const h = Math.floor(totalMins / 60);
+  const m = totalMins % 60;
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ' Saat';
+}
+
+function buildTables() {
+  const year = parseInt(document.getElementById('selectYear').value);
+  const month = parseInt(document.getElementById('selectMonth').value);
+  currentDaysCount = getDaysInMonth(year, month);
+
+  document.getElementById('title1').textContent = `ŞENGÜN MAKİNA ${monthNames[month].toUpperCase()} AYI FAZLA MESAİ ÇİZELGESİ`;
+
+  const tbody1 = document.getElementById('tbodySheet1');
+  const tbody2 = document.getElementById('tbodySheet2');
+  tbody1.innerHTML = '';
+  tbody2.innerHTML = '';
+
+  for(let i = 1; i <= currentDaysCount; i++) {
+    const dayStr = String(i).padStart(2, '0');
+    const monthStr = String(month + 1).padStart(2, '0');
+    const dateFormatted = `${dayStr}.${monthStr}.${year}`;
+    const dow = new Date(year, month, i).getDay();
+    const weekdayFull = weekDaysFullTR[dow];
+    const isWeekend = dow === 0 || dow === 6;
+
+    const tr1 = document.createElement('tr');
+    tr1.innerHTML = `
+      <td class="center" style="cursor:pointer" title="Bir şablon seçtiyseniz uygulamak için tıklayın" onclick="applyArmedTemplate(${i})">${dateFormatted}</td>
+      <td><input id="time${i}" aria-label="${dateFormatted} mesai saatleri" oninput="formatTimeLive(this);save();calc()" onblur="autoZero(${i})"></td>
+      <td class="center"><input id="break${i}" class="center" type="text" aria-label="${dateFormatted} mola dakika" oninput="save();calc()" onblur="autoZero(${i})"></td>
+      <td><input id="meal${i}" aria-label="${dateFormatted} yol-yemek" oninput="save()" onblur="autoZero(${i})"></td>
+    `;
+    tbody1.appendChild(tr1);
+
+    const tr2 = document.createElement('tr');
+    tr2.id = `rowSheet2_${i}`;
+    if(isWeekend) tr2.classList.add('weekend');
+    tr2.innerHTML = `
+      <td class="cell-header" id="d${i}" data-label="TARİH"><span class="date-text">${dateFormatted}</span><span class="day-text">${weekdayFull}</span></td>
+      <td id="startText${i}" data-label="BAŞLANGIÇ">-</td>
+      <td id="endText${i}" data-label="BİTİŞ">-</td>
+      <td id="bText${i}" data-label="MOLA(DK)">0</td>
+      <td data-label="MESAİ TİPİ"><select id="type${i}" title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" onchange="save();calc()"><option>PUFA(1,5X)</option><option>SERVİS(2X)</option></select></td>
+      <td class="center" id="mult${i}" data-label="ÇARPAN">1.5</td>
+      <td class="center" id="hours${i}" data-label="TOPLAM SAAT"></td>
+      <td class="center" id="mins${i}" data-label="TOPLAM DAKİKA"></td>
+      <td class="right" id="pay${i}" data-label="ÜCRET"></td>
+    `;
+    tbody2.appendChild(tr2);
+  }
+
+  for(let e = 1; e <= 6; e++) {
+    const extraId = 33 + e;
+    const trExtra = document.createElement('tr');
+    trExtra.id = `rowSheet2_${extraId}`;
+    trExtra.classList.add('extra-row');
+    trExtra.innerHTML = `
+      <td colspan="2" class="cell-header" data-label="GÜN"><span class="date-text">EKSTRA ${e}</span><span class="day-text">Özel Mesai</span></td><td class="mobile-hide"></td>
+      <td data-label="MOLA(DK)"><input id="b${extraId}" type="text" style="width:50px; text-align:center; border:1px solid #ccc; background:#fff; padding:2px;" oninput="save();calc()"></td>
+      <td data-label="MESAİ TİPİ"><select id="type${extraId}" title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" onchange="save();calc()"><option>PUFA(1,5X)</option><option>SERVİS(2X)</option></select></td>
+      <td class="center" id="mult${extraId}" data-label="ÇARPAN">1.5</td>
+      <td class="center" id="hours${extraId}" data-label="TOPLAM SAAT"></td>
+      <td class="center" id="mins${extraId}" data-label="TOPLAM DAKİKA"></td>
+      <td class="right" id="pay${extraId}" data-label="ÜCRET"></td>
+    `;
+    tbody2.appendChild(trExtra);
+  }
+
+  updateDynamicTitle();
+  buildAnnualTable();
+}
+
+function buildAnnualTable() {
+  const year = document.getElementById('selectYear').value;
+  document.getElementById('titleAnnual').textContent = `${year} YILI YILLIK FAZLA MESAİ ÖZETİ`;
+  const tbody3 = document.getElementById('tbodySheet3');
+  tbody3.innerHTML = '';
+
+  let totalAnnualMinutes = 0;
+
+  for(let m = 0; m < 12; m++) {
+    const key = `fazlaMesaiCizelgesi_${year}_${m}`;
+    let monthMin = 0;
+    let monthPay = 0;
+    try {
+      const data = JSON.parse(localStorage.getItem(key) || '{}');
+      const daysCount = getDaysInMonth(year, m);
+      const salaryClean = String(data['salary'] || '0').replace(/[^0-9,.]/g, '').replace(',', '.');
+      const salary = Number(salaryClean) || 0;
+      const normalMin = salary > 0 ? salary / 225 / 60 : 0;
+
+      for(let i = 1; i <= daysCount; i++) {
+        const timeVal = data['time'+i] || '';
+        const breakVal = Number(data['break'+i]) || 0;
+        const parts = timeVal.split('-');
+        const a = parseTime((parts[0]||'').trim());
+        const z = parseTime((parts[1]||'').trim());
+        if(a !== null && z !== null) {
+          let mins = 0;
+          if (a === 0 && z === 0) {
+            mins = 24 * 60 - breakVal;
+          } else {
+            mins = z - a - breakVal;
+            if(mins < 0) mins += 24*60;
+          }
+          if(mins < 0) mins = 0;
+          const type = data['type'+i] || 'PUFA(1,5X)';
+          const mult = type==='SERVİS(2X)'?2:1.5;
+          monthMin += mins;
+          monthPay += mins * normalMin * mult;
+        }
+      }
+      for(let e = 34; e <= 39; e++) {
+        const mins = Number(data['b'+e]) || 0;
+        const type = data['type'+e] || 'PUFA(1,5X)';
+        const mult = type==='SERVİS(2X)'?2:1.5;
+        monthMin += mins;
+        monthPay += mins * normalMin * mult;
+      }
+    } catch(err) { console.warn(`Yıllık özet hesaplanırken hata (${monthNames[m]}):`, err); }
+
+    totalAnnualMinutes += monthMin;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><b>${monthNames[m]}</b></td>
+      <td class="right"><b>${formatHoursMinutes(monthMin)}</b></td>
+      <td class="right"><b>${money(monthPay)} ₺</b></td>
+    `;
+    tbody3.appendChild(tr);
+  }
+
+  const alertBox = document.getElementById('limitAlert');
+  if((totalAnnualMinutes / 60) > 270) {
+    alertBox.style.display = 'block';
+  } else {
+    alertBox.style.display = 'none';
+  }
+}
+
+function updateMonthDays() {
+  buildTables();
+  restore();
+  calc();
+}
+
+function showSheet(n){
+  document.getElementById('sheet1').classList.toggle('hidden',n!==1);
+  document.getElementById('sheet2').classList.toggle('hidden',n!==2);
+  document.getElementById('sheet3').classList.toggle('hidden',n!==3);
+  document.getElementById('sheet4').classList.toggle('hidden',n!==4);
+  const order = [1,2,4,3];
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',order[i]===n));
+  if(n === 3) buildAnnualTable();
+}
+
+function parseTime(s){
+  const m=(s||'').trim().match(/^(\d{1,2})[:. ](\d{2})$/);
+  if(!m) return null;
+  let h=+m[1], min=+m[2]; if(h>23||min>59)return null;
+  return h*60+min;
+}
+
+function formatTimeLive(input) {
+  let val = input.value;
+  let clean = val.replace(/\D/g, '');
+
+  if (clean.length === 8) {
+    input.value = `${clean.slice(0,2)}:${clean.slice(2,4)}-${clean.slice(4,6)}:${clean.slice(6,8)}`;
+  } 
+  else if (clean.length === 4 && !val.includes(':')) {
+    input.value = `${clean.slice(0,2)}:${clean.slice(2,4)}`;
+  }
+}
+
+function autoZero(i){
+  const timeElem = document.getElementById('time'+i);
+  const breakElem = document.getElementById('break'+i);
+  const mealElem = document.getElementById('meal'+i);
+  
+  if(!timeElem) return;
+
+  const hasTime = (timeElem.value || '').trim().length > 0;
+  if(hasTime){
+    if(breakElem && breakElem.value.trim() === '') breakElem.value = '0';
+    if(mealElem && mealElem.value.trim() === '') mealElem.value = '0';
+  }
+  save();
+  calc();
+}
+
+function ensureNumber(input) {
+  if (input.value.trim() === '') {
+    input.value = '0';
+    save();
+    calc();
+  }
+}
+
+function money(x){return isFinite(x) ? x.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '0,00'}
+
+function updateEmptyState(){
+  const note = document.getElementById('emptyStateNote');
+  if(!note) return;
+  let hasAny = false;
+  for(let i = 1; i <= currentDaysCount; i++) {
+    const t = document.getElementById('time'+i);
+    if(t && t.value && t.value.trim().length > 0) { hasAny = true; break; }
+  }
+  note.style.display = hasAny ? 'none' : 'block';
+}
+
+function calc(){
+  const salaryClean = String(document.getElementById('salary').value || '0').replace(/[^0-9,.]/g, '').replace(',', '.');
+  const salary = Number(salaryClean) || 0;
+  const normalMin = salary / 225 / 60, normalHour = salary / 225;
+  document.getElementById('normalMin').value = money(normalMin) + ' ₺';
+  document.getElementById('normalHour').value = money(normalHour) + ' ₺';
+  document.getElementById('overtimeMin').value = money(normalMin * 1.5) + ' ₺';
+  document.getElementById('overtimeHour').value = money(normalHour * 1.5) + ' ₺';
+
+  let totalMin = 0;
+  let mins1_5 = 0;
+  let mins2_0 = 0;
+
+  for(let i = 1; i <= currentDaysCount; i++){
+    let timeElem = document.getElementById('time'+i);
+    let breakElem = document.getElementById('break'+i);
+    let startText = document.getElementById('startText'+i);
+    let endText = document.getElementById('endText'+i);
+    let bText = document.getElementById('bText'+i);
+    let rowSheet2 = document.getElementById('rowSheet2_'+i);
+
+    let start='-', end='-', br=0;
+    if(timeElem && breakElem) {
+      const s = timeElem.value || '';
+      const parts = s.split('-');
+      start = (parts[0]||'').trim() || '-'; 
+      end = (parts[1]||'').trim() || '-';
+      if(startText) startText.textContent = start;
+      if(endText) endText.textContent = end;
+      br = Number(breakElem.value) || 0;
+      if(bText) bText.textContent = br > 0 ? br : '0';
+    }
+
+    const a = parseTime(start), z = parseTime(end);
+    let mins = 0;
+    if(a !== null && z !== null){
+      if (a === 0 && z === 0) {
+        mins = 24 * 60 - br;
+      } else {
+        mins = z - a - br;
+        if(mins < 0) mins += 24*60;
+      }
+      if(mins < 0) mins = 0;
+    }
+    
+    const hasOvertime = (mins > 0);
+    if(rowSheet2) {
+      rowSheet2.classList.toggle('hidden-row', !hasOvertime);
+    }
+
+    if(timeElem) {
+      const hasContent = (timeElem.value || '').trim().length > 0;
+      const isInvalid = hasContent && (a === null || z === null);
+      timeElem.classList.toggle('invalid', isInvalid);
+      timeElem.title = isInvalid ? 'Geçersiz format! "10001200" veya "10:00-12:00" biçiminde girin' : '';
+    }
+
+    const typeElem = document.getElementById('type'+i);
+    const type = typeElem ? typeElem.value : 'PUFA(1,5X)';
+    const mult = type === 'SERVİS(2X)' ? 2 : 1.5;
+    
+    const multElem = document.getElementById('mult'+i);
+    const minsElem = document.getElementById('mins'+i);
+    const hoursElem = document.getElementById('hours'+i);
+    const payElem = document.getElementById('pay'+i);
+
+    if(multElem) multElem.textContent = mult;
+    if(minsElem) minsElem.textContent = mins ? mins.toFixed(0) : '';
+    if(hoursElem) hoursElem.textContent = mins ? formatHoursMinutes(mins) : '';
+    
+    const pay = mins * normalMin * mult;
+    if(payElem) payElem.textContent = pay ? money(pay) + ' ₺' : '';
+    
+    totalMin += mins;
+    if(mult === 1.5) mins1_5 += mins;
+    else if(mult === 2) mins2_0 += mins;
+  }
+
+  for(let extraId = 34; extraId <= 39; extraId++){
+    const bElem = document.getElementById('b'+extraId);
+    const typeElem = document.getElementById('type'+extraId);
+    const rowSheet2 = document.getElementById('rowSheet2_'+extraId);
+    if(!bElem || !typeElem) continue;
+
+    let mins = Number(bElem.value) || 0;
+    let type = typeElem.value;
+    let mult = type === 'SERVİS(2X)' ? 2 : 1.5;
+
+    if(bElem.value.trim() === '') {
+      bElem.value = '0';
+    }
+
+    if(rowSheet2) {
+      rowSheet2.classList.toggle('hidden-row', mins <= 0);
+    }
+
+    const multElem = document.getElementById('mult'+extraId);
+    const minsElem = document.getElementById('mins'+extraId);
+    const hoursElem = document.getElementById('hours'+extraId);
+    const payElem = document.getElementById('pay'+extraId);
+
+    if(multElem) multElem.textContent = mult;
+    if(minsElem) minsElem.textContent = mins ? mins.toFixed(0) : '';
+    if(hoursElem) hoursElem.textContent = mins ? formatHoursMinutes(mins) : '';
+
+    const pay = mins * normalMin * mult;
+    if(payElem) payElem.textContent = pay ? money(pay) + ' ₺' : '';
+
+    totalMin += mins;
+    if(mult === 1.5) mins1_5 += mins;
+    else if(mult === 2) mins2_0 += mins;
+  }
+
+  // KESİNTİ VE NET HAK EDİŞ HESAPLAMA
+  const dedHInput = document.getElementById('deductionHours')?.value;
+  const dedMInput = document.getElementById('deductionMinutes')?.value;
+
+  const dedH = (dedHInput && !isNaN(dedHInput)) ? parseInt(dedHInput, 10) : 0;
+  const dedM = (dedMInput && !isNaN(dedMInput)) ? parseInt(dedMInput, 10) : 0;
+
+  let remainingDeduction = (dedH * 60) + dedM;
+
+  const grossOvertimePay = (mins1_5 * normalMin * 1.5) + (mins2_0 * normalMin * 2.0);
+
+  let cut1_5 = Math.min(mins1_5, remainingDeduction);
+  remainingDeduction -= cut1_5;
+
+  let cut2_0 = Math.min(mins2_0, remainingDeduction);
+  remainingDeduction -= cut2_0;
+
+  const cutFrom1_5_Val = cut1_5 * normalMin * 1.5;
+  const cutFrom2_0_Val = cut2_0 * normalMin * 2.0;
+  const cutFromSalaryVal = remainingDeduction * normalMin;
+
+  const totalDeductionMoney = cutFrom1_5_Val + cutFrom2_0_Val + cutFromSalaryVal;
+  const netOvertimePay = ((mins1_5 - cut1_5) * normalMin * 1.5) + ((mins2_0 - cut2_0) * normalMin * 2.0);
+  const netPayVal = (salary + grossOvertimePay) - totalDeductionMoney;
+
+  document.getElementById('totalHours').textContent = formatHoursMinutes(totalMin);
+  document.getElementById('totalMins').textContent = totalMin + ' Dk';
+  document.getElementById('totalPay').textContent = money(grossOvertimePay) + ' ₺';
+
+  document.getElementById('overtimePay').value = money(netOvertimePay) + ' ₺';
+  document.getElementById('deduction').value = money(totalDeductionMoney) + ' ₺';
+  document.getElementById('netPay').value = money(netPayVal) + ' ₺';
+
+  buildAnnualTable();
+  updateEmptyState();
+}
+
+let toastTimer = null;
+function showSavedToast(){
+  const toast = document.getElementById('saveToast');
+  if(!toast) return;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ toast.classList.remove('show'); }, 1200);
+}
+
+function save(){
+  const o={}; 
+  document.querySelectorAll('input,select').forEach(e=>{
+    if(e.id && e.id !== 'selectYear' && e.id !== 'selectMonth') o[e.id]=e.value;
+  });
+  localStorage.setItem(getStorageKey(), JSON.stringify(o));
+  showSavedToast();
+}
+
+function restore(){
+  try{
+    const o = JSON.parse(localStorage.getItem(getStorageKey())||'{}');
+    Object.entries(o).forEach(([id,v])=>{
+      const e=document.getElementById(id);
+      if(e) e.value=v;
+    });
+    syncName();
+  }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
+}
+
+function sharePdf() {
+  updateDynamicTitle();
+  if (navigator.share) {
+    const name = (document.getElementById('name')?.value || '').trim();
+    const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
+    navigator.share({
+      title: document.title,
+      text: name ? `${monthLabel} - ${name}` : monthLabel
+    }).catch(()=>{});
+  }
+  window.print();
+}
+
+function exportJSON() {
+  const data = {};
+  for(let i=0; i<localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if(key.startsWith('fazlaMesaiCizelgesi_')) {
+      data[key] = localStorage.getItem(key);
+    }
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'mesai_yedekleri.json';
+  a.click();
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      Object.entries(data).forEach(([key, val]) => {
+        if(key.startsWith('fazlaMesaiCizelgesi_')) {
+          localStorage.setItem(key, val);
+        }
+      });
+      updateMonthDays();
+      alert('Yedek başarıyla yüklendi!');
+    } catch(err) {
+      alert('Geçersiz dosya formatı!');
+    }
+  };
+  reader.readAsText(file);
+}
+
+let armedTemplate = null;
+
+function armTemplate(btn, timeStr, breakMin) {
+  document.querySelectorAll('.quick-bar .btn').forEach(b => { b.style.outline = ''; b.classList.remove('armed'); });
+  if(armedTemplate && armedTemplate.time === timeStr && armedTemplate.breakMin === breakMin) {
+    armedTemplate = null;
+    document.getElementById('tplHint').textContent = '';
+    return;
+  }
+  armedTemplate = { time: timeStr, breakMin: breakMin };
+  btn.classList.add('armed');
+  document.getElementById('tplHint').textContent = 'Şimdi çizelgede bir tarihe tıklayın →';
+}
+
+function applyArmedTemplate(dayNum) {
+  if(!armedTemplate) return;
+  const timeInput = document.getElementById('time' + dayNum);
+  const breakInput = document.getElementById('break' + dayNum);
+  if(timeInput && breakInput) {
+    timeInput.value = armedTemplate.time;
+    breakInput.value = armedTemplate.breakMin;
+    save();
+    calc();
+  }
+}
+
+window.addEventListener('load', ()=>{
+  initYearSelect();
+  buildTables();
+  restore();
+  calc();
+});
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Hata:', err));
+    });
+  }
+</script>
+</body>
+</html>
