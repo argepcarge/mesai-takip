@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
-<!-- jsPDF Kütüphanesi Eklendi -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box} 
 body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
@@ -1290,53 +1288,17 @@ function restore(){
   }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
 }
 
-// GÜNCELLENMİŞ PDF PAYLAŞIM FONKSİYONU
-async function sharePdf() {
+function sharePdf() {
   updateDynamicTitle();
-  const { jsPDF } = window.jspdf;
-  if (!jsPDF) {
-    window.print();
-    return;
+  if (navigator.share) {
+    const name = (document.getElementById('name')?.value || '').trim();
+    const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
+    navigator.share({
+      title: document.title,
+      text: name ? `${monthLabel} - ${name}` : monthLabel
+    }).catch(()=>{});
   }
-
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const name = (document.getElementById('name')?.value || 'Mesai_Raporu').trim();
-  const monthIdx = parseInt(document.getElementById('selectMonth').value);
-  const yearVal = document.getElementById('selectYear').value;
-  const fileName = `${name}_${monthNames[monthIdx]}_${yearVal}_FazlaMesai.pdf`.replace(/\s+/g, '_');
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text(`SENGUN MAKINA - ${monthNames[monthIdx]} ${yearVal} FAZLA MESAI`, 15, 20);
-  
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "normal");
-  doc.text(`Adi Soyadi: ${name}`, 15, 30);
-  doc.text(`Toplam Net Maas: ${document.getElementById('netPay')?.value || '0'}`, 15, 36);
-  doc.text(`Toplam Mesai Saati: ${document.getElementById('totalHours')?.textContent || '0'}`, 15, 42);
-
-  const pdfBlob = doc.output('blob');
-  const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        title: document.title,
-        text: `${monthNames[monthIdx]} ${yearVal} Fazla Mesai Çizelgesi - ${name}`,
-        files: [file]
-      });
-      return;
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.log('Paylaşım iptal edildi:', err);
-      }
-    }
-  }
-
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(pdfBlob);
-  link.download = fileName;
-  link.click();
+  window.print();
 }
 
 function exportJSON() {
