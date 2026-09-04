@@ -180,7 +180,7 @@ table#tableSheet1 {
 table#tableSheet1 td, table#tableSheet1 th {
   border: 1.5px solid #000 !important;
   padding: 1px 4px !important;
-  height: 15px;
+  height: 23px;
   vertical-align: middle;
   text-align: center !important;
   font-weight: bold !important;
