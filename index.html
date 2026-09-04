@@ -6,7 +6,7 @@
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
 
-<!-- html2pdf kütüphanesi -->
+<!-- BURAYA EKLENDİ: html2pdf kütüphanesi -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
@@ -508,6 +508,117 @@ col.col-4 { width: 22% !important; }
   .btn-secondary{background:#3a4048}
   .btn-secondary:hover{background:#454c55}
 }
+
+@media (prefers-color-scheme: dark) and (max-width: 700px) {
+  #tableSheet2 td.cell-header{
+    background:#182620 !important;
+    color:#e7e9ec !important;
+    border-bottom-color:#2c4438 !important;
+  }
+  #tableSheet2 td.cell-header .date-text{ color:#e7e9ec; }
+  #tableSheet2 td.cell-header .day-text{ color:#9fb8ab; }
+
+  #tableSheet2 tr.weekend td.cell-header{
+    background:#332705 !important;
+    color:#ffdd6a !important;
+    border-bottom-color:#4d3c08 !important;
+  }
+  #tableSheet2 tr.weekend td.cell-header .day-text{ color:#e0c268; }
+
+  #tableSheet2 tr.extra-row td.cell-header{
+    background:#22262c !important;
+    color:#d6dae0 !important;
+    border-bottom-color:#3a4048 !important;
+  }
+  #tableSheet2 tr.extra-row td.cell-header .day-text{ color:#a9adb3; }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 6mm 8mm !important;
+  }
+
+  @media (max-width: 700px) {
+    @page {
+      margin: 2mm 3mm !important;
+    }
+  }
+
+  html, body {
+    width: 100% !important;
+    height: 100% !important;
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .header-controls, .quick-bar, .tabs, .btn, .alert-box, .note, .save-toast, .empty-state-note, #sheet2, #sheet3, #sheet4 {
+    display: none !important;
+  }
+
+  #sheet1 {
+    display: block !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .excel-page-border {
+    border: none !important;
+    padding: 6px 6px 10px 6px !important;
+    box-sizing: border-box !important;
+    min-height: 0 !important;
+    display: block !important;
+  }
+
+  table#tableSheet1 {
+    width: 100% !important;
+    border: 1.5px solid #000 !important;
+  }
+
+  table#tableSheet1 td, table#tableSheet1 th {
+    border: 1.5px solid #000 !important;
+    padding: 0 2px !important;
+    height: 25px !important;
+    font-size: 10pt !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+  }
+
+  #tableSheet1 .title {
+    font-size: 11pt !important;
+    height: 7mm !important;
+    font-family: Arial, sans-serif !important;
+  }
+
+  #tableSheet1 input#name {
+    font-size: 10pt !important;
+  }
+  .signature-area {
+    margin-top: 6px !important;
+    margin-bottom: 4px !important;
+    font-size: 10pt !important;
+    line-height: 1.2 !important;
+  }
+  .signature-area .supervisor-display {
+    font-size: 10pt !important;
+  }
+
+  input::-webkit-input-placeholder { color: transparent !important; }
+  input:-moz-placeholder { color: transparent !important; }
+}
 </style>
 </head>
 <body>
@@ -631,11 +742,15 @@ col.col-4 { width: 22% !important; }
 </div>
 </div>
 
+<!-- YENİLENMİŞ MODERN ÜCRET SAYFASI (SHEET 4) -->
 <div id="sheet4" class="sheet hidden">
   <div class="salary-dashboard">
+    
     <div class="salary-grid">
+      <!-- SOL BLOK: BAZ ÜCRET VE SAAT HESAPLARI -->
       <div class="salary-block">
         <div class="salary-block-title">Maaş ve Birim Ücretler</div>
+        
         <div class="salary-row">
           <span class="salary-label">Aylık Net Maaş</span>
           <div class="salary-input-wrapper primary-input">
@@ -643,6 +758,7 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit">₺</span>
           </div>
         </div>
+
         <div class="salary-row">
           <span class="salary-label">Normal Saat Ücreti</span>
           <div class="salary-input-wrapper">
@@ -650,6 +766,7 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit">₺</span>
           </div>
         </div>
+
         <div class="salary-row">
           <span class="salary-label">Normal Dakika Ücreti</span>
           <div class="salary-input-wrapper">
@@ -657,6 +774,7 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit">₺</span>
           </div>
         </div>
+
         <div class="salary-row">
           <span class="salary-label">Mesai Saat Ücreti (%50)</span>
           <div class="salary-input-wrapper">
@@ -664,6 +782,7 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit">₺</span>
           </div>
         </div>
+
         <div class="salary-row">
           <span class="salary-label">Mesai Dakika Ücreti</span>
           <div class="salary-input-wrapper">
@@ -673,8 +792,10 @@ col.col-4 { width: 22% !important; }
         </div>
       </div>
 
+      <!-- SAĞ BLOK: MESAİ VE KESİNTİ HESABI -->
       <div class="salary-block">
         <div class="salary-block-title">Hakediş ve Kesintiler</div>
+
         <div class="salary-row">
           <span class="salary-label" style="font-weight: 800; color: #22C55E;">Alınan Mesai Ücreti</span>
           <div class="salary-input-wrapper green-bg">
@@ -682,6 +803,7 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit" style="color: #22C55E;">₺</span>
           </div>
         </div>
+
         <div class="salary-row" style="margin-top: 12px;">
           <span class="salary-label" style="color: #dc2626;">Kesinti Saati</span>
           <div class="salary-input-wrapper red-bg">
@@ -689,6 +811,7 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit" style="color: #dc2626;">Sa</span>
           </div>
         </div>
+
         <div class="salary-row">
           <span class="salary-label" style="color: #dc2626;">Kesinti Dakikası</span>
           <div class="salary-input-wrapper red-bg">
@@ -696,6 +819,7 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit" style="color: #dc2626;">Dk</span>
           </div>
         </div>
+
         <div class="salary-row">
           <span class="salary-label" style="font-weight: 800; color: #dc2626;">Yapılan Toplam Kesinti</span>
           <div class="salary-input-wrapper red-bg">
@@ -706,12 +830,14 @@ col.col-4 { width: 22% !important; }
       </div>
     </div>
 
+    <!-- ALT BÖLÜM: DEV TOPLAM KART -->
     <div class="net-pay-card">
       <div class="net-pay-title">TOPLAM HAK EDİLEN NET MAAŞ</div>
       <div class="net-pay-value-wrap">
         <input id="netPay" type="text" readonly aria-label="Toplam hak edilen net ücret">
       </div>
     </div>
+
   </div>
 </div>
 
@@ -741,6 +867,7 @@ function printPDF() {
   window.print();
 }
 
+/* BURAYA EKLENDİ: Geliştirilmiş PDF Paylaş Fonksiyonu */
 async function sharePdf() {
   updateDynamicTitle();
   const element = document.getElementById('sheet1'); 
@@ -751,27 +878,7 @@ async function sharePdf() {
     margin:       5,
     filename:     filename,
     image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { 
-      scale: 2, 
-      useCORS: true,
-      onclone: function (clonedDoc) {
-        const clonedSheet = clonedDoc.getElementById('sheet1');
-        if (clonedSheet) {
-          // Açıklama yazılarını ve boş uyarı kutusunu PDF'ten tamamen gizle
-          const notes = clonedSheet.querySelectorAll('.note, .empty-state-note');
-          notes.forEach(n => n.style.display = 'none');
-
-          // Arka planı beyaz, yazıları ve çerçeveleri siyah yap
-          clonedSheet.style.background = '#ffffff';
-          clonedSheet.style.color = '#000000';
-          clonedSheet.querySelectorAll('*').forEach(el => {
-            el.style.backgroundColor = '#ffffff';
-            el.style.color = '#000000';
-            el.style.borderColor = '#000000';
-          });
-        }
-      }
-    },
+    html2canvas:  { scale: 2, useCORS: true },
     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
@@ -1153,6 +1260,7 @@ function calc(){
     else if(mult === 2) mins2_0 += mins;
   }
 
+  // KESİNTİ VE NET HAK EDİŞ HESAPLAMA
   const dedHInput = document.getElementById('deductionHours')?.value;
   const dedMInput = document.getElementById('deductionMinutes')?.value;
 
@@ -1287,6 +1395,13 @@ window.addEventListener('load', ()=>{
   restore();
   calc();
 });
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Hata:', err));
+    });
+  }
 </script>
 </body>
 </html>
