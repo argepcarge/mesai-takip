@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
+
+<!-- BURAYA EKLENDİ: html2pdf kütüphanesi -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
 *{box-sizing:border-box} 
 body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
@@ -541,7 +545,6 @@ col.col-4 { width: 22% !important; }
     }
   }
 
-
   html, body {
     width: 100% !important;
     height: 100% !important;
@@ -586,7 +589,7 @@ col.col-4 { width: 22% !important; }
   }
 
   table#tableSheet1 td, table#tableSheet1 th {
-    border: 1px solid #000 !important;
+    border: 1.5px solid #000 !important;
     padding: 0 2px !important;
     height: 25px !important;
     font-size: 10pt !important;
@@ -862,6 +865,40 @@ function updateDynamicTitle() {
 function printPDF() {
   updateDynamicTitle();
   window.print();
+}
+
+/* BURAYA EKLENDİ: Geliştirilmiş PDF Paylaş Fonksiyonu */
+async function sharePdf() {
+  updateDynamicTitle();
+  const element = document.getElementById('sheet1'); 
+  const nameVal = (document.getElementById('name')?.value || 'Fazla_Mesai').trim();
+  const filename = `${nameVal}_Mesai_Cizelgesi.pdf`;
+
+  const opt = {
+    margin:       5,
+    filename:     filename,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  try {
+    const pdfBlob = await html2pdf().from(element).set(opt).outputPdf('blob');
+    const file = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: document.title,
+        text: 'Fazla mesai çizelgesi ekteki PDF dosyasındadır.'
+      });
+    } else {
+      html2pdf().from(element).set(opt).save();
+    }
+  } catch (error) {
+    console.log('PDF paylaşım hatası veya iptal edildi:', error);
+    html2pdf().from(element).set(opt).save();
+  }
 }
 
 function syncName() {
@@ -1287,19 +1324,6 @@ function restore(){
     });
     syncName();
   }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
-}
-
-function sharePdf() {
-  updateDynamicTitle();
-  if (navigator.share) {
-    const name = (document.getElementById('name')?.value || '').trim();
-    const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
-    navigator.share({
-      title: document.title,
-      text: name ? `${monthLabel} - ${name}` : monthLabel
-    }).catch(()=>{});
-  }
-  window.print();
 }
 
 function exportJSON() {
