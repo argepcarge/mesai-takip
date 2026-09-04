@@ -530,6 +530,11 @@ col.col-4 { width: 22% !important; }
 }
 
 @media print {
+    zoom: 0.88;
+    -webkit-transform: scale(0.88);
+    transform: scale(0.88);
+    transform-origin: top left;
+  
   @page {
     size: A4 portrait;
     margin: 6mm 8mm !important;
