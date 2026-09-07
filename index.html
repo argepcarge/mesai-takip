@@ -885,6 +885,7 @@ function updateDynamicTitle() {
   }
 }
 
+
 async function shareExcel() {
   updateDynamicTitle();
 
@@ -948,7 +949,7 @@ async function shareExcel() {
     const file = new File([blob], fileName, { type: mimeType });
 
     let shared = false;
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
           files: [file],
@@ -1401,6 +1402,7 @@ function restore(){
     syncName();
   }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
 }
+
 
 function exportJSON() {
   const data = {};
