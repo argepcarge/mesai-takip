@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 *{box-sizing:border-box} 
 body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
@@ -1315,17 +1316,60 @@ function restore(){
   }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
 }
 
-function sharePdf() {
+async function sharePdf() {
   updateDynamicTitle();
-  if (navigator.share) {
-    const name = (document.getElementById('name')?.value || '').trim();
-    const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
-    navigator.share({
-      title: document.title,
-      text: name ? `${monthLabel} - ${name}` : monthLabel
-    }).catch(()=>{});
+
+  const name = (document.getElementById('name')?.value || '').trim();
+  const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
+  const fileName = (name ? `${monthLabel}_${name}` : monthLabel).replace(/[^\wğüşıöçĞÜŞİÖÇ\-]+/g, '_') + '.pdf';
+
+  const source = document.getElementById('sheet1');
+  if (!source || typeof html2pdf === 'undefined') {
+    window.print();
+    return;
   }
-  window.print();
+
+  const btn = event ? event.target : null;
+  const oldText = btn ? btn.textContent : null;
+  if (btn) { btn.textContent = 'PDF Hazırlanıyor...'; btn.disabled = true; }
+
+  try {
+    const worker = html2pdf()
+      .set({
+        margin: 5,
+        filename: fileName,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+      })
+      .from(source);
+
+    const pdfBlob = await worker.outputPdf('blob');
+    const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+      await navigator.share({
+        files: [pdfFile],
+        title: document.title,
+        text: name ? `${monthLabel} - ${name}` : monthLabel
+      });
+    } else {
+      const url = URL.createObjectURL(pdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  } catch (err) {
+    if (err && err.name !== 'AbortError') {
+      console.error('PDF paylaşım hatası:', err);
+      alert('PDF oluşturulurken bir hata oluştu. Yazdırma ekranı açılıyor.');
+      window.print();
+    }
+  } finally {
+    if (btn) { btn.textContent = oldText; btn.disabled = false; }
+  }
 }
 
 function exportJSON() {
