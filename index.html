@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
 *{box-sizing:border-box} 
 body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
@@ -674,6 +676,7 @@ col.col-4 { width: 22% !important; }
     <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
     <button class="btn" onclick="printPDF()">İK Çıktısı Al (A4)</button>
     <button class="btn btn-secondary" onclick="sharePdf()">PDF Paylaş</button>
+    <button class="btn btn-secondary" onclick="shareExcel()">Excel Paylaş</button>
   </div>
 </div>
 
@@ -888,6 +891,98 @@ function updateDynamicTitle() {
 function printPDF() {
   updateDynamicTitle();
   window.print();
+}
+
+async function shareExcel() {
+  updateDynamicTitle();
+
+  if (typeof ExcelJS === 'undefined') {
+    alert('Excel kütüphanesi yüklenemedi, internet bağlantınızı kontrol edin.');
+    return;
+  }
+
+  const btn = (typeof event !== 'undefined' && event) ? event.target : null;
+  const oldText = btn ? btn.textContent : null;
+  if (btn) { btn.textContent = 'Excel Hazırlanıyor...'; btn.disabled = true; }
+
+  try {
+    const resp = await fetch('./sablon.xlsx');
+    if (!resp.ok) throw new Error('Şablon dosyası bulunamadı (sablon.xlsx). Dosyanın index.html ile aynı klasörde olduğundan emin olun.');
+    const buffer = await resp.arrayBuffer();
+
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(buffer);
+    const ws = workbook.getWorksheet('Sayfa1');
+    if (!ws) throw new Error('Şablonda "Sayfa1" adında bir sekme bulunamadı.');
+
+    const name = (document.getElementById('name')?.value || '').trim();
+    const titleText = document.getElementById('title1')?.textContent || 'FAZLA MESAİ ÇİZELGESİ';
+
+    // Başlık ve Ad-Soyad
+    ws.getCell('A1').value = titleText;
+    ws.getCell('B2').value = name;
+
+    // Seçili yıl / ay / gün sayısı
+    const year = Number(document.getElementById('selectYear')?.value);
+    const monthIdx = parseInt(document.getElementById('selectMonth')?.value, 10); // 0=Ocak
+    const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
+
+    const TEMPLATE_DAY_ROWS = 31; // şablonda 4. satırdan 34. satıra kadar 31 gün var
+
+    for (let i = 1; i <= TEMPLATE_DAY_ROWS; i++) {
+      const row = 3 + i; // 4..34
+      if (i <= daysInMonth) {
+        const dateObj = new Date(year, monthIdx, i);
+        ws.getCell(`A${row}`).value = dateObj;
+
+        const timeVal = document.getElementById('time' + i)?.value || '';
+        const breakVal = document.getElementById('break' + i)?.value || '';
+
+        ws.getCell(`B${row}`).value = timeVal;
+        ws.getCell(`D${row}`).value = breakVal === '' ? 0 : Number(breakVal);
+      } else {
+        // Ay 31 günden kısaysa fazla satırları temizle
+        ws.getCell(`A${row}`).value = null;
+        ws.getCell(`B${row}`).value = null;
+        ws.getCell(`D${row}`).value = null;
+        ws.getCell(`E${row}`).value = null;
+      }
+    }
+
+    const outBuffer = await workbook.xlsx.writeBuffer();
+    const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    const blob = new Blob([outBuffer], { type: mimeType });
+    const fileName = (name ? `${titleText}_${name}` : titleText).replace(/[^\wğüşıöçĞÜŞİÖÇ\-]+/g, '_') + '.xlsx';
+    const file = new File([blob], fileName, { type: mimeType });
+
+    let shared = false;
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: document.title,
+          text: name ? `${titleText} - ${name}` : titleText
+        });
+        shared = true;
+      } catch (shareErr) {
+        if (shareErr && shareErr.name === 'AbortError') shared = true;
+      }
+    }
+
+    if (!shared) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  } catch (err) {
+    console.error('Excel oluşturma hatası:', err);
+    alert('Excel dosyası oluşturulurken bir hata oluştu: ' + (err && err.message ? err.message : ''));
+  } finally {
+    if (btn) { btn.textContent = oldText; btn.disabled = false; }
+  }
 }
 
 function syncName() {
@@ -1315,17 +1410,108 @@ function restore(){
   }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
 }
 
-function sharePdf() {
-  updateDynamicTitle();
-  if (navigator.share) {
-    const name = (document.getElementById('name')?.value || '').trim();
-    const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
-    navigator.share({
-      title: document.title,
-      text: name ? `${monthLabel} - ${name}` : monthLabel
-    }).catch(()=>{});
+function forcePrintStylesForCapture() {
+  const changed = [];
+  for (const sheet of document.styleSheets) {
+    let rules;
+    try { rules = sheet.cssRules; } catch (e) { continue; }
+    if (!rules) continue;
+    for (const rule of rules) {
+      if (!rule.media) continue;
+      const mt = rule.media.mediaText;
+      if (/prefers-color-scheme\s*:\s*dark/i.test(mt)) {
+        changed.push({ media: rule.media, original: mt });
+        rule.media.mediaText = 'not all';
+      } else if (/\bprint\b/i.test(mt)) {
+        changed.push({ media: rule.media, original: mt });
+        rule.media.mediaText = mt.replace(/\bprint\b/gi, 'all');
+      }
+    }
   }
-  window.print();
+  return changed;
+}
+
+function restoreStylesAfterCapture(changed) {
+  changed.forEach(({ media, original }) => { media.mediaText = original; });
+}
+
+async function sharePdf() {
+  updateDynamicTitle();
+
+  const source = document.getElementById('sheet1');
+  if (!source || typeof html2pdf === 'undefined') {
+    window.print();
+    return;
+  }
+
+  const name = (document.getElementById('name')?.value || '').trim();
+  const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
+  const fileName = (name ? `${monthLabel}_${name}` : monthLabel).replace(/[^\wğüşıöçĞÜŞİÖÇ\-]+/g, '_') + '.pdf';
+
+  const btn = (typeof event !== 'undefined' && event) ? event.target : null;
+  const oldText = btn ? btn.textContent : null;
+  if (btn) { btn.textContent = 'PDF Hazırlanıyor...'; btn.disabled = true; }
+
+  const changedRules = forcePrintStylesForCapture();
+
+  // Safari (iOS) stil değişikliklerini bir sonraki çizim karesine kadar
+  // ertelediği için, capture almadan önce zorla yeniden çizim tetikliyoruz
+  // ve iki kare bekliyoruz.
+  void source.offsetHeight;
+  await new Promise(requestAnimationFrame);
+  await new Promise(requestAnimationFrame);
+
+  try {
+    const worker = html2pdf()
+      .set({
+        margin: 5,
+        filename: fileName,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'avoid-all'] }
+      })
+      .from(source);
+
+    const pdfBlob = await worker.outputPdf('blob');
+    const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+    let shared = false;
+    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+      try {
+        await navigator.share({
+          files: [pdfFile],
+          title: document.title,
+          text: name ? `${monthLabel} - ${name}` : monthLabel
+        });
+        shared = true;
+      } catch (shareErr) {
+        if (shareErr && shareErr.name === 'AbortError') {
+          // Kullanıcı paylaşım menüsünü kendi iptal etti, indirmeye gerek yok.
+          shared = true;
+        }
+        // Diğer paylaşım hatalarında (ör. iOS'un aktivasyon reddi) aşağıda indirmeye düşer.
+      }
+    }
+
+    if (!shared) {
+      const url = URL.createObjectURL(pdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  } catch (err) {
+    if (err && err.name !== 'AbortError') {
+      console.error('PDF paylaşım hatası:', err);
+      alert('PDF oluşturulurken bir hata oluştu. Yazdırma ekranı açılıyor.');
+      window.print();
+    }
+  } finally {
+    restoreStylesAfterCapture(changedRules);
+    if (btn) { btn.textContent = oldText; btn.disabled = false; }
+  }
 }
 
 function exportJSON() {
