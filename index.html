@@ -6,6 +6,7 @@
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
 <script src="./exceljs.min.js"></script>
+
 <style>
 *{box-sizing:border-box} 
 body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
@@ -487,7 +488,6 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tfoot tr{background:#052e16 !important;color:#22C55E !important;border-color:#22C55E !important}
   #tableSheet2 tfoot td{color:#22C55E !important}
 
-  /* DARK MODE ÜCRET KARTI */
   .salary-block { background: #1f2328; border-color: #33383f; }
   .salary-block-title { color: #94a3b8; border-bottom-color: #2d333b; }
   .salary-label { color: #cbd5e1; }
@@ -645,13 +645,16 @@ col.col-4 { width: 22% !important; }
 }
 </style>
 </head>
+
 <body>
 <div class="wrap">
+
 <div class="header-controls">
   <div>
     <label for="selectYear">Yıl: </label>
     <select id="selectYear" onchange="updateMonthDays()"></select>
   </div>
+
   <div>
     <label for="selectMonth">Ay: </label>
     <select id="selectMonth" onchange="updateMonthDays()">
@@ -669,60 +672,133 @@ col.col-4 { width: 22% !important; }
       <option value="11">ARALIK</option>
     </select>
   </div>
+
   <div class="header-actions">
     <button class="btn btn-secondary" onclick="exportJSON()">Yedek İndir</button>
-    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Yedek Yükle</button>
-    <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
-    <button class="btn btn-secondary" onclick="shareExcel()">Excel Paylaş</button>
+
+    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">
+      Yedek Yükle
+    </button>
+
+    <input 
+      type="file" 
+      id="importFile" 
+      style="display:none" 
+      accept=".json" 
+      onchange="importJSON(event)"
+    >
+
+    <!-- DEĞİŞTİRİLDİ -->
+    <button class="btn btn-secondary" onclick="shareExcel(this)">
+      Excel Paylaş
+    </button>
   </div>
 </div>
 
 <div class="quick-bar">
   <span>Hızlı Şablon:</span>
-  <button class="btn btn-secondary" id="tpl-1730" style="padding:4px 8px;font-size:12px;" onclick="armTemplate(this,'17:30-20:30','')">17:30-20:30 (Molasız)</button>
-  <button class="btn btn-secondary" id="tpl-0800" style="padding:4px 8px;font-size:12px;" onclick="armTemplate(this,'08:00-16:00','')">08:00-16:00 (Molasız)</button>
+
+  <button 
+    class="btn btn-secondary" 
+    id="tpl-1730" 
+    style="padding:4px 8px;font-size:12px;" 
+    onclick="armTemplate(this,'17:30-20:30','')">
+    17:30-20:30 (Molasız)
+  </button>
+
+  <button 
+    class="btn btn-secondary" 
+    id="tpl-0800" 
+    style="padding:4px 8px;font-size:12px;" 
+    onclick="armTemplate(this,'08:00-16:00','')">
+    08:00-16:00 (Molasız)
+  </button>
+
   <span id="tplHint" style="font-size:12px;color:#0066cc;font-weight:700;"></span>
 </div>
 
-<div id="limitAlert" class="alert-box">Dikkat: Bu yıl içinde toplam fazla çalışma süreniz yasal sınır olan 270 saati aşmıştır!</div>
+<div id="limitAlert" class="alert-box">
+  Dikkat: Bu yıl içinde toplam fazla çalışma süreniz yasal sınır olan 270 saati aşmıştır!
+</div>
 
 <div class="tabs">
-<button class="tab active" onclick="showSheet(1)">Çizelge</button>
-<button class="tab" onclick="showSheet(2)">Hesap</button>
-<button class="tab" onclick="showSheet(4)">Ücret</button>
-<button class="tab" onclick="showSheet(3)">Yıllık Özet</button>
+  <button class="tab active" onclick="showSheet(1)">Çizelge</button>
+  <button class="tab" onclick="showSheet(2)">Hesap</button>
+  <button class="tab" onclick="showSheet(4)">Ücret</button>
+  <button class="tab" onclick="showSheet(3)">Yıllık Özet</button>
 </div>
 
 <div id="sheet1" class="sheet">
-  <p class="empty-state-note" id="emptyStateNote">Bu ay için henüz mesai kaydı girilmemiş. Aşağıdaki tabloya başlangıç-bitiş saatlerini girerek başlayabilirsiniz.</p>
+
+  <p class="empty-state-note" id="emptyStateNote">
+    Bu ay için henüz mesai kaydı girilmemiş. Aşağıdaki tabloya başlangıç-bitiş saatlerini girerek başlayabilirsiniz.
+  </p>
+
   <div class="excel-page-border">
+
     <table id="tableSheet1">
+
       <colgroup>
         <col class="col-1">
         <col class="col-2">
         <col class="col-3">
         <col class="col-4">
       </colgroup>
+
       <thead>
-        <tr><th colspan="4" class="title" id="title1">ŞENGÜN MAKİNA XXXXXX AYI FAZLA MESAİ ÇİZELGESİ</th></tr>
-        <tr><td class="label">ADI-SOYADI</td><td colspan="3"><input id="name" aria-label="Adı Soyadı" oninput="syncName();save()"></td></tr>
-        <tr><th>TARİH</th><th>MESAİ SAATLERİ</th><th>MOLA(DK)</th><th>YOL-YEMEK</th></tr>
+
+        <tr>
+          <th colspan="4" class="title" id="title1">
+            ŞENGÜN MAKİNA XXXXXX AYI FAZLA MESAİ ÇİZELGESİ
+          </th>
+        </tr>
+
+        <tr>
+          <td class="label">ADI-SOYADI</td>
+          <td colspan="3">
+            <input 
+              id="name" 
+              aria-label="Adı Soyadı" 
+              oninput="syncName();save()"
+            >
+          </td>
+        </tr>
+
+        <tr>
+          <th>TARİH</th>
+          <th>MESAİ SAATLERİ</th>
+          <th>MOLA(DK)</th>
+          <th>YOL-YEMEK</th>
+        </tr>
+
       </thead>
+
       <tbody id="tbodySheet1"></tbody>
+
     </table>
-    
+
     <div class="signature-area">
       <div>SORUMLU AD SOYAD</div>
       <div id="supervisorDisplay" class="supervisor-display"></div>
       <div style="margin-top: 2px;">İMZA</div>
     </div>
+
   </div>
-  <p class="note">Mesai saatini doğrudan "2120" yazarak canlı olarak "21:20" yapabilir veya "10001200" yazarak "10:00-12:00" formatına dönüştürebilirsiniz. "00:00-00:00" girişi tam 24 saat kabul edilir.</p>
+
+  <p class="note">
+    Mesai saatini doğrudan "2120" yazarak canlı olarak "21:20" yapabilir veya 
+    "10001200" yazarak "10:00-12:00" formatına dönüştürebilirsiniz. 
+    "00:00-00:00" girişi tam 24 saat kabul edilir.
+  </p>
+
 </div>
 
 <div id="sheet2" class="sheet hidden">
+
 <div class="table-scroll">
+
 <table id="tableSheet2">
+
 <colgroup>
   <col style="width:14%">
   <col style="width:10%">
@@ -734,752 +810,2683 @@ col.col-4 { width: 22% !important; }
   <col style="width:9%">
   <col style="width:18%">
 </colgroup>
+
 <thead>
-  <tr>
-    <th>TARİH</th><th>BAŞLANGIÇ</th><th>BİTİŞ</th><th>MOLA(DK)</th>
-    <th>MESAİ TİPİ</th><th>ÇARPAN</th><th>TOPLAM SAAT</th><th>TOPLAM DAKİKA</th><th>ÜCRET</th>
-  </tr>
+
+<tr>
+  <th>TARİH</th>
+  <th>BAŞLANGIÇ</th>
+  <th>BİTİŞ</th>
+  <th>MOLA(DK)</th>
+  <th>MESAİ TİPİ</th>
+  <th>ÇARPAN</th>
+  <th>TOPLAM SAAT</th>
+  <th>TOPLAM DAKİKA</th>
+  <th>ÜCRET</th>
+</tr>
+
 </thead>
+
 <tbody id="tbodySheet2"></tbody>
+
 <tfoot>
-  <tr>
-    <td colspan="5" data-label=""><b>TOPLAM SÜRE :</b></td><td class="mobile-hide"></td>
-    <td class="center" id="totalHours" data-label="TOPLAM SAAT"></td>
-    <td class="center" id="totalMins" data-label="TOPLAM DAKİKA"></td>
-    <td class="right" id="totalPay" data-label="ÜCRET"></td>
-  </tr>
+
+<tr>
+  <td colspan="5" data-label="">
+    <b>TOPLAM SÜRE :</b>
+  </td>
+
+  <td class="mobile-hide"></td>
+
+  <td class="center" id="totalHours" data-label="TOPLAM SAAT"></td>
+
+  <td class="center" id="totalMins" data-label="TOPLAM DAKİKA"></td>
+
+  <td class="right" id="totalPay" data-label="ÜCRET"></td>
+</tr>
+
 </tfoot>
+
 </table>
+
 </div>
 </div>
 
 <div id="sheet3" class="sheet hidden">
+
 <div class="table-scroll">
+
 <table id="tableSheet3">
+
 <thead>
-  <tr><th colspan="3" class="title" id="titleAnnual">YILLIK FAZLA MESAİ ÖZETİ</th></tr>
-  <tr><th>AY</th><th>TOPLAM MESAİ SAATİ</th><th>TAHMİNİ TOPLAM ÜCRET</th></tr>
+
+<tr>
+  <th colspan="3" class="title" id="titleAnnual">
+    YILLIK FAZLA MESAİ ÖZETİ
+  </th>
+</tr>
+
+<tr>
+  <th>AY</th>
+  <th>TOPLAM MESAİ SAATİ</th>
+  <th>TAHMİNİ TOPLAM ÜCRET</th>
+</tr>
+
 </thead>
+
 <tbody id="tbodySheet3"></tbody>
+
 </table>
+
 </div>
 </div>
 
-<!-- YENİLENMİŞ MODERN ÜCRET SAYFASI (SHEET 4) -->
+<!-- ÜCRET SAYFASI -->
 <div id="sheet4" class="sheet hidden">
+
   <div class="salary-dashboard">
-    
+
     <div class="salary-grid">
-      <!-- SOL BLOK: BAZ ÜCRET VE SAAT HESAPLARI -->
+
       <div class="salary-block">
-        <div class="salary-block-title">Maaş ve Birim Ücretler</div>
-        
+
+        <div class="salary-block-title">
+          Maaş ve Birim Ücretler
+        </div>
+
         <div class="salary-row">
           <span class="salary-label">Aylık Net Maaş</span>
+
           <div class="salary-input-wrapper primary-input">
-            <input id="salary" type="text" value="0" aria-label="Aylık maaş" oninput="save();calc()">
+
+            <input 
+              id="salary" 
+              type="text" 
+              value="0" 
+              aria-label="Aylık maaş" 
+              oninput="save();calc()"
+            >
+
             <span class="salary-unit">₺</span>
+
           </div>
         </div>
 
         <div class="salary-row">
           <span class="salary-label">Normal Saat Ücreti</span>
+
           <div class="salary-input-wrapper">
-            <input id="normalHour" type="text" readonly aria-label="Normal saat ücreti">
+
+            <input 
+              id="normalHour" 
+              type="text" 
+              readonly 
+              aria-label="Normal saat ücreti"
+            >
+
             <span class="salary-unit">₺</span>
+
           </div>
         </div>
 
         <div class="salary-row">
           <span class="salary-label">Normal Dakika Ücreti</span>
+
           <div class="salary-input-wrapper">
-            <input id="normalMin" type="text" readonly aria-label="Normal dakika ücreti">
+
+            <input 
+              id="normalMin" 
+              type="text" 
+              readonly 
+              aria-label="Normal dakika ücreti"
+            >
+
             <span class="salary-unit">₺</span>
+
           </div>
         </div>
 
         <div class="salary-row">
           <span class="salary-label">Mesai Saat Ücreti (%50)</span>
+
           <div class="salary-input-wrapper">
-            <input id="overtimeHour" type="text" readonly aria-label="Mesai saat ücreti">
+
+            <input 
+              id="overtimeHour" 
+              type="text" 
+              readonly 
+              aria-label="Mesai saat ücreti"
+            >
+
             <span class="salary-unit">₺</span>
+
           </div>
         </div>
 
         <div class="salary-row">
           <span class="salary-label">Mesai Dakika Ücreti</span>
+
           <div class="salary-input-wrapper">
-            <input id="overtimeMin" type="text" readonly aria-label="Mesai dakika ücreti">
+
+            <input 
+              id="overtimeMin" 
+              type="text" 
+              readonly 
+              aria-label="Mesai dakika ücreti"
+            >
+
             <span class="salary-unit">₺</span>
+
           </div>
         </div>
+
       </div>
 
-      <!-- SAĞ BLOK: MESAİ VE KESİNTİ HESABI -->
       <div class="salary-block">
-        <div class="salary-block-title">Hakediş ve Kesintiler</div>
+
+        <div class="salary-block-title">
+          Hakediş ve Kesintiler
+        </div>
 
         <div class="salary-row">
-          <span class="salary-label" style="font-weight: 800; color: #22C55E;">Alınan Mesai Ücreti</span>
+
+          <span 
+            class="salary-label" 
+            style="font-weight: 800; color: #22C55E;">
+            Alınan Mesai Ücreti
+          </span>
+
           <div class="salary-input-wrapper green-bg">
-            <input id="overtimePay" type="text" readonly aria-label="Toplam mesai ücreti">
-            <span class="salary-unit" style="color: #22C55E;">₺</span>
+
+            <input 
+              id="overtimePay" 
+              type="text" 
+              readonly 
+              aria-label="Toplam mesai ücreti"
+            >
+
+            <span 
+              class="salary-unit" 
+              style="color: #22C55E;">
+              ₺
+            </span>
+
           </div>
+
         </div>
 
         <div class="salary-row" style="margin-top: 12px;">
-          <span class="salary-label" style="color: #dc2626;">Kesinti Saati</span>
+
+          <span 
+            class="salary-label" 
+            style="color: #dc2626;">
+            Kesinti Saati
+          </span>
+
           <div class="salary-input-wrapper red-bg">
-            <input id="deductionHours" type="text" value="0" aria-label="Kesinti Saati" oninput="save();calc()" onblur="ensureNumber(this)">
-            <span class="salary-unit" style="color: #dc2626;">Sa</span>
+
+            <input 
+              id="deductionHours" 
+              type="text" 
+              value="0" 
+              aria-label="Kesinti Saati" 
+              oninput="save();calc()" 
+              onblur="ensureNumber(this)"
+            >
+
+            <span 
+              class="salary-unit" 
+              style="color: #dc2626;">
+              Sa
+            </span>
+
           </div>
+
         </div>
 
         <div class="salary-row">
-          <span class="salary-label" style="color: #dc2626;">Kesinti Dakikası</span>
+
+          <span 
+            class="salary-label" 
+            style="color: #dc2626;">
+            Kesinti Dakikası
+          </span>
+
           <div class="salary-input-wrapper red-bg">
-            <input id="deductionMinutes" type="text" value="0" aria-label="Kesinti Dakikası" oninput="save();calc()" onblur="ensureNumber(this)">
-            <span class="salary-unit" style="color: #dc2626;">Dk</span>
+
+            <input 
+              id="deductionMinutes" 
+              type="text" 
+              value="0" 
+              aria-label="Kesinti Dakikası" 
+              oninput="save();calc()" 
+              onblur="ensureNumber(this)"
+            >
+
+            <span 
+              class="salary-unit" 
+              style="color: #dc2626;">
+              Dk
+            </span>
+
           </div>
+
         </div>
 
         <div class="salary-row">
-          <span class="salary-label" style="font-weight: 800; color: #dc2626;">Yapılan Toplam Kesinti</span>
+
+          <span 
+            class="salary-label" 
+            style="font-weight: 800; color: #dc2626;">
+            Yapılan Toplam Kesinti
+          </span>
+
           <div class="salary-input-wrapper red-bg">
-            <input id="deduction" type="text" readonly aria-label="Yapılan toplam kesinti ücreti">
-            <span class="salary-unit" style="color: #dc2626;">₺</span>
+
+            <input 
+              id="deduction" 
+              type="text" 
+              readonly 
+              aria-label="Yapılan toplam kesinti ücreti"
+            >
+
+            <span 
+              class="salary-unit" 
+              style="color: #dc2626;">
+              ₺
+            </span>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
 
-    <!-- ALT BÖLÜM: DEV TOPLAM KART -->
     <div class="net-pay-card">
-      <div class="net-pay-title">TOPLAM HAK EDİLEN NET MAAŞ</div>
-      <div class="net-pay-value-wrap">
-        <input id="netPay" type="text" readonly aria-label="Toplam hak edilen net ücret">
+
+      <div class="net-pay-title">
+        TOPLAM HAK EDİLEN NET MAAŞ
       </div>
+
+      <div class="net-pay-value-wrap">
+
+        <input 
+          id="netPay" 
+          type="text" 
+          readonly 
+          aria-label="Toplam hak edilen net ücret"
+        >
+
+      </div>
+
     </div>
 
   </div>
-</div>
 
 </div>
 
-<div id="saveToast" class="save-toast">Kaydedildi ✓</div>
+</div>
+
+<div id="saveToast" class="save-toast">
+  Kaydedildi ✓
+</div>
 
 <script>
-const monthNames = ["OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS", "EYLÜL", "EKİM", "KASIM", "ARALIK"];
-const weekDaysFullTR = ['PAZAR', 'PAZARTESİ', 'SALI', 'ÇARŞAMBA', 'PERŞEMBE', 'CUMA', 'CUMARTESİ'];
+
+const monthNames = [
+  "OCAK",
+  "ŞUBAT",
+  "MART",
+  "NİSAN",
+  "MAYIS",
+  "HAZİRAN",
+  "TEMMUZ",
+  "AĞUSTOS",
+  "EYLÜL",
+  "EKİM",
+  "KASIM",
+  "ARALIK"
+];
+
+const weekDaysFullTR = [
+  'PAZAR',
+  'PAZARTESİ',
+  'SALI',
+  'ÇARŞAMBA',
+  'PERŞEMBE',
+  'CUMA',
+  'CUMARTESİ'
+];
 
 function updateDynamicTitle() {
-  const nameVal = (document.getElementById('name')?.value || '').trim();
-  const monthIdx = parseInt(document.getElementById('selectMonth').value);
+
+  const nameVal = (
+    document.getElementById('name')?.value || ''
+  ).trim();
+
+  const monthIdx = parseInt(
+    document.getElementById('selectMonth').value
+  );
+
   const monthName = monthNames[monthIdx];
-  const yearVal = document.getElementById('selectYear').value;
-  
+
+  const yearVal =
+    document.getElementById('selectYear').value;
+
   if (nameVal) {
-    document.title = `${nameVal}_${monthName}_${yearVal}_MESAİ ÇİZELGESİ`;
+
+    document.title =
+      `${nameVal}_${monthName}_${yearVal}_MESAİ ÇİZELGESİ`;
+
   } else {
-    document.title = `MESAİ ÇİZELGESİ ${monthName}_${yearVal}`;
+
+    document.title =
+      `MESAİ ÇİZELGESİ ${monthName}_${yearVal}`;
+
   }
 }
 
 
-async function shareExcel() {
+/* =========================================================
+   EXCEL PAYLAŞMA
+   ========================================================= */
+
+async function shareExcel(btn) {
+
   updateDynamicTitle();
 
   if (typeof ExcelJS === 'undefined') {
-    alert('Excel kütüphanesi yüklenemedi, internet bağlantınızı kontrol edin.');
+
+    alert(
+      'Excel kütüphanesi yüklenemedi.\n\n' +
+      'exceljs.min.js dosyasının uygulama klasöründe olduğundan emin olun.'
+    );
+
     return;
   }
 
-  const btn = (typeof event !== 'undefined' && event) ? event.target : null;
-  const oldText = btn ? btn.textContent : null;
-  if (btn) { btn.textContent = 'Excel Hazırlanıyor...'; btn.disabled = true; }
+  const oldText = btn ? btn.textContent : '';
+
+  if (btn) {
+
+    btn.textContent = 'Excel Hazırlanıyor...';
+    btn.disabled = true;
+
+  }
 
   try {
+
+    /*
+     * 1 — Excel şablonunu yükle
+     */
+
     const resp = await fetch('./sablon.xlsx');
-    if (!resp.ok) throw new Error('Şablon dosyası bulunamadı (sablon.xlsx). Dosyanın index.html ile aynı klasörde olduğundan emin olun.');
+
+    if (!resp.ok) {
+
+      throw new Error(
+        'Şablon dosyası bulunamadı (sablon.xlsx).\n\n' +
+        'sablon.xlsx dosyasının index.html ile aynı klasörde olduğundan emin olun.'
+      );
+
+    }
+
     const buffer = await resp.arrayBuffer();
 
+
+    /*
+     * 2 — ExcelJS ile dosyayı aç
+     */
+
     const workbook = new ExcelJS.Workbook();
+
     await workbook.xlsx.load(buffer);
+
     const ws = workbook.getWorksheet('Sayfa1');
-    if (!ws) throw new Error('Şablonda "Sayfa1" adında bir sekme bulunamadı.');
 
-    const name = (document.getElementById('name')?.value || '').trim();
-    const titleText = document.getElementById('title1')?.textContent || 'FAZLA MESAİ ÇİZELGESİ';
+    if (!ws) {
 
-    // Başlık ve Ad-Soyad
+      throw new Error(
+        'Şablonda "Sayfa1" adında bir sekme bulunamadı.'
+      );
+
+    }
+
+
+    /*
+     * 3 — Personel ve başlık
+     */
+
+    const name = (
+      document.getElementById('name')?.value || ''
+    ).trim();
+
+    const titleText =
+      document.getElementById('title1')?.textContent ||
+      'FAZLA MESAİ ÇİZELGESİ';
+
     ws.getCell('A1').value = titleText;
+
     ws.getCell('B2').value = name;
 
-    // Seçili yıl / ay / gün sayısı
-    const year = Number(document.getElementById('selectYear')?.value);
-    const monthIdx = parseInt(document.getElementById('selectMonth')?.value, 10); // 0=Ocak
-    const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
 
-    const TEMPLATE_DAY_ROWS = 31; // şablonda 4. satırdan 34. satıra kadar 31 gün var
+    /*
+     * 4 — Seçili yıl / ay
+     */
 
-    for (let i = 1; i <= TEMPLATE_DAY_ROWS; i++) {
-      const row = 3 + i; // 4..34
+    const year =
+      Number(document.getElementById('selectYear')?.value);
+
+    const monthIdx =
+      parseInt(
+        document.getElementById('selectMonth')?.value,
+        10
+      );
+
+    const daysInMonth =
+      new Date(year, monthIdx + 1, 0).getDate();
+
+
+    /*
+     * 5 — Günleri Excel'e aktar
+     */
+
+    const TEMPLATE_DAY_ROWS = 31;
+
+    for (
+      let i = 1;
+      i <= TEMPLATE_DAY_ROWS;
+      i++
+    ) {
+
+      const row = 3 + i;
+
+
       if (i <= daysInMonth) {
-        const dateObj = new Date(Date.UTC(year, monthIdx, i));
-        ws.getCell(`A${row}`).value = dateObj;
 
-        const timeVal = document.getElementById('time' + i)?.value || '';
-        const breakVal = document.getElementById('break' + i)?.value || '';
+        const dateObj =
+          new Date(Date.UTC(year, monthIdx, i));
 
-        ws.getCell(`B${row}`).value = timeVal;
-        ws.getCell(`D${row}`).value = breakVal === '' ? 0 : Number(breakVal);
+        ws.getCell(`A${row}`).value =
+          dateObj;
+
+
+        const timeVal =
+          document.getElementById(`time${i}`)?.value || '';
+
+        const breakVal =
+          document.getElementById(`break${i}`)?.value || '';
+
+
+        ws.getCell(`B${row}`).value =
+          timeVal;
+
+
+        ws.getCell(`D${row}`).value =
+          breakVal === ''
+            ? 0
+            : Number(breakVal);
+
       } else {
-        // Ay 31 günden kısaysa fazla satırları temizle
+
+        /*
+         * Ay 31 günden kısa ise
+         * fazla satırları temizle
+         */
+
         ws.getCell(`A${row}`).value = null;
         ws.getCell(`B${row}`).value = null;
         ws.getCell(`D${row}`).value = null;
         ws.getCell(`E${row}`).value = null;
+
       }
     }
 
-    const outBuffer = await workbook.xlsx.writeBuffer();
-    const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    const blob = new Blob([outBuffer], { type: mimeType });
-    const fileName = (name ? `${titleText}_${name}` : titleText).replace(/[^\wğüşıöçĞÜŞİÖÇ\-]+/g, '_') + '.xlsx';
-    const file = new File([blob], fileName, { type: mimeType });
 
-    let shared = false;
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          files: [file],
-          title: document.title,
-          text: name ? `${titleText} - ${name}` : titleText
-        });
-        shared = true;
-      } catch (shareErr) {
-        if (shareErr && shareErr.name === 'AbortError') shared = true;
+    /*
+     * 6 — XLSX oluştur
+     */
+
+    const outBuffer =
+      await workbook.xlsx.writeBuffer();
+
+    const mimeType =
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+
+    /*
+     * 7 — Dosya adını oluştur
+     */
+
+    const fileName =
+      (
+        name
+          ? `${titleText}_${name}`
+          : titleText
+      )
+      .replace(
+        /[^\wğüşıöçĞÜŞİÖÇ\-]+/g,
+        '_'
+      )
+      + '.xlsx';
+
+
+    /*
+     * 8 — Gerçek File nesnesi oluştur
+     *
+     * Android Web Share API için Blob yerine
+     * File kullanıyoruz.
+     */
+
+    const blob =
+      new Blob(
+        [outBuffer],
+        { type: mimeType }
+      );
+
+    const file =
+      new File(
+        [blob],
+        fileName,
+        { type: mimeType }
+      );
+
+
+    /*
+     * =====================================================
+     * 9 — SİSTEM PAYLAŞIM KONTROLÜ
+     * =====================================================
+     */
+
+    /*
+     * Tarayıcı Web Share API desteklemiyor
+     */
+
+    if (!navigator.share) {
+
+      throw new Error(
+        'Bu tarayıcı sistem paylaşımını desteklemiyor.\n\n' +
+        'Android için Chrome veya uygulamanın PWA sürümünü kullanın.'
+      );
+
+    }
+
+
+    /*
+     * Dosya paylaşımı destekleniyor mu?
+     *
+     * Android Chrome'da özellikle bu kontrol önemli.
+     */
+
+    if (
+      navigator.canShare &&
+      !navigator.canShare({
+        files: [file]
+      })
+    ) {
+
+      throw new Error(
+        'Bu Android/tarayıcı sürümü XLSX dosyasını ' +
+        'sistem paylaşımıyla göndermeyi desteklemiyor.\n\n' +
+        'Uygulamanın güncel Chrome/PWA sürümünde çalıştığından emin olun.'
+      );
+
+    }
+
+
+    /*
+     * =====================================================
+     * 10 — DOĞRUDAN ANDROID / iPHONE PAYLAŞIM EKRANI
+     * =====================================================
+     */
+
+    try {
+
+      await navigator.share({
+
+        files: [file],
+
+        title: document.title,
+
+        text:
+          name
+            ? `${titleText} - ${name}`
+            : titleText
+
+      });
+
+      /*
+       * Paylaşım başarılı.
+       */
+
+    } catch (shareErr) {
+
+      /*
+       * Kullanıcı Android/iPhone paylaşım ekranını
+       * kapattıysa bunu hata olarak gösterme.
+       */
+
+      if (
+        shareErr &&
+        shareErr.name === 'AbortError'
+      ) {
+
+        return;
+
       }
+
+      throw shareErr;
+
     }
 
-    if (!shared) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+
+    /*
+     * ÖNEMLİ:
+     *
+     * Burada artık kesinlikle:
+     *
+     * <a download="...">
+     *
+     * kullanılmıyor.
+     *
+     * Dolayısıyla Android Downloads'a
+     * otomatik Excel kaydedilmiyor.
+     */
+
   } catch (err) {
-    console.error('Excel oluşturma hatası:', err);
-    alert('Excel dosyası oluşturulurken bir hata oluştu: ' + (err && err.message ? err.message : ''));
+
+    console.error(
+      'Excel paylaşma hatası:',
+      err
+    );
+
+    alert(
+      'Excel paylaşılırken bir sorun oluştu.\n\n' +
+      (
+        err && err.message
+          ? err.message
+          : 'Bilinmeyen hata.'
+      )
+    );
+
   } finally {
-    if (btn) { btn.textContent = oldText; btn.disabled = false; }
+
+    if (btn) {
+
+      btn.textContent = oldText;
+      btn.disabled = false;
+
+    }
+
   }
 }
+
 
 function syncName() {
-  const nameVal = document.getElementById('name').value;
-  document.getElementById('supervisorDisplay').textContent = nameVal;
+
+  const nameVal =
+    document.getElementById('name').value;
+
+  document.getElementById(
+    'supervisorDisplay'
+  ).textContent = nameVal;
+
   updateDynamicTitle();
+
 }
+
 
 function initYearSelect() {
-  const sel = document.getElementById('selectYear');
+
+  const sel =
+    document.getElementById('selectYear');
+
   sel.innerHTML = '';
+
   const baseYear = 2026;
-  for(let y = baseYear; y <= baseYear + 5; y++) {
-    const opt = document.createElement('option');
+
+  for (
+    let y = baseYear;
+    y <= baseYear + 5;
+    y++
+  ) {
+
+    const opt =
+      document.createElement('option');
+
     opt.value = y;
     opt.textContent = y;
-    if(y === baseYear) opt.selected = true;
+
+    if (y === baseYear) {
+      opt.selected = true;
+    }
+
     sel.appendChild(opt);
+
   }
-  document.getElementById('selectMonth').value = new Date().getMonth();
+
+  document.getElementById(
+    'selectMonth'
+  ).value =
+    new Date().getMonth();
+
 }
+
 
 function getDaysInMonth(year, month) {
-  return new Date(year, month + 1, 0).getDate();
+
+  return new Date(
+    year,
+    month + 1,
+    0
+  ).getDate();
+
 }
 
+
 function getStorageKey() {
-  const year = document.getElementById('selectYear').value;
-  const month = document.getElementById('selectMonth').value;
+
+  const year =
+    document.getElementById(
+      'selectYear'
+    ).value;
+
+  const month =
+    document.getElementById(
+      'selectMonth'
+    ).value;
+
   return `fazlaMesaiCizelgesi_${year}_${month}`;
+
 }
+
 
 let currentDaysCount = 31;
 
+
 function formatHoursMinutes(totalMins) {
-  if (!totalMins || totalMins <= 0) return '';
-  const h = Math.floor(totalMins / 60);
-  const m = totalMins % 60;
-  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ' Saat';
+
+  if (
+    !totalMins ||
+    totalMins <= 0
+  ) {
+    return '';
+  }
+
+  const h =
+    Math.floor(totalMins / 60);
+
+  const m =
+    totalMins % 60;
+
+  return (
+    String(h).padStart(2, '0') +
+    ':' +
+    String(m).padStart(2, '0') +
+    ' Saat'
+  );
+
 }
 
+
 function buildTables() {
-  const year = parseInt(document.getElementById('selectYear').value);
-  const month = parseInt(document.getElementById('selectMonth').value);
-  currentDaysCount = getDaysInMonth(year, month);
 
-  document.getElementById('title1').textContent = `ŞENGÜN MAKİNA ${monthNames[month].toUpperCase()} AYI FAZLA MESAİ ÇİZELGESİ`;
+  const year =
+    parseInt(
+      document.getElementById(
+        'selectYear'
+      ).value
+    );
 
-  const tbody1 = document.getElementById('tbodySheet1');
-  const tbody2 = document.getElementById('tbodySheet2');
+  const month =
+    parseInt(
+      document.getElementById(
+        'selectMonth'
+      ).value
+    );
+
+  currentDaysCount =
+    getDaysInMonth(
+      year,
+      month
+    );
+
+  document.getElementById(
+    'title1'
+  ).textContent =
+    `ŞENGÜN MAKİNA ${monthNames[month].toUpperCase()} AYI FAZLA MESAİ ÇİZELGESİ`;
+
+  const tbody1 =
+    document.getElementById(
+      'tbodySheet1'
+    );
+
+  const tbody2 =
+    document.getElementById(
+      'tbodySheet2'
+    );
+
   tbody1.innerHTML = '';
   tbody2.innerHTML = '';
 
-  for(let i = 1; i <= currentDaysCount; i++) {
-    const dayStr = String(i).padStart(2, '0');
-    const monthStr = String(month + 1).padStart(2, '0');
-    const dateFormatted = `${dayStr}.${monthStr}.${year}`;
-    const dow = new Date(year, month, i).getDay();
-    const weekdayFull = weekDaysFullTR[dow];
-    const isWeekend = dow === 0 || dow === 6;
 
-    const tr1 = document.createElement('tr');
+  for (
+    let i = 1;
+    i <= currentDaysCount;
+    i++
+  ) {
+
+    const dayStr =
+      String(i).padStart(2, '0');
+
+    const monthStr =
+      String(month + 1).padStart(2, '0');
+
+    const dateFormatted =
+      `${dayStr}.${monthStr}.${year}`;
+
+    const dow =
+      new Date(
+        year,
+        month,
+        i
+      ).getDay();
+
+    const weekdayFull =
+      weekDaysFullTR[dow];
+
+    const isWeekend =
+      dow === 0 ||
+      dow === 6;
+
+
+    const tr1 =
+      document.createElement('tr');
+
     tr1.innerHTML = `
-      <td class="center" style="cursor:pointer" title="Bir şablon seçtiyseniz uygulamak için tıklayın" onclick="applyArmedTemplate(${i})">${dateFormatted}</td>
-      <td><input id="time${i}" aria-label="${dateFormatted} mesai saatleri" oninput="formatTimeLive(this);save();calc()" onblur="autoZero(${i})"></td>
-      <td class="center"><input id="break${i}" class="center" type="text" aria-label="${dateFormatted} mola dakika" oninput="save();calc()" onblur="autoZero(${i})"></td>
-      <td><input id="meal${i}" aria-label="${dateFormatted} yol-yemek" oninput="save()" onblur="autoZero(${i})"></td>
+      <td 
+        class="center" 
+        style="cursor:pointer" 
+        title="Bir şablon seçtiyseniz uygulamak için tıklayın" 
+        onclick="applyArmedTemplate(${i})">
+        ${dateFormatted}
+      </td>
+
+      <td>
+        <input 
+          id="time${i}" 
+          aria-label="${dateFormatted} mesai saatleri" 
+          oninput="formatTimeLive(this);save();calc()" 
+          onblur="autoZero(${i})">
+      </td>
+
+      <td class="center">
+        <input 
+          id="break${i}" 
+          class="center" 
+          type="text" 
+          aria-label="${dateFormatted} mola dakika" 
+          oninput="save();calc()" 
+          onblur="autoZero(${i})">
+      </td>
+
+      <td>
+        <input 
+          id="meal${i}" 
+          aria-label="${dateFormatted} yol-yemek" 
+          oninput="save()" 
+          onblur="autoZero(${i})">
+      </td>
     `;
+
     tbody1.appendChild(tr1);
 
-    const tr2 = document.createElement('tr');
-    tr2.id = `rowSheet2_${i}`;
-    if(isWeekend) tr2.classList.add('weekend');
+
+    const tr2 =
+      document.createElement('tr');
+
+    tr2.id =
+      `rowSheet2_${i}`;
+
+    if (isWeekend) {
+      tr2.classList.add('weekend');
+    }
+
     tr2.innerHTML = `
-      <td class="cell-header" id="d${i}" data-label="TARİH"><span class="date-text">${dateFormatted}</span><span class="day-text">${weekdayFull}</span></td>
-      <td id="startText${i}" data-label="BAŞLANGIÇ">-</td>
-      <td id="endText${i}" data-label="BİTİŞ">-</td>
-      <td id="bText${i}" data-label="MOLA(DK)">0</td>
-      <td data-label="MESAİ TİPİ"><select id="type${i}" title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" onchange="save();calc()"><option>PUFA(1,5X)</option><option>SERVİS(2X)</option></select></td>
-      <td class="center" id="mult${i}" data-label="ÇARPAN">1.5</td>
-      <td class="center" id="hours${i}" data-label="TOPLAM SAAT"></td>
-      <td class="center" id="mins${i}" data-label="TOPLAM DAKİKA"></td>
-      <td class="right" id="pay${i}" data-label="ÜCRET"></td>
+      <td 
+        class="cell-header" 
+        id="d${i}" 
+        data-label="TARİH">
+
+        <span class="date-text">
+          ${dateFormatted}
+        </span>
+
+        <span class="day-text">
+          ${weekdayFull}
+        </span>
+
+      </td>
+
+      <td 
+        id="startText${i}" 
+        data-label="BAŞLANGIÇ">
+        -
+      </td>
+
+      <td 
+        id="endText${i}" 
+        data-label="BİTİŞ">
+        -
+      </td>
+
+      <td 
+        id="bText${i}" 
+        data-label="MOLA(DK)">
+        0
+      </td>
+
+      <td data-label="MESAİ TİPİ">
+
+        <select 
+          id="type${i}" 
+          title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" 
+          onchange="save();calc()">
+
+          <option>PUFA(1,5X)</option>
+          <option>SERVİS(2X)</option>
+
+        </select>
+
+      </td>
+
+      <td 
+        class="center" 
+        id="mult${i}" 
+        data-label="ÇARPAN">
+        1.5
+      </td>
+
+      <td 
+        class="center" 
+        id="hours${i}" 
+        data-label="TOPLAM SAAT">
+      </td>
+
+      <td 
+        class="center" 
+        id="mins${i}" 
+        data-label="TOPLAM DAKİKA">
+      </td>
+
+      <td 
+        class="right" 
+        id="pay${i}" 
+        data-label="ÜCRET">
+      </td>
     `;
+
     tbody2.appendChild(tr2);
+
   }
 
-  for(let e = 1; e <= 6; e++) {
-    const extraId = 33 + e;
-    const trExtra = document.createElement('tr');
-    trExtra.id = `rowSheet2_${extraId}`;
-    trExtra.classList.add('extra-row');
+
+  for (
+    let e = 1;
+    e <= 6;
+    e++
+  ) {
+
+    const extraId =
+      33 + e;
+
+    const trExtra =
+      document.createElement('tr');
+
+    trExtra.id =
+      `rowSheet2_${extraId}`;
+
+    trExtra.classList.add(
+      'extra-row'
+    );
+
     trExtra.innerHTML = `
-      <td colspan="2" class="cell-header" data-label="GÜN"><span class="date-text">EKSTRA ${e}</span><span class="day-text">Özel Mesai</span></td><td class="mobile-hide"></td>
-      <td data-label="MOLA(DK)"><input id="b${extraId}" type="text" style="width:50px; text-align:center; border:1px solid #ccc; background:#fff; padding:2px;" oninput="save();calc()"></td>
-      <td data-label="MESAİ TİPİ"><select id="type${extraId}" title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" onchange="save();calc()"><option>PUFA(1,5X)</option><option>SERVİS(2X)</option></select></td>
-      <td class="center" id="mult${extraId}" data-label="ÇARPAN">1.5</td>
-      <td class="center" id="hours${extraId}" data-label="TOPLAM SAAT"></td>
-      <td class="center" id="mins${extraId}" data-label="TOPLAM DAKİKA"></td>
-      <td class="right" id="pay${extraId}" data-label="ÜCRET"></td>
+      <td 
+        colspan="2" 
+        class="cell-header" 
+        data-label="GÜN">
+
+        <span class="date-text">
+          EKSTRA ${e}
+        </span>
+
+        <span class="day-text">
+          Özel Mesai
+        </span>
+
+      </td>
+
+      <td class="mobile-hide"></td>
+
+      <td data-label="MOLA(DK)">
+
+        <input 
+          id="b${extraId}" 
+          type="text" 
+          style="width:50px; text-align:center; border:1px solid #ccc; background:#fff; padding:2px;" 
+          oninput="save();calc()">
+
+      </td>
+
+      <td data-label="MESAİ TİPİ">
+
+        <select 
+          id="type${extraId}" 
+          title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" 
+          onchange="save();calc()">
+
+          <option>PUFA(1,5X)</option>
+          <option>SERVİS(2X)</option>
+
+        </select>
+
+      </td>
+
+      <td 
+        class="center" 
+        id="mult${extraId}" 
+        data-label="ÇARPAN">
+        1.5
+      </td>
+
+      <td 
+        class="center" 
+        id="hours${extraId}" 
+        data-label="TOPLAM SAAT">
+      </td>
+
+      <td 
+        class="center" 
+        id="mins${extraId}" 
+        data-label="TOPLAM DAKİKA">
+      </td>
+
+      <td 
+        class="right" 
+        id="pay${extraId}" 
+        data-label="ÜCRET">
+      </td>
     `;
+
     tbody2.appendChild(trExtra);
+
   }
 
   updateDynamicTitle();
+
   buildAnnualTable();
+
 }
 
+
 function buildAnnualTable() {
-  const year = document.getElementById('selectYear').value;
-  document.getElementById('titleAnnual').textContent = `${year} YILI YILLIK FAZLA MESAİ ÖZETİ`;
-  const tbody3 = document.getElementById('tbodySheet3');
+
+  const year =
+    document.getElementById(
+      'selectYear'
+    ).value;
+
+  document.getElementById(
+    'titleAnnual'
+  ).textContent =
+    `${year} YILI YILLIK FAZLA MESAİ ÖZETİ`;
+
+  const tbody3 =
+    document.getElementById(
+      'tbodySheet3'
+    );
+
   tbody3.innerHTML = '';
 
   let totalAnnualMinutes = 0;
 
-  for(let m = 0; m < 12; m++) {
-    const key = `fazlaMesaiCizelgesi_${year}_${m}`;
+
+  for (
+    let m = 0;
+    m < 12;
+    m++
+  ) {
+
+    const key =
+      `fazlaMesaiCizelgesi_${year}_${m}`;
+
     let monthMin = 0;
     let monthPay = 0;
+
     try {
-      const data = JSON.parse(localStorage.getItem(key) || '{}');
-      const daysCount = getDaysInMonth(year, m);
-      const salaryClean = String(data['salary'] || '0').replace(/[^0-9,.]/g, '').replace(',', '.');
-      const salary = Number(salaryClean) || 0;
-      const normalMin = salary > 0 ? salary / 225 / 60 : 0;
 
-      for(let i = 1; i <= daysCount; i++) {
-        const timeVal = data['time'+i] || '';
-        const breakVal = Number(data['break'+i]) || 0;
-        const parts = timeVal.split('-');
-        const a = parseTime((parts[0]||'').trim());
-        const z = parseTime((parts[1]||'').trim());
-        if(a !== null && z !== null) {
+      const data =
+        JSON.parse(
+          localStorage.getItem(key) || '{}'
+        );
+
+      const daysCount =
+        getDaysInMonth(
+          year,
+          m
+        );
+
+      const salaryClean =
+        String(
+          data['salary'] || '0'
+        )
+        .replace(
+          /[^0-9,.]/g,
+          ''
+        )
+        .replace(
+          ',',
+          '.'
+        );
+
+      const salary =
+        Number(salaryClean) || 0;
+
+      const normalMin =
+        salary > 0
+          ? salary / 225 / 60
+          : 0;
+
+
+      for (
+        let i = 1;
+        i <= daysCount;
+        i++
+      ) {
+
+        const timeVal =
+          data['time' + i] || '';
+
+        const breakVal =
+          Number(
+            data['break' + i]
+          ) || 0;
+
+        const parts =
+          timeVal.split('-');
+
+        const a =
+          parseTime(
+            (parts[0] || '').trim()
+          );
+
+        const z =
+          parseTime(
+            (parts[1] || '').trim()
+          );
+
+        if (
+          a !== null &&
+          z !== null
+        ) {
+
           let mins = 0;
-          if (a === 0 && z === 0) {
-            mins = 24 * 60 - breakVal;
+
+          if (
+            a === 0 &&
+            z === 0
+          ) {
+
+            mins =
+              24 * 60 -
+              breakVal;
+
           } else {
-            mins = z - a - breakVal;
-            if(mins < 0) mins += 24*60;
+
+            mins =
+              z -
+              a -
+              breakVal;
+
+            if (mins < 0) {
+              mins += 24 * 60;
+            }
+
           }
-          if(mins < 0) mins = 0;
-          const type = data['type'+i] || 'PUFA(1,5X)';
-          const mult = type==='SERVİS(2X)'?2:1.5;
+
+          if (mins < 0) {
+            mins = 0;
+          }
+
+          const type =
+            data['type' + i] ||
+            'PUFA(1,5X)';
+
+          const mult =
+            type === 'SERVİS(2X)'
+              ? 2
+              : 1.5;
+
           monthMin += mins;
-          monthPay += mins * normalMin * mult;
+
+          monthPay +=
+            mins *
+            normalMin *
+            mult;
+
         }
+
       }
-      for(let e = 34; e <= 39; e++) {
-        const mins = Number(data['b'+e]) || 0;
-        const type = data['type'+e] || 'PUFA(1,5X)';
-        const mult = type==='SERVİS(2X)'?2:1.5;
+
+
+      for (
+        let e = 34;
+        e <= 39;
+        e++
+      ) {
+
+        const mins =
+          Number(
+            data['b' + e]
+          ) || 0;
+
+        const type =
+          data['type' + e] ||
+          'PUFA(1,5X)';
+
+        const mult =
+          type === 'SERVİS(2X)'
+            ? 2
+            : 1.5;
+
         monthMin += mins;
-        monthPay += mins * normalMin * mult;
+
+        monthPay +=
+          mins *
+          normalMin *
+          mult;
+
       }
-    } catch(err) { console.warn(`Yıllık özet hesaplanırken hata (${monthNames[m]}):`, err); }
 
-    totalAnnualMinutes += monthMin;
+    } catch (err) {
 
-    const tr = document.createElement('tr');
+      console.warn(
+        `Yıllık özet hesaplanırken hata (${monthNames[m]}):`,
+        err
+      );
+
+    }
+
+
+    totalAnnualMinutes +=
+      monthMin;
+
+
+    const tr =
+      document.createElement('tr');
+
     tr.innerHTML = `
-      <td><b>${monthNames[m]}</b></td>
-      <td class="right"><b>${formatHoursMinutes(monthMin)}</b></td>
-      <td class="right"><b>${money(monthPay)} ₺</b></td>
+      <td>
+        <b>${monthNames[m]}</b>
+      </td>
+
+      <td class="right">
+        <b>${formatHoursMinutes(monthMin)}</b>
+      </td>
+
+      <td class="right">
+        <b>${money(monthPay)} ₺</b>
+      </td>
     `;
+
     tbody3.appendChild(tr);
+
   }
 
-  const alertBox = document.getElementById('limitAlert');
-  if((totalAnnualMinutes / 60) > 270) {
-    alertBox.style.display = 'block';
+
+  const alertBox =
+    document.getElementById(
+      'limitAlert'
+    );
+
+  if (
+    (totalAnnualMinutes / 60) > 270
+  ) {
+
+    alertBox.style.display =
+      'block';
+
   } else {
-    alertBox.style.display = 'none';
+
+    alertBox.style.display =
+      'none';
+
   }
+
 }
+
 
 function updateMonthDays() {
+
   buildTables();
+
   restore();
+
   calc();
+
 }
 
-function showSheet(n){
-  document.getElementById('sheet1').classList.toggle('hidden',n!==1);
-  document.getElementById('sheet2').classList.toggle('hidden',n!==2);
-  document.getElementById('sheet3').classList.toggle('hidden',n!==3);
-  document.getElementById('sheet4').classList.toggle('hidden',n!==4);
-  const order = [1,2,4,3];
-  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',order[i]===n));
-  if(n === 3) buildAnnualTable();
+
+function showSheet(n) {
+
+  document.getElementById(
+    'sheet1'
+  ).classList.toggle(
+    'hidden',
+    n !== 1
+  );
+
+  document.getElementById(
+    'sheet2'
+  ).classList.toggle(
+    'hidden',
+    n !== 2
+  );
+
+  document.getElementById(
+    'sheet3'
+  ).classList.toggle(
+    'hidden',
+    n !== 3
+  );
+
+  document.getElementById(
+    'sheet4'
+  ).classList.toggle(
+    'hidden',
+    n !== 4
+  );
+
+
+  const order =
+    [1,2,4,3];
+
+  document
+    .querySelectorAll('.tab')
+    .forEach(
+      (b,i) =>
+        b.classList.toggle(
+          'active',
+          order[i] === n
+        )
+    );
+
+
+  if (n === 3) {
+    buildAnnualTable();
+  }
+
 }
 
-function parseTime(s){
-  const m=(s||'').trim().match(/^(\d{1,2})[:. ](\d{2})$/);
-  if(!m) return null;
-  let h=+m[1], min=+m[2]; if(h>23||min>59)return null;
-  return h*60+min;
+
+function parseTime(s) {
+
+  const m =
+    (s || '')
+      .trim()
+      .match(
+        /^(\d{1,2})[:. ](\d{2})$/
+      );
+
+  if (!m) {
+    return null;
+  }
+
+  let h = +m[1];
+  let min = +m[2];
+
+  if (
+    h > 23 ||
+    min > 59
+  ) {
+    return null;
+  }
+
+  return h * 60 + min;
+
 }
+
 
 function formatTimeLive(input) {
-  let val = input.value;
-  let clean = val.replace(/\D/g, '');
 
-  if (clean.length === 8) {
-    input.value = `${clean.slice(0,2)}:${clean.slice(2,4)}-${clean.slice(4,6)}:${clean.slice(6,8)}`;
-  } 
-  else if (clean.length === 4 && !val.includes(':')) {
-    input.value = `${clean.slice(0,2)}:${clean.slice(2,4)}`;
+  let val =
+    input.value;
+
+  let clean =
+    val.replace(
+      /\D/g,
+      ''
+    );
+
+
+  if (
+    clean.length === 8
+  ) {
+
+    input.value =
+      `${clean.slice(0,2)}:${clean.slice(2,4)}-${clean.slice(4,6)}:${clean.slice(6,8)}`;
+
   }
+
+  else if (
+    clean.length === 4 &&
+    !val.includes(':')
+  ) {
+
+    input.value =
+      `${clean.slice(0,2)}:${clean.slice(2,4)}`;
+
+  }
+
 }
 
-function autoZero(i){
-  const timeElem = document.getElementById('time'+i);
-  const breakElem = document.getElementById('break'+i);
-  const mealElem = document.getElementById('meal'+i);
-  
-  if(!timeElem) return;
 
-  const hasTime = (timeElem.value || '').trim().length > 0;
-  if(hasTime){
-    if(breakElem && breakElem.value.trim() === '') breakElem.value = '0';
-    if(mealElem && mealElem.value.trim() === '') mealElem.value = '0';
+function autoZero(i) {
+
+  const timeElem =
+    document.getElementById(
+      'time' + i
+    );
+
+  const breakElem =
+    document.getElementById(
+      'break' + i
+    );
+
+  const mealElem =
+    document.getElementById(
+      'meal' + i
+    );
+
+
+  if (!timeElem) {
+    return;
   }
+
+
+  const hasTime =
+    (
+      timeElem.value || ''
+    ).trim().length > 0;
+
+
+  if (hasTime) {
+
+    if (
+      breakElem &&
+      breakElem.value.trim() === ''
+    ) {
+      breakElem.value = '0';
+    }
+
+    if (
+      mealElem &&
+      mealElem.value.trim() === ''
+    ) {
+      mealElem.value = '0';
+    }
+
+  }
+
   save();
+
   calc();
+
 }
+
 
 function ensureNumber(input) {
-  if (input.value.trim() === '') {
+
+  if (
+    input.value.trim() === ''
+  ) {
+
     input.value = '0';
+
     save();
+
     calc();
+
   }
+
 }
 
-function money(x){return isFinite(x) ? x.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '0,00'}
 
-function updateEmptyState(){
-  const note = document.getElementById('emptyStateNote');
-  if(!note) return;
+function money(x) {
+
+  return isFinite(x)
+    ? x.toLocaleString(
+        'tr-TR',
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      )
+    : '0,00';
+
+}
+
+
+function updateEmptyState() {
+
+  const note =
+    document.getElementById(
+      'emptyStateNote'
+    );
+
+  if (!note) {
+    return;
+  }
+
   let hasAny = false;
-  for(let i = 1; i <= currentDaysCount; i++) {
-    const t = document.getElementById('time'+i);
-    if(t && t.value && t.value.trim().length > 0) { hasAny = true; break; }
+
+
+  for (
+    let i = 1;
+    i <= currentDaysCount;
+    i++
+  ) {
+
+    const t =
+      document.getElementById(
+        'time' + i
+      );
+
+    if (
+      t &&
+      t.value &&
+      t.value.trim().length > 0
+    ) {
+
+      hasAny = true;
+
+      break;
+
+    }
+
   }
-  note.style.display = hasAny ? 'none' : 'block';
+
+  note.style.display =
+    hasAny
+      ? 'none'
+      : 'block';
+
 }
 
-function calc(){
-  const salaryClean = String(document.getElementById('salary').value || '0').replace(/[^0-9,.]/g, '').replace(',', '.');
-  const salary = Number(salaryClean) || 0;
-  const normalMin = salary / 225 / 60, normalHour = salary / 225;
-  document.getElementById('normalMin').value = money(normalMin) + ' ₺';
-  document.getElementById('normalHour').value = money(normalHour) + ' ₺';
-  document.getElementById('overtimeMin').value = money(normalMin * 1.5) + ' ₺';
-  document.getElementById('overtimeHour').value = money(normalHour * 1.5) + ' ₺';
+
+function calc() {
+
+  const salaryClean =
+    String(
+      document.getElementById(
+        'salary'
+      ).value || '0'
+    )
+    .replace(
+      /[^0-9,.]/g,
+      ''
+    )
+    .replace(
+      ',',
+      '.'
+    );
+
+
+  const salary =
+    Number(salaryClean) || 0;
+
+
+  const normalMin =
+    salary / 225 / 60;
+
+  const normalHour =
+    salary / 225;
+
+
+  document.getElementById(
+    'normalMin'
+  ).value =
+    money(normalMin) + ' ₺';
+
+
+  document.getElementById(
+    'normalHour'
+  ).value =
+    money(normalHour) + ' ₺';
+
+
+  document.getElementById(
+    'overtimeMin'
+  ).value =
+    money(
+      normalMin * 1.5
+    ) + ' ₺';
+
+
+  document.getElementById(
+    'overtimeHour'
+  ).value =
+    money(
+      normalHour * 1.5
+    ) + ' ₺';
+
 
   let totalMin = 0;
   let mins1_5 = 0;
   let mins2_0 = 0;
 
-  for(let i = 1; i <= currentDaysCount; i++){
-    let timeElem = document.getElementById('time'+i);
-    let breakElem = document.getElementById('break'+i);
-    let startText = document.getElementById('startText'+i);
-    let endText = document.getElementById('endText'+i);
-    let bText = document.getElementById('bText'+i);
-    let rowSheet2 = document.getElementById('rowSheet2_'+i);
 
-    let start='-', end='-', br=0;
-    if(timeElem && breakElem) {
-      const s = timeElem.value || '';
-      const parts = s.split('-');
-      start = (parts[0]||'').trim() || '-'; 
-      end = (parts[1]||'').trim() || '-';
-      if(startText) startText.textContent = start;
-      if(endText) endText.textContent = end;
-      br = Number(breakElem.value) || 0;
-      if(bText) bText.textContent = br > 0 ? br : '0';
-    }
+  for (
+    let i = 1;
+    i <= currentDaysCount;
+    i++
+  ) {
 
-    const a = parseTime(start), z = parseTime(end);
-    let mins = 0;
-    if(a !== null && z !== null){
-      if (a === 0 && z === 0) {
-        mins = 24 * 60 - br;
-      } else {
-        mins = z - a - br;
-        if(mins < 0) mins += 24*60;
+    let timeElem =
+      document.getElementById(
+        'time' + i
+      );
+
+    let breakElem =
+      document.getElementById(
+        'break' + i
+      );
+
+    let startText =
+      document.getElementById(
+        'startText' + i
+      );
+
+    let endText =
+      document.getElementById(
+        'endText' + i
+      );
+
+    let bText =
+      document.getElementById(
+        'bText' + i
+      );
+
+    let rowSheet2 =
+      document.getElementById(
+        'rowSheet2_' + i
+      );
+
+
+    let start = '-';
+    let end = '-';
+    let br = 0;
+
+
+    if (
+      timeElem &&
+      breakElem
+    ) {
+
+      const s =
+        timeElem.value || '';
+
+      const parts =
+        s.split('-');
+
+
+      start =
+        (
+          parts[0] || ''
+        ).trim() || '-';
+
+      end =
+        (
+          parts[1] || ''
+        ).trim() || '-';
+
+
+      if (startText) {
+        startText.textContent =
+          start;
       }
-      if(mins < 0) mins = 0;
-    }
-    
-    const hasOvertime = (mins > 0);
-    if(rowSheet2) {
-      rowSheet2.classList.toggle('hidden-row', !hasOvertime);
+
+      if (endText) {
+        endText.textContent =
+          end;
+      }
+
+
+      br =
+        Number(
+          breakElem.value
+        ) || 0;
+
+
+      if (bText) {
+
+        bText.textContent =
+          br > 0
+            ? br
+            : '0';
+
+      }
+
     }
 
-    if(timeElem) {
-      const hasContent = (timeElem.value || '').trim().length > 0;
-      const isInvalid = hasContent && (a === null || z === null);
-      timeElem.classList.toggle('invalid', isInvalid);
-      timeElem.title = isInvalid ? 'Geçersiz format! "10001200" veya "10:00-12:00" biçiminde girin' : '';
+
+    const a =
+      parseTime(start);
+
+    const z =
+      parseTime(end);
+
+
+    let mins = 0;
+
+
+    if (
+      a !== null &&
+      z !== null
+    ) {
+
+      if (
+        a === 0 &&
+        z === 0
+      ) {
+
+        mins =
+          24 * 60 -
+          br;
+
+      } else {
+
+        mins =
+          z -
+          a -
+          br;
+
+        if (mins < 0) {
+          mins += 24 * 60;
+        }
+
+      }
+
+      if (mins < 0) {
+        mins = 0;
+      }
+
     }
 
-    const typeElem = document.getElementById('type'+i);
-    const type = typeElem ? typeElem.value : 'PUFA(1,5X)';
-    const mult = type === 'SERVİS(2X)' ? 2 : 1.5;
-    
-    const multElem = document.getElementById('mult'+i);
-    const minsElem = document.getElementById('mins'+i);
-    const hoursElem = document.getElementById('hours'+i);
-    const payElem = document.getElementById('pay'+i);
 
-    if(multElem) multElem.textContent = mult;
-    if(minsElem) minsElem.textContent = mins ? mins.toFixed(0) : '';
-    if(hoursElem) hoursElem.textContent = mins ? formatHoursMinutes(mins) : '';
-    
-    const pay = mins * normalMin * mult;
-    if(payElem) payElem.textContent = pay ? money(pay) + ' ₺' : '';
-    
+    const hasOvertime =
+      mins > 0;
+
+
+    if (rowSheet2) {
+
+      rowSheet2.classList.toggle(
+        'hidden-row',
+        !hasOvertime
+      );
+
+    }
+
+
+    if (timeElem) {
+
+      const hasContent =
+        (
+          timeElem.value || ''
+        ).trim().length > 0;
+
+
+      const isInvalid =
+        hasContent &&
+        (
+          a === null ||
+          z === null
+        );
+
+
+      timeElem.classList.toggle(
+        'invalid',
+        isInvalid
+      );
+
+
+      timeElem.title =
+        isInvalid
+          ? 'Geçersiz format! "10001200" veya "10:00-12:00" biçiminde girin'
+          : '';
+
+    }
+
+
+    const typeElem =
+      document.getElementById(
+        'type' + i
+      );
+
+
+    const type =
+      typeElem
+        ? typeElem.value
+        : 'PUFA(1,5X)';
+
+
+    const mult =
+      type === 'SERVİS(2X)'
+        ? 2
+        : 1.5;
+
+
+    const multElem =
+      document.getElementById(
+        'mult' + i
+      );
+
+    const minsElem =
+      document.getElementById(
+        'mins' + i
+      );
+
+    const hoursElem =
+      document.getElementById(
+        'hours' + i
+      );
+
+    const payElem =
+      document.getElementById(
+        'pay' + i
+      );
+
+
+    if (multElem) {
+      multElem.textContent =
+        mult;
+    }
+
+
+    if (minsElem) {
+
+      minsElem.textContent =
+        mins
+          ? mins.toFixed(0)
+          : '';
+
+    }
+
+
+    if (hoursElem) {
+
+      hoursElem.textContent =
+        mins
+          ? formatHoursMinutes(mins)
+          : '';
+
+    }
+
+
+    const pay =
+      mins *
+      normalMin *
+      mult;
+
+
+    if (payElem) {
+
+      payElem.textContent =
+        pay
+          ? money(pay) + ' ₺'
+          : '';
+
+    }
+
+
     totalMin += mins;
-    if(mult === 1.5) mins1_5 += mins;
-    else if(mult === 2) mins2_0 += mins;
+
+
+    if (mult === 1.5) {
+      mins1_5 += mins;
+    }
+
+    else if (mult === 2) {
+      mins2_0 += mins;
+    }
+
   }
 
-  for(let extraId = 34; extraId <= 39; extraId++){
-    const bElem = document.getElementById('b'+extraId);
-    const typeElem = document.getElementById('type'+extraId);
-    const rowSheet2 = document.getElementById('rowSheet2_'+extraId);
-    if(!bElem || !typeElem) continue;
 
-    let mins = Number(bElem.value) || 0;
-    let type = typeElem.value;
-    let mult = type === 'SERVİS(2X)' ? 2 : 1.5;
+  for (
+    let extraId = 34;
+    extraId <= 39;
+    extraId++
+  ) {
 
-    if(bElem.value.trim() === '') {
+    const bElem =
+      document.getElementById(
+        'b' + extraId
+      );
+
+    const typeElem =
+      document.getElementById(
+        'type' + extraId
+      );
+
+    const rowSheet2 =
+      document.getElementById(
+        'rowSheet2_' + extraId
+      );
+
+
+    if (
+      !bElem ||
+      !typeElem
+    ) {
+      continue;
+    }
+
+
+    let mins =
+      Number(
+        bElem.value
+      ) || 0;
+
+
+    let type =
+      typeElem.value;
+
+
+    let mult =
+      type === 'SERVİS(2X)'
+        ? 2
+        : 1.5;
+
+
+    if (
+      bElem.value.trim() === ''
+    ) {
       bElem.value = '0';
     }
 
-    if(rowSheet2) {
-      rowSheet2.classList.toggle('hidden-row', mins <= 0);
+
+    if (rowSheet2) {
+
+      rowSheet2.classList.toggle(
+        'hidden-row',
+        mins <= 0
+      );
+
     }
 
-    const multElem = document.getElementById('mult'+extraId);
-    const minsElem = document.getElementById('mins'+extraId);
-    const hoursElem = document.getElementById('hours'+extraId);
-    const payElem = document.getElementById('pay'+extraId);
 
-    if(multElem) multElem.textContent = mult;
-    if(minsElem) minsElem.textContent = mins ? mins.toFixed(0) : '';
-    if(hoursElem) hoursElem.textContent = mins ? formatHoursMinutes(mins) : '';
+    const multElem =
+      document.getElementById(
+        'mult' + extraId
+      );
 
-    const pay = mins * normalMin * mult;
-    if(payElem) payElem.textContent = pay ? money(pay) + ' ₺' : '';
+    const minsElem =
+      document.getElementById(
+        'mins' + extraId
+      );
+
+    const hoursElem =
+      document.getElementById(
+        'hours' + extraId
+      );
+
+    const payElem =
+      document.getElementById(
+        'pay' + extraId
+      );
+
+
+    if (multElem) {
+      multElem.textContent =
+        mult;
+    }
+
+
+    if (minsElem) {
+
+      minsElem.textContent =
+        mins
+          ? mins.toFixed(0)
+          : '';
+
+    }
+
+
+    if (hoursElem) {
+
+      hoursElem.textContent =
+        mins
+          ? formatHoursMinutes(mins)
+          : '';
+
+    }
+
+
+    const pay =
+      mins *
+      normalMin *
+      mult;
+
+
+    if (payElem) {
+
+      payElem.textContent =
+        pay
+          ? money(pay) + ' ₺'
+          : '';
+
+    }
+
 
     totalMin += mins;
-    if(mult === 1.5) mins1_5 += mins;
-    else if(mult === 2) mins2_0 += mins;
+
+
+    if (mult === 1.5) {
+      mins1_5 += mins;
+    }
+
+    else if (mult === 2) {
+      mins2_0 += mins;
+    }
+
   }
 
-  // KESİNTİ VE NET HAK EDİŞ HESAPLAMA
-  const dedHInput = document.getElementById('deductionHours')?.value;
-  const dedMInput = document.getElementById('deductionMinutes')?.value;
 
-  const dedH = (dedHInput && !isNaN(dedHInput)) ? parseInt(dedHInput, 10) : 0;
-  const dedM = (dedMInput && !isNaN(dedMInput)) ? parseInt(dedMInput, 10) : 0;
+  /* KESİNTİ VE NET HAK EDİŞ */
 
-  let remainingDeduction = (dedH * 60) + dedM;
+  const dedHInput =
+    document.getElementById(
+      'deductionHours'
+    )?.value;
 
-  const grossOvertimePay = (mins1_5 * normalMin * 1.5) + (mins2_0 * normalMin * 2.0);
 
-  let cut1_5 = Math.min(mins1_5, remainingDeduction);
-  remainingDeduction -= cut1_5;
+  const dedMInput =
+    document.getElementById(
+      'deductionMinutes'
+    )?.value;
 
-  let cut2_0 = Math.min(mins2_0, remainingDeduction);
-  remainingDeduction -= cut2_0;
 
-  const cutFrom1_5_Val = cut1_5 * normalMin * 1.5;
-  const cutFrom2_0_Val = cut2_0 * normalMin * 2.0;
-  const cutFromSalaryVal = remainingDeduction * normalMin;
+  const dedH =
+    (
+      dedHInput &&
+      !isNaN(dedHInput)
+    )
+      ? parseInt(
+          dedHInput,
+          10
+        )
+      : 0;
 
-  const totalDeductionMoney = cutFrom1_5_Val + cutFrom2_0_Val + cutFromSalaryVal;
-  const netOvertimePay = ((mins1_5 - cut1_5) * normalMin * 1.5) + ((mins2_0 - cut2_0) * normalMin * 2.0);
-  const netPayVal = (salary + grossOvertimePay) - totalDeductionMoney;
 
-  document.getElementById('totalHours').textContent = formatHoursMinutes(totalMin);
-  document.getElementById('totalMins').textContent = totalMin + ' Dk';
-  document.getElementById('totalPay').textContent = money(grossOvertimePay) + ' ₺';
+  const dedM =
+    (
+      dedMInput &&
+      !isNaN(dedMInput)
+    )
+      ? parseInt(
+          dedMInput,
+          10
+        )
+      : 0;
 
-  document.getElementById('overtimePay').value = money(netOvertimePay) + ' ₺';
-  document.getElementById('deduction').value = money(totalDeductionMoney) + ' ₺';
-  document.getElementById('netPay').value = money(netPayVal) + ' ₺';
+
+  let remainingDeduction =
+    (
+      dedH * 60
+    ) +
+    dedM;
+
+
+  const grossOvertimePay =
+    (
+      mins1_5 *
+      normalMin *
+      1.5
+    ) +
+    (
+      mins2_0 *
+      normalMin *
+      2.0
+    );
+
+
+  let cut1_5 =
+    Math.min(
+      mins1_5,
+      remainingDeduction
+    );
+
+
+  remainingDeduction -=
+    cut1_5;
+
+
+  let cut2_0 =
+    Math.min(
+      mins2_0,
+      remainingDeduction
+    );
+
+
+  remainingDeduction -=
+    cut2_0;
+
+
+  const cutFrom1_5_Val =
+    cut1_5 *
+    normalMin *
+    1.5;
+
+
+  const cutFrom2_0_Val =
+    cut2_0 *
+    normalMin *
+    2.0;
+
+
+  const cutFromSalaryVal =
+    remainingDeduction *
+    normalMin;
+
+
+  const totalDeductionMoney =
+    cutFrom1_5_Val +
+    cutFrom2_0_Val +
+    cutFromSalaryVal;
+
+
+  const netOvertimePay =
+    (
+      (mins1_5 - cut1_5) *
+      normalMin *
+      1.5
+    ) +
+    (
+      (mins2_0 - cut2_0) *
+      normalMin *
+      2.0
+    );
+
+
+  const netPayVal =
+    (
+      salary +
+      grossOvertimePay
+    ) -
+    totalDeductionMoney;
+
+
+  document.getElementById(
+    'totalHours'
+  ).textContent =
+    formatHoursMinutes(
+      totalMin
+    );
+
+
+  document.getElementById(
+    'totalMins'
+  ).textContent =
+    totalMin + ' Dk';
+
+
+  document.getElementById(
+    'totalPay'
+  ).textContent =
+    money(
+      grossOvertimePay
+    ) + ' ₺';
+
+
+  document.getElementById(
+    'overtimePay'
+  ).value =
+    money(
+      netOvertimePay
+    ) + ' ₺';
+
+
+  document.getElementById(
+    'deduction'
+  ).value =
+    money(
+      totalDeductionMoney
+    ) + ' ₺';
+
+
+  document.getElementById(
+    'netPay'
+  ).value =
+    money(
+      netPayVal
+    ) + ' ₺';
+
 
   buildAnnualTable();
+
   updateEmptyState();
+
 }
+
 
 let toastTimer = null;
-function showSavedToast(){
-  const toast = document.getElementById('saveToast');
-  if(!toast) return;
-  toast.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>{ toast.classList.remove('show'); }, 1200);
+
+
+function showSavedToast() {
+
+  const toast =
+    document.getElementById(
+      'saveToast'
+    );
+
+  if (!toast) {
+    return;
+  }
+
+
+  toast.classList.add(
+    'show'
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      () => {
+        toast.classList.remove(
+          'show'
+        );
+      },
+      1200
+    );
+
 }
 
-function save(){
-  const o={}; 
-  document.querySelectorAll('input,select').forEach(e=>{
-    if(e.id && e.id !== 'selectYear' && e.id !== 'selectMonth') o[e.id]=e.value;
-  });
-  localStorage.setItem(getStorageKey(), JSON.stringify(o));
+
+function save() {
+
+  const o = {};
+
+
+  document
+    .querySelectorAll(
+      'input,select'
+    )
+    .forEach(
+      e => {
+
+        if (
+          e.id &&
+          e.id !== 'selectYear' &&
+          e.id !== 'selectMonth'
+        ) {
+
+          o[e.id] =
+            e.value;
+
+        }
+
+      }
+    );
+
+
+  localStorage.setItem(
+    getStorageKey(),
+    JSON.stringify(o)
+  );
+
+
   showSavedToast();
+
 }
 
-function restore(){
-  try{
-    const o = JSON.parse(localStorage.getItem(getStorageKey())||'{}');
-    Object.entries(o).forEach(([id,v])=>{
-      const e=document.getElementById(id);
-      if(e) e.value=v;
-    });
+
+function restore() {
+
+  try {
+
+    const o =
+      JSON.parse(
+        localStorage.getItem(
+          getStorageKey()
+        ) || '{}'
+      );
+
+
+    Object.entries(o)
+      .forEach(
+        ([id,v]) => {
+
+          const e =
+            document.getElementById(
+              id
+            );
+
+          if (e) {
+            e.value = v;
+          }
+
+        }
+      );
+
+
     syncName();
-  }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
+
+  }
+
+  catch(e) {
+
+    console.warn(
+      'Kayıtlı veri geri yüklenirken hata:',
+      e
+    );
+
+  }
+
 }
 
 
 function exportJSON() {
+
   const data = {};
-  for(let i=0; i<localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if(key.startsWith('fazlaMesaiCizelgesi_')) {
-      data[key] = localStorage.getItem(key);
+
+
+  for (
+    let i = 0;
+    i < localStorage.length;
+    i++
+  ) {
+
+    const key =
+      localStorage.key(i);
+
+
+    if (
+      key.startsWith(
+        'fazlaMesaiCizelgesi_'
+      )
+    ) {
+
+      data[key] =
+        localStorage.getItem(key);
+
     }
+
   }
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          data,
+          null,
+          2
+        )
+      ],
+      {
+        type:
+          'application/json'
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const a =
+    document.createElement(
+      'a'
+    );
+
+
   a.href = url;
-  a.download = 'mesai_yedekleri.json';
+
+  a.download =
+    'mesai_yedekleri.json';
+
   a.click();
+
 }
 
+
 function importJSON(event) {
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      Object.entries(data).forEach(([key, val]) => {
-        if(key.startsWith('fazlaMesaiCizelgesi_')) {
-          localStorage.setItem(key, val);
-        }
-      });
-      updateMonthDays();
-      alert('Yedek başarıyla yüklendi!');
-    } catch(err) {
-      alert('Geçersiz dosya formatı!');
-    }
-  };
+
+  const file =
+    event.target.files[0];
+
+  if (!file) {
+    return;
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(e) {
+
+      try {
+
+        const data =
+          JSON.parse(
+            e.target.result
+          );
+
+
+        Object.entries(data)
+          .forEach(
+            ([key,val]) => {
+
+              if (
+                key.startsWith(
+                  'fazlaMesaiCizelgesi_'
+                )
+              ) {
+
+                localStorage.setItem(
+                  key,
+                  val
+                );
+
+              }
+
+            }
+          );
+
+
+        updateMonthDays();
+
+
+        alert(
+          'Yedek başarıyla yüklendi!'
+        );
+
+      }
+
+      catch(err) {
+
+        alert(
+          'Geçersiz dosya formatı!'
+        );
+
+      }
+
+    };
+
+
   reader.readAsText(file);
+
 }
+
 
 let armedTemplate = null;
 
-function armTemplate(btn, timeStr, breakMin) {
-  document.querySelectorAll('.quick-bar .btn').forEach(b => { b.style.outline = ''; b.classList.remove('armed'); });
-  if(armedTemplate && armedTemplate.time === timeStr && armedTemplate.breakMin === breakMin) {
+
+function armTemplate(
+  btn,
+  timeStr,
+  breakMin
+) {
+
+  document
+    .querySelectorAll(
+      '.quick-bar .btn'
+    )
+    .forEach(
+      b => {
+
+        b.style.outline = '';
+
+        b.classList.remove(
+          'armed'
+        );
+
+      }
+    );
+
+
+  if (
+    armedTemplate &&
+    armedTemplate.time === timeStr &&
+    armedTemplate.breakMin === breakMin
+  ) {
+
     armedTemplate = null;
-    document.getElementById('tplHint').textContent = '';
+
+    document.getElementById(
+      'tplHint'
+    ).textContent = '';
+
+    return;
+
+  }
+
+
+  armedTemplate = {
+    time: timeStr,
+    breakMin: breakMin
+  };
+
+
+  btn.classList.add(
+    'armed'
+  );
+
+
+  document.getElementById(
+    'tplHint'
+  ).textContent =
+    'Şimdi çizelgede bir tarihe tıklayın →';
+
+}
+
+
+function applyArmedTemplate(
+  dayNum
+) {
+
+  if (!armedTemplate) {
     return;
   }
-  armedTemplate = { time: timeStr, breakMin: breakMin };
-  btn.classList.add('armed');
-  document.getElementById('tplHint').textContent = 'Şimdi çizelgede bir tarihe tıklayın →';
-}
 
-function applyArmedTemplate(dayNum) {
-  if(!armedTemplate) return;
-  const timeInput = document.getElementById('time' + dayNum);
-  const breakInput = document.getElementById('break' + dayNum);
-  if(timeInput && breakInput) {
-    timeInput.value = armedTemplate.time;
-    breakInput.value = armedTemplate.breakMin;
+
+  const timeInput =
+    document.getElementById(
+      'time' + dayNum
+    );
+
+
+  const breakInput =
+    document.getElementById(
+      'break' + dayNum
+    );
+
+
+  if (
+    timeInput &&
+    breakInput
+  ) {
+
+    timeInput.value =
+      armedTemplate.time;
+
+    breakInput.value =
+      armedTemplate.breakMin;
+
     save();
+
     calc();
+
   }
+
 }
 
-window.addEventListener('load', ()=>{
-  initYearSelect();
-  buildTables();
-  restore();
-  calc();
-});
-</script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Hata:', err));
-    });
+
+window.addEventListener(
+  'load',
+  () => {
+
+    initYearSelect();
+
+    buildTables();
+
+    restore();
+
+    calc();
+
   }
+);
+
 </script>
+
+<script>
+
+if (
+  'serviceWorker' in navigator
+) {
+
+  window.addEventListener(
+    'load',
+    () => {
+
+      navigator.serviceWorker
+        .register('./sw.js')
+        .catch(
+          err =>
+            console.log(
+              'SW Hata:',
+              err
+            )
+        );
+
+    }
+  );
+
+}
+
+</script>
+
 </body>
 </html>
