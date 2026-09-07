@@ -932,7 +932,7 @@ async function shareExcel() {
     for (let i = 1; i <= TEMPLATE_DAY_ROWS; i++) {
       const row = 3 + i; // 4..34
       if (i <= daysInMonth) {
-        const dateObj = new Date(year, monthIdx, i);
+        const dateObj = new Date(Date.UTC(year, monthIdx, i));
         ws.getCell(`A${row}`).value = dateObj;
 
         const timeVal = document.getElementById('time' + i)?.value || '';
