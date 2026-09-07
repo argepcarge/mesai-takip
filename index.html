@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 *{box-sizing:border-box} 
 body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
@@ -1316,89 +1315,17 @@ function restore(){
   }catch(e){ console.warn('Kayıtlı veri geri yüklenirken hata:', e); }
 }
 
-function forcePrintStylesForCapture() {
-  const changed = [];
-  for (const sheet of document.styleSheets) {
-    let rules;
-    try { rules = sheet.cssRules; } catch (e) { continue; }
-    if (!rules) continue;
-    for (const rule of rules) {
-      if (!rule.media) continue;
-      const mt = rule.media.mediaText;
-      if (/prefers-color-scheme\s*:\s*dark/i.test(mt)) {
-        changed.push({ media: rule.media, original: mt });
-        rule.media.mediaText = 'not all';
-      } else if (/\bprint\b/i.test(mt)) {
-        changed.push({ media: rule.media, original: mt });
-        rule.media.mediaText = mt.replace(/\bprint\b/gi, 'all');
-      }
-    }
-  }
-  return changed;
-}
-
-function restoreStylesAfterCapture(changed) {
-  changed.forEach(({ media, original }) => { media.mediaText = original; });
-}
-
-async function sharePdf() {
+function sharePdf() {
   updateDynamicTitle();
-
-  const source = document.getElementById('sheet1');
-  if (!source || typeof html2pdf === 'undefined') {
-    window.print();
-    return;
+  if (navigator.share) {
+    const name = (document.getElementById('name')?.value || '').trim();
+    const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
+    navigator.share({
+      title: document.title,
+      text: name ? `${monthLabel} - ${name}` : monthLabel
+    }).catch(()=>{});
   }
-
-  const name = (document.getElementById('name')?.value || '').trim();
-  const monthLabel = document.getElementById('title1')?.textContent || 'Fazla Mesai Çizelgesi';
-  const fileName = (name ? `${monthLabel}_${name}` : monthLabel).replace(/[^\wğüşıöçĞÜŞİÖÇ\-]+/g, '_') + '.pdf';
-
-  const btn = (typeof event !== 'undefined' && event) ? event.target : null;
-  const oldText = btn ? btn.textContent : null;
-  if (btn) { btn.textContent = 'PDF Hazırlanıyor...'; btn.disabled = true; }
-
-  const changedRules = forcePrintStylesForCapture();
-
-  try {
-    const worker = html2pdf()
-      .set({
-        margin: 5,
-        filename: fileName,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'avoid-all'] }
-      })
-      .from(source);
-
-    const pdfBlob = await worker.outputPdf('blob');
-    const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
-
-    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-      await navigator.share({
-        files: [pdfFile],
-        title: document.title,
-        text: name ? `${monthLabel} - ${name}` : monthLabel
-      });
-    } else {
-      const url = URL.createObjectURL(pdfBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-  } catch (err) {
-    if (err && err.name !== 'AbortError') {
-      console.error('PDF paylaşım hatası:', err);
-      alert('PDF oluşturulurken bir hata oluştu. Yazdırma ekranı açılıyor.');
-      window.print();
-    }
-  } finally {
-    restoreStylesAfterCapture(changedRules);
-    if (btn) { btn.textContent = oldText; btn.disabled = false; }
-  }
+  window.print();
 }
 
 function exportJSON() {
