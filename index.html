@@ -1190,17 +1190,6 @@ function updateDynamicTitle() {
 
 /* =========================================================
    EXCEL ŞABLONU ÖN-YÜKLEME + DOSYAYI ARKA PLANDA HAZIRLAMA
-   (permission denied fix)
-
-   navigator.share() sadece "kullanıcı etkileşimi" (user activation)
-   hâlâ geçerliyken çağrılırsa çalışır. Bu süre çok kısa (tarayıcıya
-   göre ~1-5 saniye). ExcelJS ile şablonu açmak, hücreleri doldurmak
-   ve yeniden yazmak (workbook.xlsx.load / writeBuffer) tek başına
-   bu süreyi tüketebiliyor — özellikle orta/düşük segment Android
-   telefonlarda. Bu yüzden dosyayı buton tıklanmadan ÖNCE, arka
-   planda (veri her değiştiğinde, gecikmeli olarak) hazırlayıp
-   hafızada tutuyoruz. Butona basıldığında artık hiçbir ağır işlem
-   kalmıyor, doğrudan hazır dosyayla paylaşım çağrılıyor.
    ========================================================= */
 
 let preloadedTemplateBuffer = null;
@@ -1229,14 +1218,7 @@ function preloadTemplate() {
     .then(buffer => {
 
       preloadedTemplateBuffer = buffer;
-
-      /*
-       * Şablon indi indi, hemen ilk Excel dosyasını
-       * arka planda hazırlamaya başla.
-       */
-
       scheduleExcelBuild(0);
-
       return buffer;
 
     })
@@ -1286,8 +1268,7 @@ function scheduleExcelBuild(delayMs) {
 
 /*
  * Excel dosyasını, mevcut form verileriyle oluşturur ve
- * bir File nesnesi döndürür. Hem arka plan hazırlığı hem de
- * shareExcel() içindeki fallback tarafından kullanılır.
+ * bir File nesnesi döndürür. (Dosya adı Türkçe karakterlerden arındırılmıştır)
  */
 
 async function buildExcelFile() {
@@ -1385,14 +1366,19 @@ async function buildExcelFile() {
   const mimeType =
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-  const fileName =
-    (
-      name
-        ? `${titleText}_${name}`
-        : titleText
-    )
-    .replace(/[^\wğüşıöçĞÜŞİÖÇ\-]+/g, '_')
-    + '.xlsx';
+  // Android FileProvider hatasını önlemek için Türkçe karakterleri temizliyoruz
+  const rawTitle = name ? `${titleText}_${name}` : titleText;
+  const safeTitle = rawTitle
+    .replace(/ğ/gi, 'g')
+    .replace(/ü/gi, 'u')
+    .replace(/ş/gi, 's')
+    .replace(/ı/gi, 'i')
+    .replace(/İ/gi, 'I')
+    .replace(/ö/gi, 'o')
+    .replace(/ç/gi, 'c')
+    .replace(/[^a-zA-Z0-9_-]/g, '_');
+
+  const fileName = safeTitle + '.xlsx';
 
   const blob = new Blob([outBuffer], { type: mimeType });
 
@@ -1402,17 +1388,12 @@ async function buildExcelFile() {
 
 
 /* =========================================================
-   EXCEL PAYLAŞMA
+   EXCEL PAYLAŞMA (Hata durumunda otomatik indirme YAPILMAZ)
    ========================================================= */
 
 async function shareExcel(btn) {
 
   updateDynamicTitle();
-
-  /* =========================================================
-     1. TIKLAMA: EXCEL DOSYASINI HAZIRLA
-     2. TIKLAMA: HAZIR DOSYAYI PAYLAŞ
-     ========================================================= */
 
   if (!preparedExcelFile) {
 
@@ -1431,15 +1412,9 @@ async function shareExcel(btn) {
         btn.textContent = 'Excel Paylaş';
       }
 
-      alert(
-        'Excel başarıyla hazırlandı.\n\n' +
-        'Paylaşmak için "Excel Paylaş" butonuna tekrar basın.'
-      );
-
     } catch (err) {
 
       console.error('Excel hazırlama hatası:', err);
-
       preparedExcelFile = null;
 
       alert(
@@ -1461,12 +1436,6 @@ async function shareExcel(btn) {
 
     return;
   }
-
-
-  /* =========================================================
-     2. TIKLAMA: SADECE HAZIR EXCEL DOSYASINI PAYLAŞ
-     Burada ExcelJS çalışmaz ve dosya yeniden oluşturulmaz.
-     ========================================================= */
 
   try {
 
@@ -1503,13 +1472,14 @@ async function shareExcel(btn) {
   } catch (err) {
 
     if (err && err.name === 'AbortError') {
-      return;
+      return; // Kullanıcı paylaşım menüsünü kapattıysa hata verme
     }
 
     console.error('Excel paylaşma hatası:', err);
 
+    // Otomatik indirme KESİNLİKLE YAPILMIYOR, sadece hata mesajı gösteriliyor:
     alert(
-      'Excel paylaşılırken bir sorun oluştu.\n\n' +
+      'Paylaşım başarısız oldu veya izin verilmedi.\n\n' +
       (err && err.message ? err.message : 'Bilinmeyen hata.')
     );
 
@@ -1938,7 +1908,6 @@ function buildTables() {
   }
 
   updateDynamicTitle();
-
   buildAnnualTable();
 
 }
@@ -2184,9 +2153,7 @@ function buildAnnualTable() {
 function updateMonthDays() {
 
   buildTables();
-
   restore();
-
   calc();
 
 }
@@ -2354,7 +2321,6 @@ function autoZero(i) {
   }
 
   save();
-
   calc();
 
 }
@@ -2367,9 +2333,7 @@ function ensureNumber(input) {
   ) {
 
     input.value = '0';
-
     save();
-
     calc();
 
   }
@@ -2424,7 +2388,6 @@ function updateEmptyState() {
     ) {
 
       hasAny = true;
-
       break;
 
     }
@@ -3089,11 +3052,8 @@ function calc() {
 
 
   buildAnnualTable();
-
   updateEmptyState();
 
-  // Veri değiştiyse daha önce hazırlanan Excel geçersiz olur.
-  // Kullanıcı tekrar paylaşmak istediğinde önce yeniden hazırlamalıdır.
   preparedExcelFile = null;
 
   const shareBtn = document.getElementById('shareExcelBtn');
@@ -3118,16 +3078,13 @@ function showSavedToast() {
     return;
   }
 
-
   toast.classList.add(
     'show'
   );
 
-
   clearTimeout(
     toastTimer
   );
-
 
   toastTimer =
     setTimeout(
@@ -3145,7 +3102,6 @@ function showSavedToast() {
 function save() {
 
   const o = {};
-
 
   document
     .querySelectorAll(
@@ -3168,14 +3124,11 @@ function save() {
       }
     );
 
-
   localStorage.setItem(
     getStorageKey(),
     JSON.stringify(o)
   );
 
-
-  // Form verisi değiştiyse hazırlanmış Excel artık güncel değildir.
   preparedExcelFile = null;
 
   const shareBtn = document.getElementById('shareExcelBtn');
@@ -3199,7 +3152,6 @@ function restore() {
         ) || '{}'
       );
 
-
     Object.entries(o)
       .forEach(
         ([id,v]) => {
@@ -3215,7 +3167,6 @@ function restore() {
 
         }
       );
-
 
     syncName();
 
@@ -3237,7 +3188,6 @@ function exportJSON() {
 
   const data = {};
 
-
   for (
     let i = 0;
     i < localStorage.length;
@@ -3246,7 +3196,6 @@ function exportJSON() {
 
     const key =
       localStorage.key(i);
-
 
     if (
       key.startsWith(
@@ -3260,7 +3209,6 @@ function exportJSON() {
     }
 
   }
-
 
   const blob =
     new Blob(
@@ -3277,24 +3225,19 @@ function exportJSON() {
       }
     );
 
-
   const url =
     URL.createObjectURL(
       blob
     );
-
 
   const a =
     document.createElement(
       'a'
     );
 
-
   a.href = url;
-
   a.download =
     'mesai_yedekleri.json';
-
   a.click();
 
 }
@@ -3309,10 +3252,8 @@ function importJSON(event) {
     return;
   }
 
-
   const reader =
     new FileReader();
-
 
   reader.onload =
     function(e) {
@@ -3323,7 +3264,6 @@ function importJSON(event) {
           JSON.parse(
             e.target.result
           );
-
 
         Object.entries(data)
           .forEach(
@@ -3345,26 +3285,18 @@ function importJSON(event) {
             }
           );
 
-
         updateMonthDays();
-
-
-        alert(
-          'Yedek başarıyla yüklendi!'
-        );
+        alert('Yedek başarıyla yüklendi!');
 
       }
 
       catch(err) {
 
-        alert(
-          'Geçersiz dosya formatı!'
-        );
+        alert('Geçersiz dosya formatı!');
 
       }
 
     };
-
 
   reader.readAsText(file);
 
@@ -3388,7 +3320,6 @@ function armTemplate(
       b => {
 
         b.style.outline = '';
-
         b.classList.remove(
           'armed'
         );
@@ -3404,26 +3335,21 @@ function armTemplate(
   ) {
 
     armedTemplate = null;
-
     document.getElementById(
       'tplHint'
     ).textContent = '';
-
     return;
 
   }
-
 
   armedTemplate = {
     time: timeStr,
     breakMin: breakMin
   };
 
-
   btn.classList.add(
     'armed'
   );
-
 
   document.getElementById(
     'tplHint'
@@ -3441,18 +3367,15 @@ function applyArmedTemplate(
     return;
   }
 
-
   const timeInput =
     document.getElementById(
       'time' + dayNum
     );
 
-
   const breakInput =
     document.getElementById(
       'break' + dayNum
     );
-
 
   if (
     timeInput &&
@@ -3466,7 +3389,6 @@ function applyArmedTemplate(
       armedTemplate.breakMin;
 
     save();
-
     calc();
 
   }
@@ -3479,21 +3401,9 @@ window.addEventListener(
   () => {
 
     initYearSelect();
-
     buildTables();
-
     restore();
-
     calc();
-
-    /*
-     * Excel şablonunu sayfa yüklenir yüklenmez arka planda
-     * indirip hazırda tutuyoruz. Böylece "Excel Paylaş"
-     * butonuna basıldığında ağ isteği beklenmez, kullanıcı
-     * etkileşim süresi (user activation) tükenmeden
-     * navigator.share() çağrılabilir.
-     */
-
     preloadTemplate();
 
   }
