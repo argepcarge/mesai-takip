@@ -145,7 +145,6 @@ input[type=number] {
 .header-controls select{padding:6px 10px;border:1px solid #ccc;border-radius:4px;background:#fff;font-size:14px;cursor:pointer}
 .btn{background:#0066cc;color:#fff;border:0;padding:7px 12px;border-radius:4px;cursor:pointer;font-size:13px;font-weight:700;transition:background .15s ease, box-shadow .15s ease}
 .btn:hover{background:#0052a3}
-.btn:disabled{opacity:.6;cursor:not-allowed}
 .btn-secondary{background:#6c757d}
 .btn-secondary:hover{background:#5a6268}
 .quick-bar{background:#fff;border:1px solid #aaa;border-radius:6px;padding:8px 16px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -1201,16 +1200,8 @@ function updateDynamicTitle() {
    bu süreyi tüketebiliyor — özellikle orta/düşük segment Android
    telefonlarda. Bu yüzden dosyayı buton tıklanmadan ÖNCE, arka
    planda (veri her değiştiğinde, gecikmeli olarak) hazırlayıp
-   hafızada tutuyoruz.
-
-   EK GÜVENCE (bu sürümde eklendi):
-   Eğer kullanıcı butona bastığında dosya HENÜZ hazır değilse,
-   artık navigator.share() HİÇ ÇAĞRILMIYOR. Onun yerine dosya
-   hazırlanıyor, buton "Hazır, tekrar dokunun" durumuna geçiyor
-   ve paylaşım YALNIZCA kullanıcının ikinci (yeni, taze) dokunuşuyla
-   tetikleniyor. Böylece "permission denied" hatasına yol açan
-   senaryo (await bittikten sonra share çağırmak) tamamen ortadan
-   kalkıyor.
+   hafızada tutuyoruz. Butona basıldığında artık hiçbir ağır işlem
+   kalmıyor, doğrudan hazır dosyayla paylaşım çağrılıyor.
    ========================================================= */
 
 let preloadedTemplateBuffer = null;
@@ -1219,7 +1210,6 @@ let preloadedTemplatePromise = null;
 let preparedExcelFile = null;
 let preparedExcelBuildPromise = null;
 let excelBuildTimer = null;
-let excelReady = false;
 
 function preloadTemplate() {
 
@@ -1266,10 +1256,6 @@ function preloadTemplate() {
 
 function scheduleExcelBuild(delayMs) {
 
-  // Yeni bir hazırlama planlanınca, elimizdeki dosya artık
-  // güncel veriyi yansıtmayabilir; hazır olma bayrağını düşür.
-  excelReady = false;
-
   clearTimeout(excelBuildTimer);
 
   excelBuildTimer = setTimeout(
@@ -1280,14 +1266,12 @@ function scheduleExcelBuild(delayMs) {
           .then(file => {
 
             preparedExcelFile = file;
-            excelReady = true;
             return file;
 
           })
           .catch(err => {
 
             console.warn('Excel arka plan hazırlama hatası:', err);
-            excelReady = false;
             return null;
 
           });
@@ -1304,8 +1288,7 @@ function scheduleExcelBuild(delayMs) {
 /*
  * Excel dosyasını, mevcut form verileriyle oluşturur ve
  * bir File nesnesi döndürür. Hem arka plan hazırlığı hem de
- * shareExcel() içindeki "henüz hazır değilse hazırla" dalı
- * tarafından kullanılır.
+ * shareExcel() içindeki fallback tarafından kullanılır.
  */
 
 async function buildExcelFile() {
@@ -1420,145 +1403,123 @@ async function buildExcelFile() {
 
 
 /* =========================================================
-   EXCEL PAYLAŞMA (permission denied fix uygulanmış hali)
-
-   MANTIK:
-   1) Dosya HAZIRSA -> hiçbir await'e girmeden, doğrudan ve
-      senkron şekilde navigator.share() çağrılır. Kullanıcının
-      az önceki dokunuşu (user activation) hâlâ geçerli olduğu
-      için izin reddi (permission denied) yaşanmaz.
-   2) Dosya HENÜZ HAZIR DEĞİLSE -> navigator.share() ASLA
-      çağrılmaz. Bunun yerine dosya arka planda hazırlanır,
-      kullanıcıya "Hazır, tekrar dokunun" mesajı gösterilir.
-      Paylaşım, kullanıcının ikinci (yeni) dokunuşuyla, yani
-      1. koşuldan geçerek tetiklenir.
+   EXCEL PAYLAŞMA
    ========================================================= */
 
 async function shareExcel(btn) {
 
   updateDynamicTitle();
 
-  // --- 1) DOSYA HENÜZ HAZIR DEĞİL ---
-  if (!excelReady || !preparedExcelFile) {
+  const oldText = btn ? btn.textContent : '';
 
-    const oldText = btn ? btn.textContent : '';
+  try {
 
-    if (btn) {
-      btn.disabled = true;
-      btn.textContent = 'Excel Hazırlanıyor...';
+    /*
+     * ÖNEMLİ (permission denied fix):
+     *
+     * Dosya arka planda ÖNCEDEN hazırlanmış olmalı (bkz.
+     * scheduleExcelBuild). Burada mümkün olduğunca AZ bekleme
+     * ile navigator.share()'a ulaşmaya çalışıyoruz, çünkü her
+     * ek "await", kullanıcı etkileşim (user activation) hakkını
+     * tüketiyor ve share() "permission denied" ile reddediliyor.
+     */
+
+    let file = preparedExcelFile;
+
+    if (!file && preparedExcelBuildPromise) {
+
+      // Arka plan hazırlığı hâlâ sürüyorsa kısa süre bekle.
+      file = await preparedExcelBuildPromise;
+
     }
+
+    if (!file) {
+
+      // Hiç hazırlanmamışsa (ör. sayfa yeni açıldı), son çare
+      // olarak şimdi oluşturmayı dene — bu durumda gecikme
+      // riski var ama en azından bir deneme yapılmış olur.
+      if (btn) {
+        btn.textContent = 'Excel Hazırlanıyor...';
+        btn.disabled = true;
+      }
+
+      file = await buildExcelFile();
+
+    }
+
+
+    if (!navigator.share) {
+
+      throw new Error(
+        'Bu tarayıcı sistem paylaşımını desteklemiyor.\n\n' +
+        'Android için Chrome veya uygulamanın PWA sürümünü kullanın.'
+      );
+
+    }
+
+    if (
+      navigator.canShare &&
+      !navigator.canShare({ files: [file] })
+    ) {
+
+      throw new Error(
+        'Bu Android/tarayıcı sürümü XLSX dosyasını ' +
+        'sistem paylaşımıyla göndermeyi desteklemiyor.\n\n' +
+        'Uygulamanın güncel Chrome/PWA sürümünde çalıştığından emin olun.'
+      );
+
+    }
+
+
+    const name = (
+      document.getElementById('name')?.value || ''
+    ).trim();
+
+    const titleText =
+      document.getElementById('title1')?.textContent ||
+      'FAZLA MESAİ ÇİZELGESİ';
 
     try {
 
-      const file = await (
-        preparedExcelBuildPromise || buildExcelFile()
-      );
+      await navigator.share({
 
-      if (file) {
-        preparedExcelFile = file;
-        excelReady = true;
+        files: [file],
+        title: document.title,
+        text: name ? `${titleText} - ${name}` : titleText
+
+      });
+
+    } catch (shareErr) {
+
+      if (shareErr && shareErr.name === 'AbortError') {
+        return;
       }
 
-    } catch (err) {
-
-      console.error('Excel hazırlama hatası:', err);
-
-      alert(
-        'Excel hazırlanırken bir sorun oluştu.\n\n' +
-        (err && err.message ? err.message : 'Bilinmeyen hata.')
-      );
-
-    } finally {
-
-      if (btn) {
-
-        btn.disabled = false;
-
-        btn.textContent = excelReady
-          ? 'Excel Paylaş (Hazır, tekrar dokunun)'
-          : oldText;
-
-      }
+      throw shareErr;
 
     }
 
-    /*
-     * ÖNEMLİ: Burada navigator.share() çağırmıyoruz. Yukarıdaki
-     * "await"ler kullanıcı etkileşim hakkını (user activation)
-     * tükettiği için bu noktada share() çağrılırsa Android'de
-     * "permission denied" hatası alınır. Kullanıcı butona tekrar
-     * bastığında bu, YENİ bir dokunuş (yeni user activation)
-     * olacağı için aşağıdaki senkron yol (2. blok) çalışacak.
-     */
-    return;
 
-  }
+  } catch (err) {
 
-  // --- 2) DOSYA ZATEN HAZIR: doğrudan, senkron şekilde paylaş ---
-
-  const file = preparedExcelFile;
-
-  if (!navigator.share) {
-
-    alert(
-      'Bu tarayıcı sistem paylaşımını desteklemiyor.\n\n' +
-      'Android için Chrome veya uygulamanın PWA sürümünü kullanın.'
-    );
-
-    return;
-
-  }
-
-  if (
-    navigator.canShare &&
-    !navigator.canShare({ files: [file] })
-  ) {
-
-    alert(
-      'Bu Android/tarayıcı sürümü XLSX dosyasını ' +
-      'sistem paylaşımıyla göndermeyi desteklemiyor.\n\n' +
-      'Uygulamanın güncel Chrome/PWA sürümünde çalıştığından emin olun.'
-    );
-
-    return;
-
-  }
-
-  const name = (
-    document.getElementById('name')?.value || ''
-  ).trim();
-
-  const titleText =
-    document.getElementById('title1')?.textContent ||
-    'FAZLA MESAİ ÇİZELGESİ';
-
-  navigator.share({
-
-    files: [file],
-    title: document.title,
-    text: name ? `${titleText} - ${name}` : titleText
-
-  })
-  .catch(shareErr => {
-
-    if (shareErr && shareErr.name === 'AbortError') {
-      return;
-    }
-
-    console.error('Excel paylaşma hatası:', shareErr);
+    console.error('Excel paylaşma hatası:', err);
 
     alert(
       'Excel paylaşılırken bir sorun oluştu.\n\n' +
-      (shareErr && shareErr.message ? shareErr.message : 'Bilinmeyen hata.')
+      (err && err.message ? err.message : 'Bilinmeyen hata.')
     );
 
-  })
-  .finally(() => {
+  } finally {
+
+    if (btn) {
+      btn.textContent = oldText;
+      btn.disabled = false;
+    }
 
     // Sonraki paylaşım için dosyayı güncel veriyle tazele.
     scheduleExcelBuild(200);
 
-  });
+  }
 
 }
 
@@ -3565,3 +3526,4 @@ if (
 
 </body>
 </html>
+bu benim kod bunda androidde parmission denaid alıyorum sorun sanırım excell oluşmadan paylaş sayfasının açılması
