@@ -1190,6 +1190,48 @@ function updateDynamicTitle() {
 
 
 /* =========================================================
+   EXCEL ŞABLONU ÖN-YÜKLEME (permission denied fix)
+   ========================================================= */
+
+let preloadedTemplateBuffer = null;
+let preloadedTemplatePromise = null;
+
+function preloadTemplate() {
+
+  if (preloadedTemplatePromise) {
+    return preloadedTemplatePromise;
+  }
+
+  preloadedTemplatePromise = fetch('./sablon.xlsx')
+    .then(resp => {
+
+      if (!resp.ok) {
+        throw new Error('Şablon dosyası bulunamadı (sablon.xlsx).');
+      }
+
+      return resp.arrayBuffer();
+
+    })
+    .then(buffer => {
+
+      preloadedTemplateBuffer = buffer;
+      return buffer;
+
+    })
+    .catch(err => {
+
+      console.warn('Şablon ön-yükleme hatası:', err);
+      preloadedTemplatePromise = null;
+      return null;
+
+    });
+
+  return preloadedTemplatePromise;
+
+}
+
+
+/* =========================================================
    EXCEL PAYLAŞMA
    ========================================================= */
 
@@ -1207,6 +1249,17 @@ async function shareExcel(btn) {
     return;
   }
 
+  /*
+   * ÖNEMLİ (permission denied fix):
+   *
+   * navigator.share() sadece "kullanıcı etkileşimi" (user activation)
+   * hâlâ geçerliyken çağrılırsa çalışır. Ağ isteği (fetch) gibi yavaş
+   * işlemler bu süreyi tükettiği için, şablonu MÜMKÜNSE önceden
+   * (sayfa yüklenirken) indirilmiş halinden kullanıyoruz. Böylece
+   * butona basıldıktan sonra sadece hızlı CPU işlemleri kalıyor ve
+   * navigator.share() çağrısına kadar geçen süre minimuma iniyor.
+   */
+
   const oldText = btn ? btn.textContent : '';
 
   if (btn) {
@@ -1219,12 +1272,18 @@ async function shareExcel(btn) {
   try {
 
     /*
-     * 1 — Excel şablonunu yükle
+     * 1 — Excel şablonunu yükle (önceden indirilmişse anında kullan)
      */
 
-    const resp = await fetch('./sablon.xlsx');
+    let buffer = preloadedTemplateBuffer;
 
-    if (!resp.ok) {
+    if (!buffer) {
+
+      buffer = await preloadTemplate();
+
+    }
+
+    if (!buffer) {
 
       throw new Error(
         'Şablon dosyası bulunamadı (sablon.xlsx).\n\n' +
@@ -1233,16 +1292,20 @@ async function shareExcel(btn) {
 
     }
 
-    const buffer = await resp.arrayBuffer();
-
 
     /*
      * 2 — ExcelJS ile dosyayı aç
+     *
+     * NOT: preloadedTemplateBuffer paylaşılan bir ArrayBuffer.
+     * ExcelJS onu tükettiği (detached) için her paylaşımda
+     * kopyasını kullanıyoruz, yoksa ikinci paylaşımda bozulur.
      */
+
+    const bufferCopy = buffer.slice(0);
 
     const workbook = new ExcelJS.Workbook();
 
-    await workbook.xlsx.load(buffer);
+    await workbook.xlsx.load(bufferCopy);
 
     const ws = workbook.getWorksheet('Sayfa1');
 
@@ -1319,6 +1382,9 @@ async function shareExcel(btn) {
         const breakVal =
           document.getElementById(`break${i}`)?.value || '';
 
+        const mealVal =
+          document.getElementById(`meal${i}`)?.value || '';
+
 
         ws.getCell(`B${row}`).value =
           timeVal;
@@ -1328,6 +1394,9 @@ async function shareExcel(btn) {
           breakVal === ''
             ? 0
             : Number(breakVal);
+
+        ws.getCell(`E${row}`).value =
+          mealVal;
 
       } else {
 
@@ -1416,8 +1485,6 @@ async function shareExcel(btn) {
 
     /*
      * Dosya paylaşımı destekleniyor mu?
-     *
-     * Android Chrome'da özellikle bu kontrol önemli.
      */
 
     if (
@@ -1482,19 +1549,6 @@ async function shareExcel(btn) {
     }
 
 
-    /*
-     * ÖNEMLİ:
-     *
-     * Burada artık kesinlikle:
-     *
-     * <a download="...">
-     *
-     * kullanılmıyor.
-     *
-     * Dolayısıyla Android Downloads'a
-     * otomatik Excel kaydedilmiyor.
-     */
-
   } catch (err) {
 
     console.error(
@@ -1520,7 +1574,36 @@ async function shareExcel(btn) {
 
     }
 
+    /*
+     * Bir sonraki paylaşım için şablonu tekrar ön-yükle
+     * (bufferCopy tüketildiği için orijinali koruyoruz,
+     * ama emin olmak için tazeleyelim).
+     */
+
+    preloadTemplate();
+
   }
+
+}
+
+
+function downloadFile(blob, fileName) {
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement('a');
+
+  a.href = url;
+  a.download = fileName;
+  a.click();
+
+  setTimeout(
+    () => URL.revokeObjectURL(url),
+    2000
+  );
+
 }
 
 
@@ -3455,6 +3538,16 @@ window.addEventListener(
     restore();
 
     calc();
+
+    /*
+     * Excel şablonunu sayfa yüklenir yüklenmez arka planda
+     * indirip hazırda tutuyoruz. Böylece "Excel Paylaş"
+     * butonuna basıldığında ağ isteği beklenmez, kullanıcı
+     * etkileşim süresi (user activation) tükenmeden
+     * navigator.share() çağrılabilir.
+     */
+
+    preloadTemplate();
 
   }
 );
