@@ -6,7 +6,6 @@ const assets = [
   './manifest.json',
   './exceljs.min.js',
   './sablon.xlsx',
-  './icon-192.png',
   './icon-512.png'
 ];
 
