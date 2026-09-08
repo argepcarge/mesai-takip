@@ -1268,7 +1268,7 @@ function scheduleExcelBuild(delayMs) {
 
 /*
  * Excel dosyasını, mevcut form verileriyle oluşturur ve
- * bir File nesnesi döndürür. (Dosya adı ve nesnesi Android & iOS uyumlu)
+ * bir File nesnesi döndürür. (Büyük/küçük harf korumalı karakter dönüştürme)
  */
 
 async function buildExcelFile() {
@@ -1366,16 +1366,21 @@ async function buildExcelFile() {
   const mimeType =
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-  // Android & iOS URI kısıtlamaları için Türkçe karakterler temizlenir
+  // Harf durumunu (büyükse büyük, küçükse küçük) koruyarak eşleştiren harita
+  const trMap = {
+    'ç': 'c', 'Ç': 'C',
+    'ğ': 'g', 'Ğ': 'G',
+    'ı': 'i', 'I': 'I',
+    'i': 'i', 'İ': 'I',
+    'ö': 'o', 'Ö': 'O',
+    'ş': 's', 'Ş': 'S',
+    'ü': 'u', 'Ü': 'U'
+  };
+
   const rawTitle = name ? `${titleText}_${name}` : titleText;
+
   const safeTitle = rawTitle
-    .replace(/ğ/gi, 'g')
-    .replace(/ü/gi, 'u')
-    .replace(/ş/gi, 's')
-    .replace(/ı/gi, 'i')
-    .replace(/İ/gi, 'I')
-    .replace(/ö/gi, 'o')
-    .replace(/ç/gi, 'c')
+    .replace(/[çÇğĞıİöÖşŞüÜ]/g, match => trMap[match] || match)
     .replace(/[^a-zA-Z0-9_-]/g, '_');
 
   const fileName = safeTitle + '.xlsx';
@@ -1466,7 +1471,7 @@ async function shareExcel(btn) {
   } catch (err) {
 
     if (err && err.name === 'AbortError') {
-      return; // Kullanıcı paylaşım menüsünü kapattıysa uyarı basma
+      return;
     }
 
     console.error('Excel paylaşma hatası:', err);
