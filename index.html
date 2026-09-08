@@ -688,9 +688,8 @@ col.col-4 { width: 22% !important; }
       onchange="importJSON(event)"
     >
 
-    <!-- DEĞİŞTİRİLDİ -->
-    <button class="btn btn-secondary" onclick="shareExcel(this)">
-      Excel Paylaş
+    <button class="btn btn-secondary" id="shareExcelBtn" onclick="shareExcel(this)">
+      Excel Hazırla
     </button>
   </div>
 </div>
@@ -1410,66 +1409,82 @@ async function shareExcel(btn) {
 
   updateDynamicTitle();
 
-  const oldText = btn ? btn.textContent : '';
+  /* =========================================================
+     1. TIKLAMA: EXCEL DOSYASINI HAZIRLA
+     2. TIKLAMA: HAZIR DOSYAYI PAYLAŞ
+     ========================================================= */
+
+  if (!preparedExcelFile) {
+
+    const oldText = btn ? btn.textContent : 'Excel Hazırla';
+
+    try {
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Excel Hazırlanıyor...';
+      }
+
+      preparedExcelFile = await buildExcelFile();
+
+      if (btn) {
+        btn.textContent = 'Excel Paylaş';
+      }
+
+      alert(
+        'Excel başarıyla hazırlandı.\n\n' +
+        'Paylaşmak için "Excel Paylaş" butonuna tekrar basın.'
+      );
+
+    } catch (err) {
+
+      console.error('Excel hazırlama hatası:', err);
+
+      preparedExcelFile = null;
+
+      alert(
+        'Excel hazırlanırken bir sorun oluştu.\n\n' +
+        (err && err.message ? err.message : 'Bilinmeyen hata.')
+      );
+
+      if (btn) {
+        btn.textContent = oldText;
+      }
+
+    } finally {
+
+      if (btn) {
+        btn.disabled = false;
+      }
+
+    }
+
+    return;
+  }
+
+
+  /* =========================================================
+     2. TIKLAMA: SADECE HAZIR EXCEL DOSYASINI PAYLAŞ
+     Burada ExcelJS çalışmaz ve dosya yeniden oluşturulmaz.
+     ========================================================= */
 
   try {
 
-    /*
-     * ÖNEMLİ (permission denied fix):
-     *
-     * Dosya arka planda ÖNCEDEN hazırlanmış olmalı (bkz.
-     * scheduleExcelBuild). Burada mümkün olduğunca AZ bekleme
-     * ile navigator.share()'a ulaşmaya çalışıyoruz, çünkü her
-     * ek "await", kullanıcı etkileşim (user activation) hakkını
-     * tüketiyor ve share() "permission denied" ile reddediliyor.
-     */
-
-    let file = preparedExcelFile;
-
-    if (!file && preparedExcelBuildPromise) {
-
-      // Arka plan hazırlığı hâlâ sürüyorsa kısa süre bekle.
-      file = await preparedExcelBuildPromise;
-
-    }
-
-    if (!file) {
-
-      // Hiç hazırlanmamışsa (ör. sayfa yeni açıldı), son çare
-      // olarak şimdi oluşturmayı dene — bu durumda gecikme
-      // riski var ama en azından bir deneme yapılmış olur.
-      if (btn) {
-        btn.textContent = 'Excel Hazırlanıyor...';
-        btn.disabled = true;
-      }
-
-      file = await buildExcelFile();
-
-    }
-
-
     if (!navigator.share) {
-
       throw new Error(
         'Bu tarayıcı sistem paylaşımını desteklemiyor.\n\n' +
         'Android için Chrome veya uygulamanın PWA sürümünü kullanın.'
       );
-
     }
 
     if (
       navigator.canShare &&
-      !navigator.canShare({ files: [file] })
+      !navigator.canShare({ files: [preparedExcelFile] })
     ) {
-
       throw new Error(
-        'Bu Android/tarayıcı sürümü XLSX dosyasını ' +
-        'sistem paylaşımıyla göndermeyi desteklemiyor.\n\n' +
-        'Uygulamanın güncel Chrome/PWA sürümünde çalıştığından emin olun.'
+        'Bu Android/tarayıcı sürümü XLSX dosyasını sistem paylaşımıyla göndermeyi desteklemiyor.'
       );
-
     }
-
 
     const name = (
       document.getElementById('name')?.value || ''
@@ -1479,28 +1494,17 @@ async function shareExcel(btn) {
       document.getElementById('title1')?.textContent ||
       'FAZLA MESAİ ÇİZELGESİ';
 
-    try {
-
-      await navigator.share({
-
-        files: [file],
-        title: document.title,
-        text: name ? `${titleText} - ${name}` : titleText
-
-      });
-
-    } catch (shareErr) {
-
-      if (shareErr && shareErr.name === 'AbortError') {
-        return;
-      }
-
-      throw shareErr;
-
-    }
-
+    await navigator.share({
+      files: [preparedExcelFile],
+      title: document.title,
+      text: name ? `${titleText} - ${name}` : titleText
+    });
 
   } catch (err) {
+
+    if (err && err.name === 'AbortError') {
+      return;
+    }
 
     console.error('Excel paylaşma hatası:', err);
 
@@ -1509,18 +1513,7 @@ async function shareExcel(btn) {
       (err && err.message ? err.message : 'Bilinmeyen hata.')
     );
 
-  } finally {
-
-    if (btn) {
-      btn.textContent = oldText;
-      btn.disabled = false;
-    }
-
-    // Sonraki paylaşım için dosyayı güncel veriyle tazele.
-    scheduleExcelBuild(200);
-
   }
-
 }
 
 
@@ -3099,11 +3092,14 @@ function calc() {
 
   updateEmptyState();
 
-  /*
-   * Veri değişti — Excel dosyasını arka planda güncelle,
-   * böylece "Excel Paylaş" butonuna basıldığında hazır olur.
-   */
-  scheduleExcelBuild();
+  // Veri değiştiyse daha önce hazırlanan Excel geçersiz olur.
+  // Kullanıcı tekrar paylaşmak istediğinde önce yeniden hazırlamalıdır.
+  preparedExcelFile = null;
+
+  const shareBtn = document.getElementById('shareExcelBtn');
+  if (shareBtn && !shareBtn.disabled) {
+    shareBtn.textContent = 'Excel Hazırla';
+  }
 
 }
 
@@ -3178,6 +3174,14 @@ function save() {
     JSON.stringify(o)
   );
 
+
+  // Form verisi değiştiyse hazırlanmış Excel artık güncel değildir.
+  preparedExcelFile = null;
+
+  const shareBtn = document.getElementById('shareExcelBtn');
+  if (shareBtn && !shareBtn.disabled) {
+    shareBtn.textContent = 'Excel Hazırla';
+  }
 
   showSavedToast();
 
