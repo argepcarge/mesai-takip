@@ -147,6 +147,8 @@ input[type=number] {
 .btn:hover{background:#0052a3}
 .btn-secondary{background:#6c757d}
 .btn-secondary:hover{background:#5a6268}
+.btn-danger{background:#dc2626}
+.btn-danger:hover{background:#b91c1c}
 .quick-bar{background:#fff;border:1px solid #aaa;border-radius:6px;padding:8px 16px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .quick-bar span{font-size:13px;font-weight:700;color:#3d3d3d}
 
@@ -688,6 +690,10 @@ col.col-4 { width: 22% !important; }
       onchange="importJSON(event)"
     >
 
+    <button class="btn btn-danger" onclick="clearCurrentMonth()">
+      Tabloyu Temizle
+    </button>
+
     <button class="btn btn-secondary" id="shareExcelBtn" onclick="shareExcel(this)">
       Excel Hazırla
     </button>
@@ -1159,6 +1165,24 @@ const weekDaysFullTR = [
   'CUMARTESİ'
 ];
 
+function toSafeUpperAscii(str) {
+  const trUpperMap = {
+    'ç': 'C', 'Ç': 'C',
+    'ğ': 'G', 'Ğ': 'G',
+    'ı': 'I', 'I': 'I',
+    'i': 'I', 'İ': 'I',
+    'ö': 'O', 'Ö': 'O',
+    'ş': 'S', 'Ş': 'S',
+    'ü': 'U', 'Ü': 'U'
+  };
+
+  return String(str || '')
+    .replace(/[çÇğĞıIİiöÖşŞüÜ]/g, match => trUpperMap[match] || match)
+    .toUpperCase()
+    .replace(/[^A-Z0-9_-]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
 function updateDynamicTitle() {
 
   const nameVal = (
@@ -1267,8 +1291,7 @@ function scheduleExcelBuild(delayMs) {
 
 
 /*
- * Excel dosyasını, mevcut form verileriyle oluşturur ve
- * bir File nesnesi döndürür. (Büyük/küçük harf korumalı karakter dönüştürme)
+ * Excel dosyasını oluşturur ve AD_SOYAD_AY_YIL_MESAI.xlsx formatında adlandırır.
  */
 
 async function buildExcelFile() {
@@ -1366,24 +1389,18 @@ async function buildExcelFile() {
   const mimeType =
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-  // Harf durumunu (büyükse büyük, küçükse küçük) koruyarak eşleştiren harita
-  const trMap = {
-    'ç': 'c', 'Ç': 'C',
-    'ğ': 'g', 'Ğ': 'G',
-    'ı': 'i', 'I': 'I',
-    'i': 'i', 'İ': 'I',
-    'ö': 'o', 'Ö': 'O',
-    'ş': 's', 'Ş': 'S',
-    'ü': 'u', 'Ü': 'U'
-  };
+  // Format: AHMET_YILMAZ_AGUSTOS_2026_MESAI.xlsx
+  const safeName = toSafeUpperAscii(name);
+  const safeMonth = toSafeUpperAscii(monthNames[monthIdx]);
 
-  const rawTitle = name ? `${titleText}_${name}` : titleText;
+  let rawFileName = '';
+  if (safeName) {
+    rawFileName = `${safeName}_${safeMonth}_${year}_MESAI`;
+  } else {
+    rawFileName = `MESAI_${safeMonth}_${year}`;
+  }
 
-  const safeTitle = rawTitle
-    .replace(/[çÇğĞıİöÖşŞüÜ]/g, match => trMap[match] || match)
-    .replace(/[^a-zA-Z0-9_-]/g, '_');
-
-  const fileName = safeTitle + '.xlsx';
+  const fileName = rawFileName + '.xlsx';
 
   const blob = new Blob([outBuffer], { type: mimeType });
 
@@ -1391,6 +1408,49 @@ async function buildExcelFile() {
     type: mimeType,
     lastModified: Date.now()
   });
+
+}
+
+
+/* =========================================================
+   TABLOYU TEMİZLEME FONKSİYONU
+   ========================================================= */
+
+function clearCurrentMonth() {
+
+  const monthIdx = parseInt(
+    document.getElementById('selectMonth').value,
+    10
+  );
+  const monthName = monthNames[monthIdx];
+
+  const ok = confirm(`${monthName} ayına ait tüm mesai saatleri ve molalar temizlensin mi?`);
+  if (!ok) {
+    return;
+  }
+
+  for (let i = 1; i <= currentDaysCount; i++) {
+    const timeElem = document.getElementById('time' + i);
+    const breakElem = document.getElementById('break' + i);
+    const mealElem = document.getElementById('meal' + i);
+
+    if (timeElem) timeElem.value = '';
+    if (breakElem) breakElem.value = '';
+    if (mealElem) mealElem.value = '';
+  }
+
+  for (let extraId = 34; extraId <= 39; extraId++) {
+    const bElem = document.getElementById('b' + extraId);
+    if (bElem) bElem.value = '';
+  }
+
+  const dedH = document.getElementById('deductionHours');
+  const dedM = document.getElementById('deductionMinutes');
+  if (dedH) dedH.value = '0';
+  if (dedM) dedM.value = '0';
+
+  save();
+  calc();
 
 }
 
