@@ -1268,7 +1268,7 @@ function scheduleExcelBuild(delayMs) {
 
 /*
  * Excel dosyasını, mevcut form verileriyle oluşturur ve
- * bir File nesnesi döndürür. (Dosya adı Türkçe karakterlerden arındırılmıştır)
+ * bir File nesnesi döndürür. (Dosya adı ve nesnesi Android & iOS uyumlu)
  */
 
 async function buildExcelFile() {
@@ -1366,7 +1366,7 @@ async function buildExcelFile() {
   const mimeType =
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-  // Android FileProvider hatasını önlemek için Türkçe karakterleri temizliyoruz
+  // Android & iOS URI kısıtlamaları için Türkçe karakterler temizlenir
   const rawTitle = name ? `${titleText}_${name}` : titleText;
   const safeTitle = rawTitle
     .replace(/ğ/gi, 'g')
@@ -1382,13 +1382,16 @@ async function buildExcelFile() {
 
   const blob = new Blob([outBuffer], { type: mimeType });
 
-  return new File([blob], fileName, { type: mimeType });
+  return new File([blob], fileName, { 
+    type: mimeType,
+    lastModified: Date.now()
+  });
 
 }
 
 
 /* =========================================================
-   EXCEL PAYLAŞMA (Hata durumunda otomatik indirme YAPILMAZ)
+   EXCEL PAYLAŞMA
    ========================================================= */
 
 async function shareExcel(btn) {
@@ -1451,33 +1454,23 @@ async function shareExcel(btn) {
       !navigator.canShare({ files: [preparedExcelFile] })
     ) {
       throw new Error(
-        'Bu Android/tarayıcı sürümü XLSX dosyasını sistem paylaşımıyla göndermeyi desteklemiyor.'
+        'Bu cihaz/tarayıcı sürümü XLSX dosyasını sistem paylaşımıyla göndermeyi desteklemiyor.'
       );
     }
 
-    const name = (
-      document.getElementById('name')?.value || ''
-    ).trim();
-
-    const titleText =
-      document.getElementById('title1')?.textContent ||
-      'FAZLA MESAİ ÇİZELGESİ';
-
+    // iOS WhatsApp kilitlenmesini ve kırmızı ünlemi önlemek için SADECE files dizisi gönderilir
     await navigator.share({
-      files: [preparedExcelFile],
-      title: document.title,
-      text: name ? `${titleText} - ${name}` : titleText
+      files: [preparedExcelFile]
     });
 
   } catch (err) {
 
     if (err && err.name === 'AbortError') {
-      return; // Kullanıcı paylaşım menüsünü kapattıysa hata verme
+      return; // Kullanıcı paylaşım menüsünü kapattıysa uyarı basma
     }
 
     console.error('Excel paylaşma hatası:', err);
 
-    // Otomatik indirme KESİNLİKLE YAPILMIYOR, sadece hata mesajı gösteriliyor:
     alert(
       'Paylaşım başarısız oldu veya izin verilmedi.\n\n' +
       (err && err.message ? err.message : 'Bilinmeyen hata.')
