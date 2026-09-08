@@ -2327,36 +2327,6 @@ function formatTimeLive(input) {
 
 
 function autoZero(i) {
-
-  const timeElem =
-    document.getElementById(
-      'time' + i
-    );
-
-  const mealElem =
-    document.getElementById(
-      'meal' + i
-    );
-
-  if (!timeElem) {
-    return;
-  }
-
-  const hasTime =
-    (
-      timeElem.value || ''
-    ).trim().length > 0;
-
-  // Mola alanı artık otomatik 0 yapılmaz, boş bırakılır
-  if (hasTime) {
-    if (
-      mealElem &&
-      mealElem.value.trim() === ''
-    ) {
-      mealElem.value = '0';
-    }
-  }
-
   save();
   calc();
 
