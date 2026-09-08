@@ -991,29 +991,33 @@ async function buildExcelFile(version) {
   return new File([blob], fileName, { type: mimeType });
 }
 
-function scheduleExcelBuild(delayMs = 300) {
+function scheduleExcelBuild(delayMs = 400) {
+  // Yeni istek geldiği anda eski hazırlanmakta olan Excel'i geçersiz ilan et.
+  const requestedVersion = ++excelBuildVersion;
   clearTimeout(excelBuildTimer);
 
   preparedExcelFile = null;
   setExcelButtonState('Excel Hazırlanıyor...', true);
 
   excelBuildTimer = setTimeout(async () => {
-    const version = ++excelBuildVersion;
-
     try {
-      excelBuildPromise = buildExcelFile(version);
+      excelBuildPromise = buildExcelFile(requestedVersion);
       const file = await excelBuildPromise;
 
-      if (!file) return;
+      if (!file || requestedVersion !== excelBuildVersion) return;
 
       preparedExcelFile = file;
       setExcelButtonState('Excel Paylaş', false);
     } catch (err) {
+      if (requestedVersion !== excelBuildVersion) return;
+
       console.error('Excel hazırlama hatası:', err);
       preparedExcelFile = null;
       setExcelButtonState('Excel Paylaş', false);
     } finally {
-      excelBuildPromise = null;
+      if (requestedVersion === excelBuildVersion) {
+        excelBuildPromise = null;
+      }
     }
   }, delayMs);
 }
