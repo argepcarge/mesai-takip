@@ -1291,7 +1291,8 @@ function scheduleExcelBuild(delayMs) {
 
 
 /*
- * Excel dosyasını oluşturur ve AD_SOYAD_AY_YIL_MESAI.xlsx formatında adlandırır.
+ * Excel dosyasını oluşturur: AD_SOYAD_AY_YIL_MESAI.xlsx formatında adlandırır.
+ * Boş molaları sıfır yerine null (temiz hücre) olarak yazar.
  */
 
 async function buildExcelFile() {
@@ -1369,8 +1370,9 @@ async function buildExcelFile() {
 
       ws.getCell(`B${row}`).value = timeVal;
 
+      // Mola boşsa 0 yerine null (temiz boş hücre) basılır
       ws.getCell(`D${row}`).value =
-        breakVal === '' ? 0 : Number(breakVal);
+        breakVal === '' ? null : Number(breakVal);
 
       ws.getCell(`E${row}`).value = mealVal;
 
@@ -1758,6 +1760,8 @@ function buildTables() {
       <td>
         <input 
           id="time${i}" 
+          type="text"
+          inputmode="numeric"
           aria-label="${dateFormatted} mesai saatleri" 
           oninput="formatTimeLive(this);save();calc()" 
           onblur="autoZero(${i})">
@@ -1768,8 +1772,9 @@ function buildTables() {
           id="break${i}" 
           class="center" 
           type="text" 
+          inputmode="numeric"
           aria-label="${dateFormatted} mola dakika" 
-          oninput="save();calc()" 
+          oninput="this.value=this.value.replace(/\\D/g,'');save();calc()" 
           onblur="autoZero(${i})">
       </td>
 
@@ -1916,8 +1921,9 @@ function buildTables() {
         <input 
           id="b${extraId}" 
           type="text" 
+          inputmode="numeric"
           style="width:50px; text-align:center; border:1px solid #ccc; background:#fff; padding:2px;" 
-          oninput="save();calc()">
+          oninput="this.value=this.value.replace(/\\D/g,'');save();calc()">
 
       </td>
 
@@ -2299,33 +2305,22 @@ function parseTime(s) {
 
 function formatTimeLive(input) {
 
-  let val =
-    input.value;
+  let val = input.value;
 
-  let clean =
-    val.replace(
-      /\D/g,
-      ''
-    );
-
-
-  if (
-    clean.length === 8
-  ) {
-
-    input.value =
-      `${clean.slice(0,2)}:${clean.slice(2,4)}-${clean.slice(4,6)}:${clean.slice(6,8)}`;
-
+  // Harfleri engelle: Sadece rakam, iki nokta ve tireye izin ver
+  let sanitized = val.replace(/[^0-9:-]/g, '');
+  if (val !== sanitized) {
+    input.value = sanitized;
   }
 
-  else if (
-    clean.length === 4 &&
-    !val.includes(':')
-  ) {
+  let clean = sanitized.replace(/\D/g, '');
 
+  if (clean.length === 8) {
+    input.value =
+      `${clean.slice(0,2)}:${clean.slice(2,4)}-${clean.slice(4,6)}:${clean.slice(6,8)}`;
+  } else if (clean.length === 4 && !sanitized.includes(':')) {
     input.value =
       `${clean.slice(0,2)}:${clean.slice(2,4)}`;
-
   }
 
 }
@@ -2338,44 +2333,28 @@ function autoZero(i) {
       'time' + i
     );
 
-  const breakElem =
-    document.getElementById(
-      'break' + i
-    );
-
   const mealElem =
     document.getElementById(
       'meal' + i
     );
 
-
   if (!timeElem) {
     return;
   }
-
 
   const hasTime =
     (
       timeElem.value || ''
     ).trim().length > 0;
 
-
+  // Mola alanı artık otomatik 0 yapılmaz, boş bırakılır
   if (hasTime) {
-
-    if (
-      breakElem &&
-      breakElem.value.trim() === ''
-    ) {
-      breakElem.value = '0';
-    }
-
     if (
       mealElem &&
       mealElem.value.trim() === ''
     ) {
       mealElem.value = '0';
     }
-
   }
 
   save();
