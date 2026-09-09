@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mesai-pwa-v4';
+const CACHE_NAME = 'mesai-pwa-v5';
 
 const assets = [
   './',
@@ -7,8 +7,8 @@ const assets = [
   './icon-512.png',
   './jspdf.umd.min.js',
   './jspdf.plugin.autotable.min.js',
-  './Roboto-Regular.ttf',
-  './Roboto-Medium.ttf'
+  './Carlito-Regular.ttf',
+  './Carlito-Bold.ttf'
 ];
 
 self.addEventListener('install', event => {
