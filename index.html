@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
-<script src="./exceljs.min.js"></script>
-<script src="./html2pdf.bundle.min.js"></script>
 <script src="./jspdf.umd.min.js"></script>
 <script src="./jspdf.plugin.autotable.min.js"></script>
 
@@ -714,16 +712,8 @@ col.col-4 { width: 22% !important; }
       Tabloyu Temizle
     </button>
 
-    <button class="btn btn-secondary" id="shareExcelBtn" onclick="shareExcel(this)">
-      Excel Paylaş (iOS)
-    </button>
-
-    <button class="btn" id="sharePdfBtn" onclick="sharePDF(this)">
-      PDF Paylaş (Android)
-    </button>
-
-    <button class="btn btn-success" id="shareVectorPdfBtn" onclick="shareVectorPDF(this)">
-      PDF Paylaş (Vektörel)
+    <button class="btn btn-success" id="sharePdfBtn" onclick="shareVectorPDF(this)">
+      PDF Paylaş
     </button>
   </div>
 </div>
@@ -1241,53 +1231,6 @@ function updateDynamicTitle() {
 
 
 /* =========================================================
-   EXCEL ŞABLONU ÖN-YÜKLEME + DOSYAYI ARKA PLANDA HAZIRLAMA
-   ========================================================= */
-
-let preloadedTemplateBuffer = null;
-let preloadedTemplatePromise = null;
-
-let preparedExcelFile = null;
-let preparedExcelBuildPromise = null;
-let excelBuildTimer = null;
-
-function preloadTemplate() {
-
-  if (preloadedTemplatePromise) {
-    return preloadedTemplatePromise;
-  }
-
-  preloadedTemplatePromise = fetch('./sablon.xlsx')
-    .then(resp => {
-
-      if (!resp.ok) {
-        throw new Error('Şablon dosyası bulunamadı (sablon.xlsx).');
-      }
-
-      return resp.arrayBuffer();
-
-    })
-    .then(buffer => {
-
-      preloadedTemplateBuffer = buffer;
-      scheduleExcelBuild(0);
-      return buffer;
-
-    })
-    .catch(err => {
-
-      console.warn('Şablon ön-yükleme hatası:', err);
-      preloadedTemplatePromise = null;
-      return null;
-
-    });
-
-  return preloadedTemplatePromise;
-
-}
-
-
-/* =========================================================
    TÜRKÇE FONT (ROBOTO) YEREL (OFFLINE) ÖN-YÜKLEME
    ========================================================= */
 
@@ -1334,153 +1277,9 @@ function preloadPdfFonts() {
 }
 
 
-function scheduleExcelBuild(delayMs) {
-
-  clearTimeout(excelBuildTimer);
-
-  excelBuildTimer = setTimeout(
-    () => {
-
-      preparedExcelBuildPromise =
-        buildExcelFile()
-          .then(file => {
-
-            preparedExcelFile = file;
-            return file;
-
-          })
-          .catch(err => {
-
-            console.warn('Excel arka plan hazırlama hatası:', err);
-            return null;
-
-          });
-
-    },
-    delayMs === undefined
-      ? 800
-      : delayMs
-  );
-
-}
-
-
-async function buildExcelFile() {
-
-  if (typeof ExcelJS === 'undefined') {
-    throw new Error('Excel kütüphanesi yüklenemedi.');
-  }
-
-  let buffer = preloadedTemplateBuffer;
-
-  if (!buffer) {
-    buffer = await preloadTemplate();
-  }
-
-  if (!buffer) {
-    throw new Error('Şablon dosyası bulunamadı (sablon.xlsx).');
-  }
-
-  const bufferCopy = buffer.slice(0);
-
-  const workbook = new ExcelJS.Workbook();
-
-  await workbook.xlsx.load(bufferCopy);
-
-  const ws = workbook.getWorksheet('Sayfa1');
-
-  if (!ws) {
-    throw new Error('Şablonda "Sayfa1" adında bir sekme bulunamadı.');
-  }
-
-  const name = (
-    document.getElementById('name')?.value || ''
-  ).trim();
-
-  const titleText =
-    document.getElementById('title1')?.textContent ||
-    'FAZLA MESAİ ÇİZELGESİ';
-
-  ws.getCell('A1').value = titleText;
-  ws.getCell('B2').value = name;
-
-  const year =
-    Number(document.getElementById('selectYear')?.value);
-
-  const monthIdx =
-    parseInt(
-      document.getElementById('selectMonth')?.value,
-      10
-    );
-
-  const daysInMonth =
-    new Date(year, monthIdx + 1, 0).getDate();
-
-  const TEMPLATE_DAY_ROWS = 31;
-
-  for (let i = 1; i <= TEMPLATE_DAY_ROWS; i++) {
-
-    const row = 3 + i;
-
-    if (i <= daysInMonth) {
-
-      const dateObj =
-        new Date(Date.UTC(year, monthIdx, i));
-
-      ws.getCell(`A${row}`).value = dateObj;
-
-      const timeVal =
-        document.getElementById(`time${i}`)?.value || '';
-
-      const breakVal =
-        document.getElementById(`break${i}`)?.value || '';
-
-      const mealVal =
-        document.getElementById(`meal${i}`)?.value || '';
-
-      ws.getCell(`B${row}`).value = timeVal;
-
-      ws.getCell(`D${row}`).value =
-        breakVal === '' ? null : Number(breakVal);
-
-      ws.getCell(`E${row}`).value = mealVal;
-
-    } else {
-
-      ws.getCell(`A${row}`).value = null;
-      ws.getCell(`B${row}`).value = null;
-      ws.getCell(`D${row}`).value = null;
-      ws.getCell(`E${row}`).value = null;
-
-    }
-  }
-
-  const outBuffer = await workbook.xlsx.writeBuffer();
-
-  const mimeType =
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-
-  const safeName = toSafeUpperAscii(name);
-  const safeMonth = toSafeUpperAscii(monthNames[monthIdx]);
-
-  let rawFileName = '';
-  if (safeName) {
-    rawFileName = `${safeName}_${safeMonth}_${year}_MESAI`;
-  } else {
-    rawFileName = `MESAI_${safeMonth}_${year}`;
-  }
-
-  const fileName = rawFileName + '.xlsx';
-
-  const blob = new Blob([outBuffer], { type: mimeType });
-
-  return new File([blob], fileName, { 
-    type: mimeType,
-    lastModified: Date.now()
-  });
-
-}
-
+/* =========================================================
+   TABLOYU TEMİZLEME FONKSİYONU
+   ========================================================= */
 
 function clearCurrentMonth() {
 
@@ -1522,194 +1321,6 @@ function clearCurrentMonth() {
 
 
 /* =========================================================
-   EXCEL PAYLAŞMA (iOS)
-   ========================================================= */
-
-async function shareExcel(btn) {
-
-  updateDynamicTitle();
-
-  if (!preparedExcelFile) {
-
-    const oldText = btn ? btn.textContent : 'Excel Paylaş (iOS)';
-
-    try {
-
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = 'Excel Hazırlanıyor...';
-      }
-
-      preparedExcelFile = await buildExcelFile();
-
-      if (btn) {
-        btn.textContent = 'Excel Paylaş (iOS)';
-      }
-
-    } catch (err) {
-
-      console.error('Excel hazırlama hatası:', err);
-      preparedExcelFile = null;
-
-      alert(
-        'Excel hazırlanırken bir sorun oluştu.\n\n' +
-        (err && err.message ? err.message : 'Bilinmeyen hata.')
-      );
-
-      if (btn) {
-        btn.textContent = oldText;
-      }
-
-    } finally {
-
-      if (btn) {
-        btn.disabled = false;
-      }
-
-    }
-
-    return;
-  }
-
-  try {
-
-    if (!navigator.share) {
-      throw new Error(
-        'Bu tarayıcı sistem paylaşımını desteklemiyor.\n\n' +
-        'iOS için Safari veya uygulamanın PWA sürümünü kullanın.'
-      );
-    }
-
-    if (
-      navigator.canShare &&
-      !navigator.canShare({ files: [preparedExcelFile] })
-    ) {
-      throw new Error(
-        'Bu cihaz/tarayıcı sürümü XLSX dosyasını sistem paylaşımıyla göndermeyi desteklemiyor.'
-      );
-    }
-
-    await navigator.share({
-      files: [preparedExcelFile]
-    });
-
-  } catch (err) {
-
-    if (err && err.name === 'AbortError') {
-      return;
-    }
-
-    console.error('Excel paylaşma hatası:', err);
-
-    alert(
-      'Paylaşım başarısız oldu veya izin verilmedi.\n\n' +
-      (err && err.message ? err.message : 'Bilinmeyen hata.')
-    );
-
-  }
-}
-
-
-/* =========================================================
-   PDF PAYLAŞMA (Android - html2pdf Ekran Yakalama)
-   ========================================================= */
-
-async function sharePDF(btn) {
-
-  updateDynamicTitle();
-  showSheet(1);
-
-  const oldText = btn ? btn.textContent : 'PDF Paylaş (Android)';
-
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = 'PDF Hazırlanıyor...';
-  }
-
-  try {
-
-    if (typeof html2pdf === 'undefined') {
-      throw new Error('PDF kütüphanesi yüklenemedi. html2pdf.bundle.min.js dosyasını kontrol edin.');
-    }
-
-    const element = document.querySelector('#sheet1 .excel-page-border');
-    if (!element) {
-      throw new Error('Yazdırılacak çizelge alanı bulunamadı.');
-    }
-
-    element.querySelectorAll('input').forEach(inp => {
-      inp.setAttribute('value', inp.value);
-    });
-
-    const name = (document.getElementById('name')?.value || '').trim();
-    const year = document.getElementById('selectYear')?.value;
-    const monthIdx = parseInt(document.getElementById('selectMonth')?.value, 10);
-
-    const safeName = toSafeUpperAscii(name);
-    const safeMonth = toSafeUpperAscii(monthNames[monthIdx]);
-
-    let rawFileName = '';
-    if (safeName) {
-      rawFileName = `${safeName}_${safeMonth}_${year}_MESAI`;
-    } else {
-      rawFileName = `MESAI_${safeMonth}_${year}`;
-    }
-    const fileName = rawFileName + '.pdf';
-
-    const opt = {
-      margin: [4, 4, 4, 4],
-      filename: fileName,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { 
-        scale: 2, 
-        useCORS: true, 
-        backgroundColor: '#ffffff',
-        logging: false
-      },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
-
-    const pdfFile = new File([pdfBlob], fileName, {
-      type: 'application/pdf',
-      lastModified: Date.now()
-    });
-
-    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-      await navigator.share({
-        files: [pdfFile]
-      });
-    } else if (navigator.share) {
-      await navigator.share({
-        files: [pdfFile]
-      });
-    } else {
-      downloadFile(pdfBlob, fileName);
-    }
-
-  } catch (err) {
-
-    if (err && err.name === 'AbortError') {
-      return;
-    }
-
-    console.error('PDF paylaşma hatası:', err);
-    alert('PDF oluşturulurken veya paylaşılırken bir hata oluştu:\n' + (err && err.message ? err.message : err));
-
-  } finally {
-
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = oldText;
-    }
-
-  }
-
-}
-
-
-/* =========================================================
    PDF PAYLAŞMA (Vektörel Motor - Türkçe Karakter ve Çevrimdışı)
    ========================================================= */
 
@@ -1717,11 +1328,11 @@ async function shareVectorPDF(btn) {
 
   updateDynamicTitle();
 
-  const oldText = btn ? btn.textContent : 'PDF Paylaş (Vektörel)';
+  const oldText = btn ? btn.textContent : 'PDF Paylaş';
 
   if (btn) {
     btn.disabled = true;
-    btn.textContent = 'Vektörel PDF Hazırlanıyor...';
+    btn.textContent = 'PDF Hazırlanıyor...';
   }
 
   try {
@@ -1878,7 +1489,7 @@ async function shareVectorPDF(btn) {
     const safeName = toSafeUpperAscii(name);
     const safeMonth = toSafeUpperAscii(monthNames[monthIdx]);
 
-    let rawFileName = safeName ? `${safeName}_${safeMonth}_${year}_VEKTOREL_MESAI` : `MESAI_${safeMonth}_${year}_VEKTOREL`;
+    let rawFileName = safeName ? `${safeName}_${safeMonth}_${year}_MESAI` : `MESAI_${safeMonth}_${year}`;
     const fileName = rawFileName + '.pdf';
 
     const pdfBlob = doc.output('blob');
@@ -1906,7 +1517,7 @@ async function shareVectorPDF(btn) {
     }
 
     console.error('Vektörel PDF hatası:', err);
-    alert('Vektörel PDF oluşturulurken hata oluştu:\n' + (err && err.message ? err.message : err));
+    alert('PDF oluşturulurken hata oluştu:\n' + (err && err.message ? err.message : err));
 
   } finally {
 
@@ -3430,13 +3041,6 @@ function calc() {
   buildAnnualTable();
   updateEmptyState();
 
-  preparedExcelFile = null;
-
-  const shareBtn = document.getElementById('shareExcelBtn');
-  if (shareBtn && !shareBtn.disabled) {
-    shareBtn.textContent = 'Excel Paylaş (iOS)';
-  }
-
 }
 
 
@@ -3504,13 +3108,6 @@ function save() {
     getStorageKey(),
     JSON.stringify(o)
   );
-
-  preparedExcelFile = null;
-
-  const shareBtn = document.getElementById('shareExcelBtn');
-  if (shareBtn && !shareBtn.disabled) {
-    shareBtn.textContent = 'Excel Paylaş (iOS)';
-  }
 
   showSavedToast();
 
@@ -3780,7 +3377,6 @@ window.addEventListener(
     buildTables();
     restore();
     calc();
-    preloadTemplate();
     preloadPdfFonts();
 
   }
