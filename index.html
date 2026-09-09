@@ -7,6 +7,8 @@
 <link rel="manifest" href="manifest.json">
 <script src="./exceljs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 <style>
 *{box-sizing:border-box} 
@@ -25,7 +27,7 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-/* YENİ MODERN ÜCRET KARTI TASARIMI */
+/* ÜCRET KARTI TASARIMI */
 .salary-dashboard {
   max-width: 750px;
   margin: 0 auto;
@@ -110,14 +112,12 @@ input[type=number] {
   margin-left: 4px;
 }
 
-/* KAZANÇ VE KESİNTİ VURGULARI */
 .salary-input-wrapper.green-bg { background: #f0fdf4; border-color: #86efac; }
 .salary-input-wrapper.green-bg input { color: #22C55E; font-weight: 800; }
 
 .salary-input-wrapper.red-bg { background: #fef2f2; border-color: #fca5a5; }
 .salary-input-wrapper.red-bg input { color: #dc2626; font-weight: 800; }
 
-/* EN ALT ÖZET KARTI */
 .net-pay-card {
   background: linear-gradient(135deg, #22C55E, #15803d);
   color: #ffffff;
@@ -148,6 +148,8 @@ input[type=number] {
 .btn:hover{background:#0052a3}
 .btn-secondary{background:#6c757d}
 .btn-secondary:hover{background:#5a6268}
+.btn-success{background:#059669}
+.btn-success:hover{background:#047857}
 .btn-danger{background:#dc2626}
 .btn-danger:hover{background:#b91c1c}
 .quick-bar{background:#fff;border:1px solid #aaa;border-radius:6px;padding:8px 16px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -440,7 +442,7 @@ col.col-4 { width: 22% !important; }
   .alert-box{font-size:12px}
 }
 
-/* DARK MODE RENK AYARLARI */
+/* DARK MODE: Menüler koyu, A4 Çizelge kağıdı beyaz kalır */
 @media (prefers-color-scheme: dark) {
   body{background:#15181c;color:#e7e9ec}
 
@@ -456,23 +458,40 @@ col.col-4 { width: 22% !important; }
   .tab{background:#262b31;border-color:#3a4048;color:#c7cbd0}
   .tab.active{background:#1f2328;color:#fff;border-bottom-color:#1f2328}
 
-  .excel-page-border{background:#1f2328;border-color:#3a4048}
-  table#tableSheet1{border-color:#3a4048 !important}
-  table#tableSheet1 td, table#tableSheet1 th{
-    border-color:#3a4048 !important;
-    color:#e7e9ec !important;
-    background:transparent !important;
+  /* A4 Çizelgesi koyu modda daima beyaz kağıt kalsın */
+  .excel-page-border {
+    background: #ffffff !important;
+    border-color: #000000 !important;
   }
-  #tableSheet1 .title, #tableSheet1 .label, #tableSheet1 th{background:#1f2328 !important}
-  #tableSheet1 input{color:#e7e9ec}
-  #tableSheet1 input:focus{background:#2a2f36;outline-color:#8ab4f8}
-  #tableSheet1 input.invalid{
-    background:#3a1616 !important;
-    color:#ffd7d7 !important;
-    outline-color:#ff6b6b !important;
+  table#tableSheet1 {
+    border-color: #000000 !important;
+    background: #ffffff !important;
   }
-
-  .signature-area{color:#e7e9ec}
+  table#tableSheet1 td, table#tableSheet1 th {
+    border-color: #000000 !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+  }
+  #tableSheet1 .title, #tableSheet1 .label, #tableSheet1 th {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  #tableSheet1 input {
+    color: #000000 !important;
+    background: transparent !important;
+  }
+  #tableSheet1 input:focus {
+    background: #f0f0f0 !important;
+    outline: 1px solid #000000 !important;
+  }
+  #tableSheet1 input.invalid {
+    background: #fdecea !important;
+    color: #000000 !important;
+    outline: 2px solid #d9534f !important;
+  }
+  .signature-area {
+    color: #000000 !important;
+  }
 
   .empty-state-note{background:#152437;border-color:#2f5b8f;color:#8ab4f8}
 
@@ -701,6 +720,10 @@ col.col-4 { width: 22% !important; }
 
     <button class="btn" id="sharePdfBtn" onclick="sharePDF(this)">
       PDF Paylaş (Android)
+    </button>
+
+    <button class="btn btn-success" id="shareVectorPdfBtn" onclick="shareVectorPDF(this)">
+      PDF Paylaş (Vektörel)
     </button>
   </div>
 </div>
@@ -1295,11 +1318,6 @@ function scheduleExcelBuild(delayMs) {
 }
 
 
-/*
- * Excel dosyasını oluşturur: AD_SOYAD_AY_YIL_MESAI.xlsx formatında adlandırır.
- * Boş molaları sıfır yerine null (temiz hücre) olarak yazar.
- */
-
 async function buildExcelFile() {
 
   if (typeof ExcelJS === 'undefined') {
@@ -1375,7 +1393,6 @@ async function buildExcelFile() {
 
       ws.getCell(`B${row}`).value = timeVal;
 
-      // Mola boşsa 0 yerine null (temiz boş hücre) basılır
       ws.getCell(`D${row}`).value =
         breakVal === '' ? null : Number(breakVal);
 
@@ -1396,7 +1413,6 @@ async function buildExcelFile() {
   const mimeType =
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-  // Format: AHMET_YILMAZ_AGUSTOS_2026_MESAI.xlsx
   const safeName = toSafeUpperAscii(name);
   const safeMonth = toSafeUpperAscii(monthNames[monthIdx]);
 
@@ -1418,10 +1434,6 @@ async function buildExcelFile() {
 
 }
 
-
-/* =========================================================
-   TABLOYU TEMİZLEME FONKSİYONU
-   ========================================================= */
 
 function clearCurrentMonth() {
 
@@ -1530,7 +1542,6 @@ async function shareExcel(btn) {
       );
     }
 
-    // iOS WhatsApp kilitlenmesini ve kırmızı ünlemi önlemek için SADECE files dizisi gönderilir
     await navigator.share({
       files: [preparedExcelFile]
     });
@@ -1553,13 +1564,13 @@ async function shareExcel(btn) {
 
 
 /* =========================================================
-   PDF PAYLAŞMA (Android)
+   PDF PAYLAŞMA (Android - html2pdf Ekran Yakalama)
    ========================================================= */
 
 async function sharePDF(btn) {
 
   updateDynamicTitle();
-  showSheet(1); // Çizelge sayfasını aç ki DOM görünür olsun
+  showSheet(1);
 
   const oldText = btn ? btn.textContent : 'PDF Paylaş (Android)';
 
@@ -1579,7 +1590,6 @@ async function sharePDF(btn) {
       throw new Error('Yazdırılacak çizelge alanı bulunamadı.');
     }
 
-    // Input değerlerini attribute olarak yazarak html2canvas klonunda değer kaybını önle
     element.querySelectorAll('input').forEach(inp => {
       inp.setAttribute('value', inp.value);
     });
@@ -1628,7 +1638,6 @@ async function sharePDF(btn) {
         files: [pdfFile]
       });
     } else {
-      // Paylaşım menüsü desteklenmezse doğrudan indir
       downloadFile(pdfBlob, fileName);
     }
 
@@ -1640,6 +1649,174 @@ async function sharePDF(btn) {
 
     console.error('PDF paylaşma hatası:', err);
     alert('PDF oluşturulurken veya paylaşılırken bir hata oluştu:\n' + (err && err.message ? err.message : err));
+
+  } finally {
+
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = oldText;
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   PDF PAYLAŞMA (Vektörel Motor - jsPDF + AutoTable)
+   ========================================================= */
+
+async function shareVectorPDF(btn) {
+
+  updateDynamicTitle();
+
+  const oldText = btn ? btn.textContent : 'PDF Paylaş (Vektörel)';
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Vektörel PDF Hazırlanıyor...';
+  }
+
+  try {
+
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      throw new Error('jsPDF kütüphanesi yüklenemedi. İnternet bağlantınızı kontrol edin.');
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const name = (document.getElementById('name')?.value || '').trim();
+    const year = document.getElementById('selectYear')?.value;
+    const monthIdx = parseInt(document.getElementById('selectMonth')?.value, 10);
+    const monthName = monthNames[monthIdx];
+    const titleText = `ŞENGÜN MAKİNA ${monthName} AYI FAZLA MESAİ ÇİZELGESİ`;
+
+    // Tablo verisini oluştur
+    const tableBody = [];
+
+    // Başlık
+    tableBody.push([
+      { content: titleText, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold', fontSize: 10.5, cellPadding: 2 } }
+    ]);
+
+    // Adı-Soyadı
+    tableBody.push([
+      { content: 'ADI-SOYADI', styles: { halign: 'center', fontStyle: 'bold', fontSize: 9 } },
+      { content: name, colSpan: 3, styles: { halign: 'center', fontStyle: 'bold', fontSize: 9.5 } }
+    ]);
+
+    // Kolon Başlıkları
+    tableBody.push([
+      { content: 'TARİH', styles: { halign: 'center', fontStyle: 'bold', fontSize: 8.5 } },
+      { content: 'MESAİ SAATLERİ', styles: { halign: 'center', fontStyle: 'bold', fontSize: 8.5 } },
+      { content: 'MOLA(DK)', styles: { halign: 'center', fontStyle: 'bold', fontSize: 8.5 } },
+      { content: 'YOL-YEMEK', styles: { halign: 'center', fontStyle: 'bold', fontSize: 8.5 } }
+    ]);
+
+    // 31 Günlük Satırlar
+    const daysInCurrentMonth = getDaysInMonth(parseInt(year), monthIdx);
+
+    for (let i = 1; i <= 31; i++) {
+      if (i <= daysInCurrentMonth) {
+        const dayStr = String(i).padStart(2, '0');
+        const monthStr = String(monthIdx + 1).padStart(2, '0');
+        const dateFormatted = `${dayStr}.${monthStr}.${year}`;
+
+        const timeVal = document.getElementById('time' + i)?.value || '';
+        const breakVal = document.getElementById('break' + i)?.value || '';
+        const mealVal = document.getElementById('meal' + i)?.value || '';
+
+        tableBody.push([
+          { content: dateFormatted, styles: { halign: 'center' } },
+          { content: timeVal, styles: { halign: 'center' } },
+          { content: breakVal, styles: { halign: 'center' } },
+          { content: mealVal, styles: { halign: 'center' } }
+        ]);
+      } else {
+        tableBody.push([
+          { content: '' },
+          { content: '' },
+          { content: '' },
+          { content: '' }
+        ]);
+      }
+    }
+
+    // Tabloyu çiz
+    doc.autoTable({
+      body: tableBody,
+      startY: 8,
+      margin: { left: 10, right: 10, top: 8, bottom: 20 },
+      theme: 'grid',
+      styles: {
+        fontSize: 8.5,
+        textColor: [0, 0, 0],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.25,
+        cellPadding: 1.1,
+        valign: 'middle'
+      },
+      columnStyles: {
+        0: { cellWidth: 42.75 },
+        1: { cellWidth: 71.25 },
+        2: { cellWidth: 34.20 },
+        3: { cellWidth: 41.80 }
+      },
+      pageBreak: 'avoid',
+      didDrawPage: function (data) {
+        const finalY = data.cursor.y + 5;
+        const pageWidth = doc.internal.pageSize.getWidth();
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.text('SORUMLU AD SOYAD', pageWidth / 2, finalY, { align: 'center' });
+        doc.text(name, pageWidth / 2, finalY + 4.5, { align: 'center' });
+        doc.text('İMZA', pageWidth / 2, finalY + 9, { align: 'center' });
+      }
+    });
+
+    const safeName = toSafeUpperAscii(name);
+    const safeMonth = toSafeUpperAscii(monthNames[monthIdx]);
+
+    let rawFileName = '';
+    if (safeName) {
+      rawFileName = `${safeName}_${safeMonth}_${year}_VEKTOREL_MESAI`;
+    } else {
+      rawFileName = `MESAI_${safeMonth}_${year}_VEKTOREL`;
+    }
+    const fileName = rawFileName + '.pdf';
+
+    const pdfBlob = doc.output('blob');
+    const pdfFile = new File([pdfBlob], fileName, {
+      type: 'application/pdf',
+      lastModified: Date.now()
+    });
+
+    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+      await navigator.share({
+        files: [pdfFile]
+      });
+    } else if (navigator.share) {
+      await navigator.share({
+        files: [pdfFile]
+      });
+    } else {
+      downloadFile(pdfBlob, fileName);
+    }
+
+  } catch (err) {
+
+    if (err && err.name === 'AbortError') {
+      return;
+    }
+
+    console.error('Vektörel PDF hatası:', err);
+    alert('Vektörel PDF oluşturulurken hata oluştu:\n' + (err && err.message ? err.message : err));
 
   } finally {
 
@@ -2413,7 +2590,6 @@ function formatTimeLive(input) {
 
   let val = input.value;
 
-  // Harfleri engelle: Sadece rakam, iki nokta ve tireye izin ver
   let sanitized = val.replace(/[^0-9:-]/g, '');
   if (val !== sanitized) {
     input.value = sanitized;
@@ -2433,7 +2609,6 @@ function formatTimeLive(input) {
 
 
 function autoZero(i) {
-  // Mola ve yol-yemek kutuları için otomatik '0' ataması kapalıdır, kutular boş kalır
   save();
   calc();
 }
@@ -2993,8 +3168,6 @@ function calc() {
 
   }
 
-
-  /* KESİNTİ VE NET HAK EDİŞ */
 
   const dedHInput =
     document.getElementById(
