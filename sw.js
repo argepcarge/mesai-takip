@@ -1,13 +1,10 @@
-const CACHE_NAME = 'mesai-pwa-v3';
+const CACHE_NAME = 'mesai-pwa-v4';
 
 const assets = [
   './',
   './index.html',
   './manifest.json',
-  './exceljs.min.js',
-  './sablon.xlsx',
   './icon-512.png',
-  './html2pdf.bundle.min.js',
   './jspdf.umd.min.js',
   './jspdf.plugin.autotable.min.js',
   './Roboto-Regular.ttf',
