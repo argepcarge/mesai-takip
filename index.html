@@ -1088,7 +1088,7 @@ async function shareVectorPDF(btn) {
     const monthName = monthNames[monthIdx];
     
     // Excel ile birebir iki satırlı başlık yapısı
-    const titleText = `ŞENGÜN MAKİNA\n${monthName} AYI FAZLA MESAİ ÇİZELGESİ`;[cite: 2]
+    const titleText = `ŞENGÜN MAKİNA\n${monthName} AYI FAZLA MESAİ ÇİZELGESİ`;
 
     const tableBody = [];
 
@@ -1518,6 +1518,7 @@ function parseTime(s) {
    ========================================================= */
 function formatTimeLive(input) {
   let val = input.value;
+  // Sadece rakamları al ve maksimum 8 rakamla sınırla
   let clean = val.replace(/\D/g, '').slice(0, 8);
 
   if (clean.length === 8) {
@@ -1525,6 +1526,7 @@ function formatTimeLive(input) {
   } else if (clean.length === 4 && !val.includes(':') && !val.includes('-')) {
     input.value = `${clean.slice(0,2)}:${clean.slice(2,4)}`;
   } else if (clean.length < 8 && val.includes('-')) {
+    // Kullanıcı silme yaparken serbest bırak
     input.value = val;
   }
 }
