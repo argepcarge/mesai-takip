@@ -6,6 +6,7 @@
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
 <script src="./exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 *{box-sizing:border-box} 
@@ -695,7 +696,11 @@ col.col-4 { width: 22% !important; }
     </button>
 
     <button class="btn btn-secondary" id="shareExcelBtn" onclick="shareExcel(this)">
-      Excel Hazırla
+      Excel Paylaş (iOS)
+    </button>
+
+    <button class="btn" id="sharePdfBtn" onclick="sharePDF(this)">
+      PDF Paylaş (Android)
     </button>
   </div>
 </div>
@@ -1458,7 +1463,7 @@ function clearCurrentMonth() {
 
 
 /* =========================================================
-   EXCEL PAYLAŞMA
+   EXCEL PAYLAŞMA (iOS)
    ========================================================= */
 
 async function shareExcel(btn) {
@@ -1467,7 +1472,7 @@ async function shareExcel(btn) {
 
   if (!preparedExcelFile) {
 
-    const oldText = btn ? btn.textContent : 'Excel Hazırla';
+    const oldText = btn ? btn.textContent : 'Excel Paylaş (iOS)';
 
     try {
 
@@ -1479,7 +1484,7 @@ async function shareExcel(btn) {
       preparedExcelFile = await buildExcelFile();
 
       if (btn) {
-        btn.textContent = 'Excel Paylaş';
+        btn.textContent = 'Excel Paylaş (iOS)';
       }
 
     } catch (err) {
@@ -1512,7 +1517,7 @@ async function shareExcel(btn) {
     if (!navigator.share) {
       throw new Error(
         'Bu tarayıcı sistem paylaşımını desteklemiyor.\n\n' +
-        'Android için Chrome veya uygulamanın PWA sürümünü kullanın.'
+        'iOS için Safari veya uygulamanın PWA sürümünü kullanın.'
       );
     }
 
@@ -1544,6 +1549,107 @@ async function shareExcel(btn) {
     );
 
   }
+}
+
+
+/* =========================================================
+   PDF PAYLAŞMA (Android)
+   ========================================================= */
+
+async function sharePDF(btn) {
+
+  updateDynamicTitle();
+  showSheet(1); // Çizelge sayfasını aç ki DOM görünür olsun
+
+  const oldText = btn ? btn.textContent : 'PDF Paylaş (Android)';
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'PDF Hazırlanıyor...';
+  }
+
+  try {
+
+    if (typeof html2pdf === 'undefined') {
+      throw new Error('PDF kütüphanesi yüklenemedi. İnternet bağlantınızı kontrol edin.');
+    }
+
+    const element = document.querySelector('#sheet1 .excel-page-border');
+    if (!element) {
+      throw new Error('Yazdırılacak çizelge alanı bulunamadı.');
+    }
+
+    // Input değerlerini attribute olarak yazarak html2canvas klonunda değer kaybını önle
+    element.querySelectorAll('input').forEach(inp => {
+      inp.setAttribute('value', inp.value);
+    });
+
+    const name = (document.getElementById('name')?.value || '').trim();
+    const year = document.getElementById('selectYear')?.value;
+    const monthIdx = parseInt(document.getElementById('selectMonth')?.value, 10);
+
+    const safeName = toSafeUpperAscii(name);
+    const safeMonth = toSafeUpperAscii(monthNames[monthIdx]);
+
+    let rawFileName = '';
+    if (safeName) {
+      rawFileName = `${safeName}_${safeMonth}_${year}_MESAI`;
+    } else {
+      rawFileName = `MESAI_${safeMonth}_${year}`;
+    }
+    const fileName = rawFileName + '.pdf';
+
+    const opt = {
+      margin: [4, 4, 4, 4],
+      filename: fileName,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true, 
+        backgroundColor: '#ffffff',
+        logging: false
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
+
+    const pdfFile = new File([pdfBlob], fileName, {
+      type: 'application/pdf',
+      lastModified: Date.now()
+    });
+
+    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+      await navigator.share({
+        files: [pdfFile]
+      });
+    } else if (navigator.share) {
+      await navigator.share({
+        files: [pdfFile]
+      });
+    } else {
+      // Paylaşım menüsü desteklenmezse doğrudan indir
+      downloadFile(pdfBlob, fileName);
+    }
+
+  } catch (err) {
+
+    if (err && err.name === 'AbortError') {
+      return;
+    }
+
+    console.error('PDF paylaşma hatası:', err);
+    alert('PDF oluşturulurken veya paylaşılırken bir hata oluştu:\n' + (err && err.message ? err.message : err));
+
+  } finally {
+
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = oldText;
+    }
+
+  }
+
 }
 
 
@@ -2327,9 +2433,9 @@ function formatTimeLive(input) {
 
 
 function autoZero(i) {
+  // Mola ve yol-yemek kutuları için otomatik '0' ataması kapalıdır, kutular boş kalır
   save();
   calc();
-
 }
 
 
@@ -3065,7 +3171,7 @@ function calc() {
 
   const shareBtn = document.getElementById('shareExcelBtn');
   if (shareBtn && !shareBtn.disabled) {
-    shareBtn.textContent = 'Excel Hazırla';
+    shareBtn.textContent = 'Excel Paylaş (iOS)';
   }
 
 }
@@ -3140,7 +3246,7 @@ function save() {
 
   const shareBtn = document.getElementById('shareExcelBtn');
   if (shareBtn && !shareBtn.disabled) {
-    shareBtn.textContent = 'Excel Hazırla';
+    shareBtn.textContent = 'Excel Paylaş (iOS)';
   }
 
   showSavedToast();
