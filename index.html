@@ -6,9 +6,9 @@
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
 <script src="./exceljs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="./html2pdf.bundle.min.js"></script>
+<script src="./jspdf.umd.min.js"></script>
+<script src="./jspdf.plugin.autotable.min.js"></script>
 
 <style>
 *{box-sizing:border-box} 
@@ -1287,6 +1287,53 @@ function preloadTemplate() {
 }
 
 
+/* =========================================================
+   TÜRKÇE FONT (ROBOTO) YEREL (OFFLINE) ÖN-YÜKLEME
+   ========================================================= */
+
+let robotoRegBase64 = null;
+let robotoBoldBase64 = null;
+let fontPreloadPromise = null;
+
+function arrayBufferToBase64(buffer) {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const chunk = 8192;
+  for (let i = 0; i < bytes.byteLength; i += chunk) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+function preloadPdfFonts() {
+  if (fontPreloadPromise) return fontPreloadPromise;
+
+  fontPreloadPromise = Promise.all([
+    fetch('./Roboto-Regular.ttf')
+      .then(r => {
+        if (!r.ok) throw new Error('Roboto-Regular.ttf bulunamadı.');
+        return r.arrayBuffer();
+      })
+      .then(buf => arrayBufferToBase64(buf)),
+    fetch('./Roboto-Medium.ttf')
+      .then(r => {
+        if (!r.ok) throw new Error('Roboto-Medium.ttf bulunamadı.');
+        return r.arrayBuffer();
+      })
+      .then(buf => arrayBufferToBase64(buf))
+  ]).then(([reg, bold]) => {
+    robotoRegBase64 = reg;
+    robotoBoldBase64 = bold;
+    return { reg, bold };
+  }).catch(err => {
+    console.warn('Yerel Türkçe fontlar yüklenemedi, varsayılan fonta dönülüyor:', err);
+    return null;
+  });
+
+  return fontPreloadPromise;
+}
+
+
 function scheduleExcelBuild(delayMs) {
 
   clearTimeout(excelBuildTimer);
@@ -1582,7 +1629,7 @@ async function sharePDF(btn) {
   try {
 
     if (typeof html2pdf === 'undefined') {
-      throw new Error('PDF kütüphanesi yüklenemedi. İnternet bağlantınızı kontrol edin.');
+      throw new Error('PDF kütüphanesi yüklenemedi. html2pdf.bundle.min.js dosyasını kontrol edin.');
     }
 
     const element = document.querySelector('#sheet1 .excel-page-border');
@@ -1663,7 +1710,7 @@ async function sharePDF(btn) {
 
 
 /* =========================================================
-   PDF PAYLAŞMA (Vektörel Motor - jsPDF + AutoTable)
+   PDF PAYLAŞMA (Vektörel Motor - Türkçe Karakter ve Çevrimdışı)
    ========================================================= */
 
 async function shareVectorPDF(btn) {
@@ -1680,7 +1727,11 @@ async function shareVectorPDF(btn) {
   try {
 
     if (!window.jspdf || !window.jspdf.jsPDF) {
-      throw new Error('jsPDF kütüphanesi yüklenemedi. İnternet bağlantınızı kontrol edin.');
+      throw new Error('jsPDF kütüphanesi yüklenemedi. jspdf.umd.min.js dosyasını kontrol edin.');
+    }
+
+    if (!robotoRegBase64 || !robotoBoldBase64) {
+      await preloadPdfFonts();
     }
 
     const { jsPDF } = window.jspdf;
@@ -1690,32 +1741,75 @@ async function shareVectorPDF(btn) {
       format: 'a4'
     });
 
+    const hasCustomFont = !!(robotoRegBase64 && robotoBoldBase64);
+
+    if (hasCustomFont) {
+      doc.addFileToVFS('Roboto-Regular.ttf', robotoRegBase64);
+      doc.addFont('Roboto-Regular.ttf', 'Roboto', 'normal');
+
+      doc.addFileToVFS('Roboto-Medium.ttf', robotoBoldBase64);
+      doc.addFont('Roboto-Medium.ttf', 'Roboto', 'bold');
+
+      doc.setFont('Roboto', 'normal');
+    }
+
+    const activeFont = hasCustomFont ? 'Roboto' : 'helvetica';
+
     const name = (document.getElementById('name')?.value || '').trim();
     const year = document.getElementById('selectYear')?.value;
     const monthIdx = parseInt(document.getElementById('selectMonth')?.value, 10);
     const monthName = monthNames[monthIdx];
     const titleText = `ŞENGÜN MAKİNA ${monthName} AYI FAZLA MESAİ ÇİZELGESİ`;
 
-    // Tablo verisini oluştur
     const tableBody = [];
 
     // Başlık
     tableBody.push([
-      { content: titleText, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold', fontSize: 10.5, cellPadding: 2 } }
+      { 
+        content: titleText, 
+        colSpan: 4, 
+        styles: { 
+          halign: 'center', 
+          font: activeFont,
+          fontStyle: 'bold', 
+          fontSize: 10.5, 
+          cellPadding: 2.2,
+          fillColor: [255, 255, 255] 
+        } 
+      }
     ]);
 
     // Adı-Soyadı
     tableBody.push([
-      { content: 'ADI-SOYADI', styles: { halign: 'center', fontStyle: 'bold', fontSize: 9 } },
-      { content: name, colSpan: 3, styles: { halign: 'center', fontStyle: 'bold', fontSize: 9.5 } }
+      { 
+        content: 'ADI-SOYADI', 
+        styles: { 
+          halign: 'center', 
+          font: activeFont,
+          fontStyle: 'bold', 
+          fontSize: 9,
+          fillColor: [255, 255, 255] 
+        } 
+      },
+      { 
+        content: name, 
+        colSpan: 3, 
+        styles: { 
+          halign: 'center', 
+          font: activeFont,
+          fontStyle: 'bold', 
+          fontSize: 9.5,
+          fillColor: [255, 255, 255] 
+        } 
+      }
     ]);
 
     // Kolon Başlıkları
     tableBody.push([
-      { content: 'TARİH', styles: { halign: 'center', fontStyle: 'bold', fontSize: 8.5 } },
-      { content: 'MESAİ SAATLERİ', styles: { halign: 'center', fontStyle: 'bold', fontSize: 8.5 } },
-      { content: 'MOLA(DK)', styles: { halign: 'center', fontStyle: 'bold', fontSize: 8.5 } },
-      { content: 'YOL-YEMEK', styles: { halign: 'center', fontStyle: 'bold', fontSize: 8.5 } }
+      { content: 'TARİH', styles: { halign: 'center', font: activeFont, fontStyle: 'bold', fontSize: 8.5, fillColor: [255, 255, 255] } },
+      { content: 'MESAİ SAATLERİ', styles: { halign: 'center', font: activeFont, fontStyle: 'bold', fontSize: 8.5, fillColor: [255, 255, 255] } },
+      { content: 'MOLA(DK)', styles: { halign: 'center', font: activeFont, fontStyle: 'bold', fontSize: 8.5, fillColor: [255, 255, 255] } },
+      { content: 'YOL-YEMEK', styles: { halign: 'center', font: activeFont, fontStyle: 'bold', fontSize: 8.5, fillColor: [255, 255, 255] } }
     ]);
 
     // 31 Günlük Satırlar
@@ -1732,10 +1826,10 @@ async function shareVectorPDF(btn) {
         const mealVal = document.getElementById('meal' + i)?.value || '';
 
         tableBody.push([
-          { content: dateFormatted, styles: { halign: 'center' } },
-          { content: timeVal, styles: { halign: 'center' } },
-          { content: breakVal, styles: { halign: 'center' } },
-          { content: mealVal, styles: { halign: 'center' } }
+          { content: dateFormatted, styles: { halign: 'center', font: activeFont } },
+          { content: timeVal, styles: { halign: 'center', font: activeFont } },
+          { content: breakVal, styles: { halign: 'center', font: activeFont } },
+          { content: mealVal, styles: { halign: 'center', font: activeFont } }
         ]);
       } else {
         tableBody.push([
@@ -1747,19 +1841,20 @@ async function shareVectorPDF(btn) {
       }
     }
 
-    // Tabloyu çiz
     doc.autoTable({
       body: tableBody,
       startY: 8,
       margin: { left: 10, right: 10, top: 8, bottom: 20 },
       theme: 'grid',
       styles: {
+        font: activeFont,
         fontSize: 8.5,
         textColor: [0, 0, 0],
         lineColor: [0, 0, 0],
         lineWidth: 0.25,
         cellPadding: 1.1,
-        valign: 'middle'
+        valign: 'middle',
+        fillColor: [255, 255, 255]
       },
       columnStyles: {
         0: { cellWidth: 42.75 },
@@ -1769,10 +1864,10 @@ async function shareVectorPDF(btn) {
       },
       pageBreak: 'avoid',
       didDrawPage: function (data) {
-        const finalY = data.cursor.y + 5;
+        const finalY = data.cursor.y + 6;
         const pageWidth = doc.internal.pageSize.getWidth();
 
-        doc.setFont('helvetica', 'bold');
+        doc.setFont(activeFont, 'bold');
         doc.setFontSize(9);
         doc.text('SORUMLU AD SOYAD', pageWidth / 2, finalY, { align: 'center' });
         doc.text(name, pageWidth / 2, finalY + 4.5, { align: 'center' });
@@ -1783,12 +1878,7 @@ async function shareVectorPDF(btn) {
     const safeName = toSafeUpperAscii(name);
     const safeMonth = toSafeUpperAscii(monthNames[monthIdx]);
 
-    let rawFileName = '';
-    if (safeName) {
-      rawFileName = `${safeName}_${safeMonth}_${year}_VEKTOREL_MESAI`;
-    } else {
-      rawFileName = `MESAI_${safeMonth}_${year}_VEKTOREL`;
-    }
+    let rawFileName = safeName ? `${safeName}_${safeMonth}_${year}_VEKTOREL_MESAI` : `MESAI_${safeMonth}_${year}_VEKTOREL`;
     const fileName = rawFileName + '.pdf';
 
     const pdfBlob = doc.output('blob');
@@ -3691,6 +3781,7 @@ window.addEventListener(
     restore();
     calc();
     preloadTemplate();
+    preloadPdfFonts();
 
   }
 );
