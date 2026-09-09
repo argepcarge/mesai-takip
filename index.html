@@ -196,9 +196,10 @@ table#tableSheet1 td, table#tableSheet1 th {
   font-weight: 800 !important;
   text-align: center !important;
   line-height: 1.25 !important;
-  padding: 4px !important;
+  padding: 6px 4px !important;
   background: #fff;
   letter-spacing: 0.3px;
+  white-space: nowrap;
 }
 
 #tableSheet1 .label {
@@ -398,7 +399,7 @@ col.col-4 { width: 22% !important; }
   .excel-page-border{padding:14px 8px}
 
   table#tableSheet1 td, table#tableSheet1 th{padding:1px 2px !important;font-size:10px !important;height:26px}
-  #tableSheet1 .title{font-size:11px !important;line-height:1.2 !important}
+  #tableSheet1 .title{font-size:11px !important;line-height:1.2 !important;white-space:normal}
   #tableSheet1 th{font-size:9.5px !important}
   #tableSheet1 input{font-size:12px}
   #tableSheet1 .label{font-size:11px !important}
@@ -440,7 +441,7 @@ col.col-4 { width: 22% !important; }
   .alert-box{font-size:12px}
 }
 
-/* DARK MODE: Çizelge ekranı koyu temaya bürünür */
+/* DARK MODE */
 @media (prefers-color-scheme: dark) {
   body{background:#15181c;color:#e7e9ec}
 
@@ -736,8 +737,7 @@ col.col-4 { width: 22% !important; }
 
         <tr>
           <th colspan="4" class="title" id="title1">
-            <div>ŞENGÜN MAKİNA</div>
-            <div id="titleSub">XXXXXX AYI FAZLA MESAİ ÇİZELGESİ</div>
+            <span>ŞENGÜN MAKİNA</span> <span id="titleSub">XXXXXX AYI FAZLA MESAİ ÇİZELGESİ</span>
           </th>
         </tr>
 
@@ -963,9 +963,7 @@ function updateDynamicTitle() {
   }
 }
 
-/* =========================================================
-   CARLITO (CALIBRI İKİZİ) OFFLINE ÖN-YÜKLEME
-   ========================================================= */
+/* CARLITO PRELOAD */
 let carlitoRegBase64 = null;
 let carlitoBoldBase64 = null;
 let fontPreloadPromise = null;
@@ -1039,9 +1037,7 @@ function clearCurrentMonth() {
   calc();
 }
 
-/* =========================================================
-   PDF PAYLAŞMA (Excel ile Birebir Ölçülü Vektörel Motor)
-   ========================================================= */
+/* PDF PAYLAŞMA (Tiresiz Tek Satır Başlık) */
 async function shareVectorPDF(btn) {
   updateDynamicTitle();
 
@@ -1087,22 +1083,22 @@ async function shareVectorPDF(btn) {
     const monthIdx = parseInt(document.getElementById('selectMonth')?.value, 10);
     const monthName = monthNames[monthIdx];
     
-    // Excel ile birebir iki satırlı başlık yapısı
-    const titleText = `ŞENGÜN MAKİNA\n${monthName} AYI FAZLA MESAİ ÇİZELGESİ`;
+    // Tiresiz tek satırlı başlık
+    const titleText = `ŞENGÜN MAKİNA ${monthName} AYI FAZLA MESAİ ÇİZELGESİ`;
 
     const tableBody = [];
 
-    // Başlık (2 satırlı blok)
+    // Başlık (Tek satır blok)
     tableBody.push([
       { 
         content: titleText, 
         colSpan: 4, 
         styles: { 
           halign: 'center', 
-          font: activeFont,
+          font: activeFont, 
           fontStyle: 'bold', 
           fontSize: 10, 
-          cellPadding: 2.8,
+          cellPadding: 2.8, 
           fillColor: [255, 255, 255] 
         } 
       }
@@ -1114,9 +1110,9 @@ async function shareVectorPDF(btn) {
         content: 'ADI-SOYADI', 
         styles: { 
           halign: 'center', 
-          font: activeFont,
+          font: activeFont, 
           fontStyle: 'bold', 
-          fontSize: 9,
+          fontSize: 9, 
           fillColor: [255, 255, 255] 
         } 
       },
@@ -1125,9 +1121,9 @@ async function shareVectorPDF(btn) {
         colSpan: 3, 
         styles: { 
           halign: 'center', 
-          font: activeFont,
+          font: activeFont, 
           fontStyle: 'bold', 
-          fontSize: 9.5,
+          fontSize: 9.5, 
           fillColor: [255, 255, 255] 
         } 
       }
@@ -1141,7 +1137,6 @@ async function shareVectorPDF(btn) {
       { content: 'YOL-YEMEK', styles: { halign: 'center', font: activeFont, fontStyle: 'bold', fontSize: 8.5, fillColor: [255, 255, 255] } }
     ]);
 
-    // 31 Gün Satırları (Nizami 01.09.2026 formatı)
     const daysInCurrentMonth = getDaysInMonth(parseInt(year), monthIdx);
 
     for (let i = 1; i <= 31; i++) {
@@ -1193,7 +1188,6 @@ async function shareVectorPDF(btn) {
       },
       pageBreak: 'avoid',
       didDrawPage: function (data) {
-        // Excel şablonundaki imza boşluğu hizalaması
         const finalY = data.cursor.y + 7.5;
         const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -1334,7 +1328,7 @@ function buildTables() {
           id="break${i}" 
           class="center" 
           type="text" 
-          inputmode="numeric"
+          inputmode="numeric" 
           maxlength="4"
           aria-label="${dateFormatted} mola dakika" 
           oninput="this.value=this.value.replace(/\\D/g,'');save();calc()" 
@@ -1392,7 +1386,7 @@ function buildTables() {
         <input 
           id="b${extraId}" 
           type="text" 
-          inputmode="numeric"
+          inputmode="numeric" 
           style="width:50px; text-align:center; border:1px solid #ccc; background:transparent; color:inherit; padding:2px;" 
           oninput="this.value=this.value.replace(/\\D/g,'');save();calc()">
       </td>
@@ -1513,12 +1507,8 @@ function parseTime(s) {
   return h * 60 + min;
 }
 
-/* =========================================================
-   8 RAKAM SINIRLI CANLI SAAT FORMATLAYICI
-   ========================================================= */
 function formatTimeLive(input) {
   let val = input.value;
-  // Sadece rakamları al ve maksimum 8 rakamla sınırla
   let clean = val.replace(/\D/g, '').slice(0, 8);
 
   if (clean.length === 8) {
@@ -1526,7 +1516,6 @@ function formatTimeLive(input) {
   } else if (clean.length === 4 && !val.includes(':') && !val.includes('-')) {
     input.value = `${clean.slice(0,2)}:${clean.slice(2,4)}`;
   } else if (clean.length < 8 && val.includes('-')) {
-    // Kullanıcı silme yaparken serbest bırak
     input.value = val;
   }
 }
