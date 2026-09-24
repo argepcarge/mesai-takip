@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
 <script src="./jspdf.umd.min.js"></script>
@@ -10,6 +10,9 @@
 
 <style>
 *{box-sizing:border-box} 
+html, body {
+  touch-action: manipulation;
+}
 body{font-family:'Carlito',Arial,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
 .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
 .header-controls{background:#fff;border:1px solid #aaa;border-radius:6px;padding:12px 16px;margin-bottom:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px #0001}
@@ -169,7 +172,7 @@ input[type=number] {
 
 .excel-page-border {
   border: 1px solid #000;
-  padding: 24px 20px;
+  padding: 20px 20px;
   background: #fff;
   transition: background .2s ease, border-color .2s ease;
 }
@@ -190,6 +193,11 @@ table#tableSheet1 td, table#tableSheet1 th {
   text-align: center !important;
   font-weight: bold !important;
   color: #000;
+}
+
+table#tableSheet1 tr.row-multi-active td {
+  height: 38px !important;
+  padding: 2px 4px !important;
 }
 
 #tableSheet1 .title {
@@ -229,6 +237,25 @@ table#tableSheet1 td, table#tableSheet1 th {
   min-width: 0;
 }
 
+.multi-shift-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 1px 0;
+  line-height: 1.2;
+  gap: 1px;
+}
+
+.multi-shift-line {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
 .btn-shift-modal {
   background: #f1f5f9;
   color: #475569;
@@ -253,6 +280,32 @@ table#tableSheet1 td, table#tableSheet1 th {
   background: #dbeafe;
   color: #1d4ed8;
   border-color: #60a5fa;
+  font-size: 10px;
+}
+
+/* TEK TIKLA TEMİZLE BUTONU */
+.btn-day-clear {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0;
+  width: 19px;
+  height: 19px;
+  line-height: 17px;
+  cursor: pointer;
+  margin-right: 3px;
+  transition: all .15s ease;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-day-clear:hover {
+  background: #fca5a5;
+  color: #991b1b;
 }
 
 #tableSheet1 input {
@@ -276,20 +329,6 @@ table#tableSheet1 td, table#tableSheet1 th {
 #tableSheet1 input.invalid {
   outline: 2px solid #d9534f !important;
   background: #fdecea !important;
-}
-
-.signature-area {
-  margin-top: 18px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 1.5;
-  color: #000;
-}
-
-.signature-area .supervisor-display {
-  min-height: 18px;
-  font-weight: bold;
 }
 
 .empty-state-note {
@@ -402,89 +441,44 @@ table#tableSheet1 td, table#tableSheet1 th {
   opacity: 1;
 }
 
-.row-sub-breakdown {
-  display: flex;
-  gap: 4px;
-  justify-content: flex-end;
-  margin-top: 3px;
-  flex-wrap: wrap;
+.duration-cell-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.25;
 }
-.badge-pufa, .badge-servis {
+.main-duration-line {
+  white-space: nowrap;
+  font-weight: bold;
+}
+.dur-mins {
+  font-size: 11px;
+  font-weight: normal;
+  opacity: 0.8;
+  margin-left: 2px;
+  white-space: nowrap;
+}
+.sub-split-text {
   font-size: 10px;
-  padding: 1px 5px;
-  border-radius: 4px;
-  font-weight: 700;
-  line-height: 1.3;
-}
-.badge-pufa {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
-}
-.badge-servis {
-  background: #fef3c7;
-  color: #b45309;
-  border: 1px solid #fde68a;
+  color: #64748b;
+  margin-top: 3px;
+  font-weight: normal;
+  white-space: nowrap;
 }
 
-#tableSheet2 tfoot tr.tfoot-sub-row {
-  background: #f8fafc !important;
-  color: #334155 !important;
-  border-color: #cbd5e1 !important;
-}
-#tableSheet2 tfoot tr.tfoot-sub-row td {
-  color: #334155 !important;
-  font-weight: 700 !important;
-  font-size: 12px !important;
-}
-
-#tableSheet2 tfoot tr.tfoot-main-row {
-  background: #f0fdf4 !important;
-  color: #22C55E !important;
-  border: 1.5px solid #22C55E !important;
-}
-#tableSheet2 tfoot tr.tfoot-main-row td {
-  color: #22C55E !important;
-  font-weight: bold !important;
-  font-size: 13px !important;
-}
-#tableSheet2 tfoot td {
-  display: table-cell !important;
-  text-align: center !important;
-}
-#tableSheet2 tfoot td:first-child {
-  text-align: right !important;
-}
-#tableSheet2 tfoot td:last-child {
-  text-align: right !important;
-}
-
-@media (min-width: 701px) {
-  #tableSheet2 tfoot {
-    position: sticky;
-    bottom: 0;
-    z-index: 5;
-  }
-  #tableSheet2 tfoot tr.tfoot-main-row {
-    box-shadow: 0 -3px 8px rgba(0,0,0,.10);
-  }
-}
-
-#tableSheet2, #tableSheet3 { border-collapse: collapse; width: 100%; }
-#tableSheet2 { table-layout: fixed; }
-#tableSheet2 td, #tableSheet2 th, #tableSheet3 td, #tableSheet3 th { border: 1px solid #777; padding: 5px; }
-#tableSheet2 td, #tableSheet2 th { overflow: hidden; text-overflow: ellipsis; }
+#tableSheet2 { border-collapse: collapse; width: 100%; table-layout: fixed; }
+#tableSheet2 td, #tableSheet2 th { border: 1px solid #777; padding: 6px; overflow: hidden; text-overflow: ellipsis; }
 #tableSheet2 select { max-width: 100%; }
 
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-#tableSheet2 { min-width: 640px; }
+#tableSheet2 { min-width: 600px; }
 
 .center{text-align:center !important} 
 .right{text-align:right !important}
 .note{font-size:12px;color:#4a4a4a;margin:10px 0}
 .hidden{display:none !important}
 .hidden-row { display: none !important; }
-.alert-box{background:#fff3cd;border:1px solid #ffeeba;color:#856404;padding:8px 12px;border-radius:4px;margin-bottom:12px;font-size:13px;font-weight:700;display:none}
 
 .save-toast{
   position: fixed;
@@ -528,8 +522,8 @@ col.col-4 { width: 22% !important; }
 .modal-content {
   background: #fff;
   border-radius: 10px;
-  width: 100%;
-  max-width: 480px;
+  width: 96%;
+  max-width: 520px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
   display: flex;
   flex-direction: column;
@@ -568,6 +562,7 @@ col.col-4 { width: 22% !important; }
   padding: 16px 18px;
   max-height: 70vh;
   overflow-y: auto;
+  overflow-x: hidden !important;
 }
 .modal-desc {
   margin: 0 0 12px 0;
@@ -583,16 +578,21 @@ col.col-4 { width: 22% !important; }
   padding: 8px 10px;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 .shift-row-label {
   font-size: 11px;
   font-weight: 800;
   color: #475569;
-  width: 55px;
+  width: 50px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .shift-row input {
-  flex: 1;
-  padding: 6px 8px;
+  flex: 1 1 auto;
+  min-width: 0 !important;
+  padding: 6px 6px;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
   font-size: 13px;
@@ -600,22 +600,34 @@ col.col-4 { width: 22% !important; }
   text-align: center;
 }
 .shift-row select {
-  padding: 6px 8px;
+  flex: 0 0 120px !important;
+  width: 120px !important;
+  padding: 6px 4px;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   background: #fff;
+  cursor: pointer;
+  white-space: nowrap;
 }
 .btn-shift-del {
+  flex: 0 0 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: #fee2e2;
   color: #dc2626;
   border: 1px solid #fca5a5;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: bold;
-  padding: 4px 8px;
+  padding: 0;
   cursor: pointer;
+  line-height: 1;
+  transition: background .15s ease;
 }
 .btn-shift-del:hover { background: #fecaca; }
 .modal-tip {
@@ -654,14 +666,13 @@ col.col-4 { width: 22% !important; }
   .excel-page-border{padding:14px 8px}
 
   table#tableSheet1 td, table#tableSheet1 th{padding:1px 2px !important;font-size:10px !important;height:26px}
+  table#tableSheet1 tr.row-multi-active td{height:36px !important}
   #tableSheet1 .title{font-size:11px !important;line-height:1.2 !important;white-space:normal}
   #tableSheet1 th{font-size:9.5px !important}
   #tableSheet1 input{font-size:12px}
   #tableSheet1 .label{font-size:11px !important}
 
-  .signature-area{font-size:10.5px}
-
-  #tableSheet3 td, #tableSheet3 th{padding:6px;font-size:12px}
+  .multi-shift-line{font-size:10.5px}
 
   .save-toast{left:12px;right:12px;bottom:12px;text-align:center}
 
@@ -673,34 +684,13 @@ col.col-4 { width: 22% !important; }
   .table-scroll{overflow-x:visible}
   #tableSheet2{min-width:0;border:none;border-spacing:0 0}
   #tableSheet2 thead{display:none}
-  #tableSheet2, #tableSheet2 tbody, #tableSheet2 tfoot, #tableSheet2 tr{display:block;width:100%}
+  #tableSheet2, #tableSheet2 tbody, #tableSheet2 tr{display:block;width:100%}
   #tableSheet2 tr{border:1.5px solid #ccc;border-right:4px solid #22C55E;border-radius:8px;margin-bottom:14px;padding:0;background:#fff;box-shadow:0 2px 6px #0002;overflow:hidden}
   #tableSheet2 tr.hidden-row { display: none !important; }
   #tableSheet2 tbody tr:nth-child(even):not(.weekend){background:#f7f9fb}
   #tableSheet2 tr.weekend{border-right:4px solid #e0a020}
   #tableSheet2 tr.extra-row{border-right:4px solid #6c757d}
   
-  #tableSheet2 tfoot{position:static}
-  #tableSheet2 tfoot tr.tfoot-sub-row {
-    background: #f8fafc !important;
-    border: 1.5px solid #cbd5e1;
-    border-right: 4px solid #3b82f6;
-    color: #1e293b !important;
-    display: block !important;
-    margin-bottom: 8px;
-  }
-  #tableSheet2 tfoot tr.tfoot-sub-row.servis-sub {
-    border-right: 4px solid #f59e0b;
-  }
-  #tableSheet2 tfoot tr.tfoot-main-row{
-    background:#f0fdf4 !important;
-    border:1.5px solid #22C55E;
-    border-right:4px solid #22C55E;
-    color:#22C55E !important;
-    display:block !important;
-    box-shadow:none;
-  }
-  #tableSheet2 tfoot td{display:flex !important;justify-content:space-between !important;align-items:center !important;text-align:right !important;font-weight:bold !important;}
   #tableSheet2 td{display:flex;justify-content:space-between;align-items:center;gap:8px;border:none;border-bottom:1px solid #eee;padding:7px 10px;font-size:13px;text-align:right;font-weight:bold !important}
   #tableSheet2 tr td:last-child{border-bottom:none}
   #tableSheet2 td::before{content:attr(data-label);font-weight:700;color:#555;font-size:11px;text-align:left;white-space:nowrap}
@@ -711,13 +701,45 @@ col.col-4 { width: 22% !important; }
     font-size: 14px !important;
   }
 
-  #tableSheet2 td.mobile-hide{display:none}
-  #tableSheet2 .weekday-tag{display:inline-block;margin-left:8px;font-size:11px;font-weight:700;color:#0066cc;background:#dceeff;padding:2px 7px;border-radius:10px;vertical-align:middle}
-  #tableSheet2 tr.weekend .weekday-tag{color:#8a6100;background:#ffe6a6}
   #tableSheet2 select{font-size:14px;width:auto;text-align:right;font-weight:bold !important}
 
+  .duration-cell-wrap {
+    align-items: flex-end !important;
+    text-align: right !important;
+  }
+
   .note{font-size:11px}
-  .alert-box{font-size:12px}
+
+  .modal-content {
+    width: 98%;
+  }
+  .modal-body {
+    padding: 12px 10px;
+  }
+  .shift-row {
+    gap: 6px;
+    padding: 6px 8px;
+  }
+  .shift-row-label {
+    width: 44px;
+    font-size: 10px;
+  }
+  .shift-row input {
+    font-size: 12px;
+    padding: 5px 2px;
+  }
+  .shift-row select {
+    flex: 0 0 105px !important;
+    width: 105px !important;
+    font-size: 11px;
+    padding: 5px 2px;
+  }
+  .btn-shift-del {
+    flex: 0 0 25px !important;
+    width: 25px !important;
+    height: 25px !important;
+    font-size: 14px;
+  }
 }
 
 /* DARK MODE */
@@ -766,8 +788,9 @@ col.col-4 { width: 22% !important; }
     color: #fca5a5 !important;
     outline: 2px solid #ef4444 !important;
   }
-  .signature-area {
-    color: #e7e9ec !important;
+
+  .multi-shift-line {
+    color: #e7e9ec;
   }
 
   .btn-shift-modal {
@@ -783,6 +806,15 @@ col.col-4 { width: 22% !important; }
     background: #1e3a5f;
     color: #93c5fd;
     border-color: #3b82f6;
+  }
+
+  .btn-day-clear {
+    background: #450a0a;
+    color: #fca5a5;
+    border-color: #991b1b;
+  }
+  .btn-day-clear:hover {
+    background: #5f1111;
   }
 
   .modal-content {
@@ -805,6 +837,12 @@ col.col-4 { width: 22% !important; }
     color: #e7e9ec;
     border-color: #3a4048;
   }
+  .btn-shift-del {
+    background: #450a0a;
+    color: #fca5a5;
+    border-color: #991b1b;
+  }
+  .btn-shift-del:hover { background: #5f1111; }
 
   .summary-card {
     background: #1f2328;
@@ -818,25 +856,16 @@ col.col-4 { width: 22% !important; }
   .summary-card-hours { color: #e7e9ec; }
   .summary-card-pay { color: #4ade80; }
 
-  .badge-pufa { background: #1e3a5f; color: #93c5fd; border-color: #3b82f6; }
-  .badge-servis { background: #452c06; color: #fde68a; border-color: #d97706; }
+  .sub-split-text { color: #94a3b8; }
 
   .clickable-date:hover {
     background: #263342 !important;
   }
 
-  #tableSheet2 tfoot tr.tfoot-sub-row {
-    background: #181b1f !important;
-    border-color: #33383f !important;
-  }
-  #tableSheet2 tfoot tr.tfoot-sub-row td {
-    color: #cbd5e1 !important;
-  }
-
   .empty-state-note{background:#152437;border-color:#2f5b8f;color:#8ab4f8}
 
-  #tableSheet2, #tableSheet3{background:#1f2328}
-  #tableSheet2 td, #tableSheet2 th, #tableSheet3 td, #tableSheet3 th{
+  #tableSheet2 { background:#1f2328; }
+  #tableSheet2 td, #tableSheet2 th {
     border-color:#3a4048;
     color:#e7e9ec;
     background:#1f2328;
@@ -846,9 +875,6 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tr.extra-row{background:#20242a}
   #tableSheet2 .cell-header .day-text{color:#a9adb3}
   #tableSheet2 select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
-
-  #tableSheet2 tfoot tr.tfoot-main-row{background:#052e16 !important;color:#22C55E !important;border-color:#22C55E !important}
-  #tableSheet2 tfoot tr.tfoot-main-row td{color:#22C55E !important}
 
   .salary-block { background: #1f2328; border-color: #33383f; }
   .salary-block-title { color: #94a3b8; border-bottom-color: #2d333b; }
@@ -862,7 +888,6 @@ col.col-4 { width: 22% !important; }
   .salary-input-wrapper.red-bg input { color: #f87171; }
 
   .note{color:#a9adb3}
-  .alert-box{background:#3a2e07;border-color:#5c4a0d;color:#ffdd6a}
 
   .btn-secondary{background:#3a4048}
   .btn-secondary:hover{background:#454c55}
@@ -917,7 +942,7 @@ col.col-4 { width: 22% !important; }
     padding: 0 !important;
   }
 
-  .header-controls, .quick-bar, .tabs, .btn, .alert-box, .note, .save-toast, .empty-state-note, .btn-shift-modal, .modal-overlay, #sheet2, #sheet3, #sheet4 {
+  .header-controls, .quick-bar, .tabs, .btn, .note, .save-toast, .empty-state-note, .btn-shift-modal, .btn-day-clear, .modal-overlay, #sheet2, #sheet4 {
     display: none !important;
   }
 
@@ -960,13 +985,6 @@ col.col-4 { width: 22% !important; }
 
   #tableSheet1 input#name {
     font-size: 10pt !important;
-    color: #000 !important;
-  }
-  .signature-area {
-    margin-top: 6px !important;
-    margin-bottom: 4px !important;
-    font-size: 10pt !important;
-    line-height: 1.2 !important;
     color: #000 !important;
   }
 }
@@ -1047,15 +1065,10 @@ col.col-4 { width: 22% !important; }
   <span id="tplHint" style="font-size:12px;color:#0066cc;font-weight:700;"></span>
 </div>
 
-<div id="limitAlert" class="alert-box">
-  Dikkat: Bu yıl içinde toplam fazla çalışma süreniz yasal sınır olan 270 saati aşmıştır!
-</div>
-
 <div class="tabs">
   <button class="tab active" onclick="showSheet(1)">Çizelge</button>
   <button class="tab" onclick="showSheet(2)">Hesap</button>
   <button class="tab" onclick="showSheet(4)">Ücret</button>
-  <button class="tab" onclick="showSheet(3)">Yıllık Özet</button>
 </div>
 
 <div id="sheet1" class="sheet">
@@ -1107,12 +1120,6 @@ col.col-4 { width: 22% !important; }
 
     </table>
 
-    <div class="signature-area">
-      <div>SORUMLU AD SOYAD</div>
-      <div id="supervisorDisplay" class="supervisor-display"></div>
-      <div style="margin-top: 2px;">İMZA</div>
-    </div>
-
   </div>
 
   <p class="note">
@@ -1124,7 +1131,6 @@ col.col-4 { width: 22% !important; }
 
 <div id="sheet2" class="sheet hidden">
 
-  <!-- YENİ: 1.5X / 2X VE GENEL TOPLAM ÖZET KARTLARI -->
   <div class="sheet2-summary-cards">
     <div class="summary-card pufa-card">
       <div class="summary-card-title">PUFA (1.5X) TOPLAMI</div>
@@ -1146,66 +1152,24 @@ col.col-4 { width: 22% !important; }
   <div class="table-scroll">
     <table id="tableSheet2">
       <colgroup>
+        <col style="width:20%">
+        <col style="width:22%">
+        <col style="width:10%">
         <col style="width:16%">
-        <col style="width:11%">
-        <col style="width:11%">
-        <col style="width:9%">
-        <col style="width:15%">
-        <col style="width:8%">
-        <col style="width:14%">
+        <col style="width:16%">
         <col style="width:16%">
       </colgroup>
       <thead>
         <tr>
           <th>TARİH</th>
-          <th>BAŞLANGIÇ</th>
-          <th>BİTİŞ</th>
+          <th>MESAİ ARALIĞI</th>
           <th>MOLA(DK)</th>
           <th>MESAİ TİPİ</th>
-          <th>ÇARPAN</th>
           <th>TOPLAM SÜRE</th>
           <th>ÜCRET</th>
         </tr>
       </thead>
       <tbody id="tbodySheet2"></tbody>
-      <tfoot>
-        <tr class="tfoot-sub-row">
-          <td colspan="5" data-label="KAPSAM"><b>PUFA (1.5X) TOPLAMI :</b></td>
-          <td class="mobile-hide"></td>
-          <td class="center" id="sum15Time" data-label="1.5X SÜRE">00:00 Sa</td>
-          <td class="right" id="sum15Pay" data-label="1.5X ÜCRET">0,00 ₺</td>
-        </tr>
-        <tr class="tfoot-sub-row servis-sub">
-          <td colspan="5" data-label="KAPSAM"><b>SERVİS (2.0X) TOPLAMI :</b></td>
-          <td class="mobile-hide"></td>
-          <td class="center" id="sum20Time" data-label="2.0X SÜRE">00:00 Sa</td>
-          <td class="right" id="sum20Pay" data-label="2.0X ÜCRET">0,00 ₺</td>
-        </tr>
-        <tr class="tfoot-main-row">
-          <td colspan="5" data-label="KAPSAM"><b>GENEL TOPLAM :</b></td>
-          <td class="mobile-hide"></td>
-          <td class="center" id="totalDurationCell" data-label="TOPLAM SÜRE">00:00 Sa (0 Dk)</td>
-          <td class="right" id="totalPay" data-label="GENEL ÜCRET">0,00 ₺</td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-</div>
-
-<div id="sheet3" class="sheet hidden">
-  <div class="table-scroll">
-    <table id="tableSheet3">
-      <thead>
-        <tr>
-          <th colspan="3" class="title" id="titleAnnual">YILLIK FAZLA MESAİ ÖZETİ</th>
-        </tr>
-        <tr>
-          <th>AY</th>
-          <th>TOPLAM MESAİ SAATİ</th>
-          <th>TAHMİNİ TOPLAM ÜCRET</th>
-        </tr>
-      </thead>
-      <tbody id="tbodySheet3"></tbody>
     </table>
   </div>
 </div>
@@ -1300,7 +1264,7 @@ col.col-4 { width: 22% !important; }
 <div id="shiftModal" class="modal-overlay hidden" onclick="handleModalBackdropClick(event)">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 id="modalTitle">Çoklu Mesai Düzenle</h3>
+      <h3 id="modalTitle">Mesai Düzenle</h3>
       <button type="button" class="modal-close" onclick="closeShiftModal()">&times;</button>
     </div>
     <div class="modal-body">
@@ -1418,12 +1382,11 @@ function clearCurrentMonth() {
     const timeElem = document.getElementById('time' + i);
     const breakElem = document.getElementById('break' + i);
     const mealElem = document.getElementById('meal' + i);
-    const btnElem = document.getElementById('btnShift' + i);
 
     if (timeElem) timeElem.value = '';
     if (breakElem) breakElem.value = '';
     if (mealElem) mealElem.value = '';
-    if (btnElem) btnElem.classList.remove('has-multi');
+    updateMultiShiftUI(i);
   }
 
   for (let extraId = 34; extraId <= 39; extraId++) {
@@ -1440,7 +1403,7 @@ function clearCurrentMonth() {
   calc();
 }
 
-/* PDF PAYLAŞMA (Tiresiz Tek Satır Başlık + Çoklu Mesai Tek Satır Uyumlu) */
+/* PDF PAYLAŞMA */
 async function shareVectorPDF(btn) {
   updateDynamicTitle();
 
@@ -1490,7 +1453,6 @@ async function shareVectorPDF(btn) {
 
     const tableBody = [];
 
-    // Başlık
     tableBody.push([
       { 
         content: titleText, 
@@ -1506,7 +1468,6 @@ async function shareVectorPDF(btn) {
       }
     ]);
 
-    // Adı-Soyadı
     tableBody.push([
       { 
         content: 'ADI-SOYADI', 
@@ -1531,7 +1492,6 @@ async function shareVectorPDF(btn) {
       }
     ]);
 
-    // Kolon Başlıkları
     tableBody.push([
       { content: 'TARİH', styles: { halign: 'center', font: activeFont, fontStyle: 'bold', fontSize: 8.5, fillColor: [255, 255, 255] } },
       { content: 'MESAİ SAATLERİ', styles: { halign: 'center', font: activeFont, fontStyle: 'bold', fontSize: 8.5, fillColor: [255, 255, 255] } },
@@ -1649,8 +1609,6 @@ function downloadFile(blob, fileName) {
 }
 
 function syncName() {
-  const nameVal = document.getElementById('name').value;
-  document.getElementById('supervisorDisplay').textContent = nameVal;
   updateDynamicTitle();
 }
 
@@ -1714,6 +1672,7 @@ function buildTables() {
     const isWeekend = dow === 0 || dow === 6;
 
     const tr1 = document.createElement('tr');
+    tr1.id = `rowSheet1_${i}`;
     tr1.innerHTML = `
       <td 
         class="center" 
@@ -1723,13 +1682,20 @@ function buildTables() {
         ${dateFormatted}
       </td>
       <td>
-        <div class="time-cell-wrap">
+        <div class="time-cell-wrap" id="timeWrap${i}">
           <input 
             id="time${i}" 
             type="text"
             aria-label="${dateFormatted} mesai saatleri" 
             oninput="formatTimeLive(this);onDirectTimeChange(${i});save();calc()" 
             onblur="autoZero(${i})">
+          <div id="multiDisplay${i}" class="multi-shift-box hidden" onclick="openShiftModal(${i})" title="Çoklu mesaiyi düzenlemek için tıklayın"></div>
+          <button 
+            type="button" 
+            id="btnClear${i}" 
+            class="btn-day-clear hidden" 
+            onclick="clearDayRow(${i})" 
+            title="Bu günün mesai, mola ve yemek bilgilerini temizle">&times;</button>
           <button 
             type="button" 
             id="btnShift${i}" 
@@ -1753,7 +1719,7 @@ function buildTables() {
         <input 
           id="meal${i}" 
           aria-label="${dateFormatted} yol-yemek" 
-          oninput="save()" 
+          oninput="save();calc()" 
           onblur="autoZero(${i})">
       </td>
     `;
@@ -1773,8 +1739,7 @@ function buildTables() {
           <span class="edit-icon-hint" title="Düzenle">✏️</span>
         </div>
       </td>
-      <td id="startText${i}" data-label="BAŞLANGIÇ">-</td>
-      <td id="endText${i}" data-label="BİTİŞ">-</td>
+      <td id="shiftRange${i}" data-label="MESAİ ARALIĞI">-</td>
       <td id="bText${i}" data-label="MOLA(DK)">0</td>
       <td data-label="MESAİ TİPİ">
         <select id="type${i}" title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" onchange="onTypeChange(${i});save();calc()">
@@ -1782,7 +1747,6 @@ function buildTables() {
           <option>SERVİS(2X)</option>
         </select>
       </td>
-      <td class="center" id="mult${i}" data-label="ÇARPAN">1.5</td>
       <td class="center" id="duration${i}" data-label="TOPLAM SÜRE"></td>
       <td class="right" id="pay${i}" data-label="ÜCRET"></td>
     `;
@@ -1796,34 +1760,54 @@ function buildTables() {
     trExtra.classList.add('extra-row');
 
     trExtra.innerHTML = `
-      <td colspan="2" class="cell-header" data-label="GÜN">
+      <td class="cell-header" data-label="TARİH">
         <span class="date-text">EKSTRA ${e}</span>
         <span class="day-text">Özel Mesai</span>
       </td>
-      <td class="mobile-hide"></td>
-      <td data-label="MOLA(DK)">
-        <input 
-          id="b${extraId}" 
-          type="text" 
-          inputmode="numeric" 
-          style="width:50px; text-align:center; border:1px solid #ccc; background:transparent; color:inherit; padding:2px;" 
-          oninput="this.value=this.value.replace(/\\D/g,'');save();calc()">
-      </td>
+      <td data-label="MESAİ ARALIĞI">-</td>
+      <td data-label="MOLA(DK)">0</td>
       <td data-label="MESAİ TİPİ">
         <select id="type${extraId}" title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" onchange="save();calc()">
           <option>PUFA(1,5X)</option>
           <option>SERVİS(2X)</option>
         </select>
       </td>
-      <td class="center" id="mult${extraId}" data-label="ÇARPAN">1.5</td>
-      <td class="center" id="duration${extraId}" data-label="TOPLAM SÜRE"></td>
+      <td class="center" data-label="TOPLAM SÜRE">
+        <div style="display:flex;align-items:center;justify-content:center;gap:4px;">
+          <input 
+            id="b${extraId}" 
+            type="text" 
+            inputmode="numeric" 
+            placeholder="0"
+            style="width:50px; text-align:center; border:1px solid #cbd5e1; border-radius:4px; background:transparent; color:inherit; padding:3px; font-weight:bold;" 
+            oninput="this.value=this.value.replace(/\\D/g,'');save();calc()">
+          <span style="font-size:11px;font-weight:700;">Dk</span>
+          <span id="duration${extraId}" style="font-size:11px;opacity:0.8;"></span>
+        </div>
+      </td>
       <td class="right" id="pay${extraId}" data-label="ÜCRET"></td>
     `;
     tbody2.appendChild(trExtra);
   }
 
   updateDynamicTitle();
-  buildAnnualTable();
+}
+
+/* TEK TIKLA GÜNÜ TEMİZLEME FONKSİYONU */
+function clearDayRow(dayNum) {
+  const timeElem = document.getElementById('time' + dayNum);
+  const breakElem = document.getElementById('break' + dayNum);
+  const mealElem = document.getElementById('meal' + dayNum);
+
+  if (timeElem) timeElem.value = '';
+  if (breakElem) breakElem.value = '';
+  if (mealElem) mealElem.value = '';
+
+  delete dayShiftsData[dayNum];
+  updateMultiShiftUI(dayNum);
+
+  save();
+  calc();
 }
 
 /* ÇOKLU MESAİ AÇILIR PENCERE (MODAL) İŞLEMLERİ */
@@ -1940,21 +1924,17 @@ function saveShiftModal() {
 
   const timeElem = document.getElementById('time' + activeModalDay);
   const typeElem = document.getElementById('type' + activeModalDay);
-  const btnElem = document.getElementById('btnShift' + activeModalDay);
 
   if (newShifts.length === 0) {
     delete dayShiftsData[activeModalDay];
     if (timeElem) timeElem.value = '';
-    if (btnElem) btnElem.classList.remove('has-multi');
   } else if (newShifts.length === 1) {
     dayShiftsData[activeModalDay] = newShifts;
     if (timeElem) timeElem.value = newShifts[0].time;
     if (typeElem) typeElem.value = newShifts[0].type;
-    if (btnElem) btnElem.classList.remove('has-multi');
   } else {
     dayShiftsData[activeModalDay] = newShifts;
     if (timeElem) timeElem.value = newShifts.map(s => s.time).join(' / ');
-    if (btnElem) btnElem.classList.add('has-multi');
   }
 
   closeShiftModal();
@@ -1962,14 +1942,47 @@ function saveShiftModal() {
   calc();
 }
 
+function updateMultiShiftUI(dayNum) {
+  const sList = dayShiftsData[dayNum];
+  const inputElem = document.getElementById('time' + dayNum);
+  const multiBox = document.getElementById('multiDisplay' + dayNum);
+  const btnElem = document.getElementById('btnShift' + dayNum);
+  const tr1Elem = document.getElementById('rowSheet1_' + dayNum);
+
+  if (sList && sList.length > 1) {
+    if (inputElem) inputElem.classList.add('hidden');
+    if (multiBox) {
+      multiBox.classList.remove('hidden');
+      multiBox.innerHTML = sList.map(s => `<span class="multi-shift-line">${s.time}</span>`).join('');
+    }
+    if (btnElem) {
+      btnElem.classList.add('has-multi');
+      btnElem.textContent = '✏️';
+      btnElem.title = 'Çoklu Mesaiyi Düzenle';
+    }
+    if (tr1Elem) tr1Elem.classList.add('row-multi-active');
+  } else {
+    if (inputElem) inputElem.classList.remove('hidden');
+    if (multiBox) {
+      multiBox.classList.add('hidden');
+      multiBox.innerHTML = '';
+    }
+    if (btnElem) {
+      btnElem.classList.remove('has-multi');
+      btnElem.textContent = '+';
+      btnElem.title = 'Çoklu Mesai Ekle / Düzenle';
+    }
+    if (tr1Elem) tr1Elem.classList.remove('row-multi-active');
+  }
+}
+
 function onDirectTimeChange(dayNum) {
   const timeElem = document.getElementById('time' + dayNum);
   const val = (timeElem?.value || '').trim();
-  const btnElem = document.getElementById('btnShift' + dayNum);
 
   if (!val.includes('/')) {
     delete dayShiftsData[dayNum];
-    if (btnElem) btnElem.classList.remove('has-multi');
+    updateMultiShiftUI(dayNum);
   }
 }
 
@@ -1996,103 +2009,6 @@ function getShiftMinutes(timeStr) {
   return mins;
 }
 
-function buildAnnualTable() {
-  const year = document.getElementById('selectYear').value;
-  document.getElementById('titleAnnual').textContent = `${year} YILI YILLIK FAZLA MESAİ ÖZETİ`;
-
-  const tbody3 = document.getElementById('tbodySheet3');
-  tbody3.innerHTML = '';
-  let totalAnnualMinutes = 0;
-
-  for (let m = 0; m < 12; m++) {
-    const key = `fazlaMesaiCizelgesi_${year}_${m}`;
-    let monthMin = 0;
-    let monthPay = 0;
-
-    try {
-      const data = JSON.parse(localStorage.getItem(key) || '{}');
-      const shiftsStored = data['__shiftsData'] || {};
-      const daysCount = getDaysInMonth(year, m);
-      const salaryClean = String(data['salary'] || '0').replace(/[^0-9,.]/g, '').replace(',', '.');
-      const salary = Number(salaryClean) || 0;
-      const normalMin = salary > 0 ? salary / 225 / 60 : 0;
-
-      for (let i = 1; i <= daysCount; i++) {
-        const breakVal = Number(data['break' + i]) || 0;
-        const sList = shiftsStored[i];
-
-        if (sList && sList.length > 0) {
-          let raw1_5 = 0;
-          let raw2_0 = 0;
-          sList.forEach(s => {
-            const sm = getShiftMinutes(s.time);
-            if (sm !== null) {
-              if (s.type === 'SERVİS(2X)') raw2_0 += sm;
-              else raw1_5 += sm;
-            }
-          });
-
-          let cut1_5 = Math.min(raw1_5, breakVal);
-          let remBreak = breakVal - cut1_5;
-          let cut2_0 = Math.min(raw2_0, remBreak);
-
-          let net1_5 = raw1_5 - cut1_5;
-          let net2_0 = raw2_0 - cut2_0;
-
-          monthMin += (net1_5 + net2_0);
-          monthPay += (net1_5 * normalMin * 1.5) + (net2_0 * normalMin * 2.0);
-        } else {
-          const timeVal = data['time' + i] || '';
-          const parts = timeVal.split('-');
-          const a = parseTime((parts[0] || '').trim());
-          const z = parseTime((parts[1] || '').trim());
-
-          if (a !== null && z !== null) {
-            let mins = 0;
-            if (a === 0 && z === 0) {
-              mins = 24 * 60 - breakVal;
-            } else {
-              mins = z - a - breakVal;
-              if (mins < 0) mins += 24 * 60;
-            }
-            if (mins < 0) mins = 0;
-
-            const type = data['type' + i] || 'PUFA(1,5X)';
-            const mult = type === 'SERVİS(2X)' ? 2 : 1.5;
-
-            monthMin += mins;
-            monthPay += mins * normalMin * mult;
-          }
-        }
-      }
-
-      for (let e = 34; e <= 39; e++) {
-        const mins = Number(data['b' + e]) || 0;
-        const type = data['type' + e] || 'PUFA(1,5X)';
-        const mult = type === 'SERVİS(2X)' ? 2 : 1.5;
-
-        monthMin += mins;
-        monthPay += mins * normalMin * mult;
-      }
-    } catch (err) {
-      console.warn(`Yıllık özet hatası (${monthNames[m]}):`, err);
-    }
-
-    totalAnnualMinutes += monthMin;
-
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><b>${monthNames[m]}</b></td>
-      <td class="right"><b>${formatHoursMinutes(monthMin)}</b></td>
-      <td class="right"><b>${money(monthPay)} ₺</b></td>
-    `;
-    tbody3.appendChild(tr);
-  }
-
-  const alertBox = document.getElementById('limitAlert');
-  alertBox.style.display = (totalAnnualMinutes / 60) > 270 ? 'block' : 'none';
-}
-
 function updateMonthDays() {
   buildTables();
   restore();
@@ -2102,13 +2018,10 @@ function updateMonthDays() {
 function showSheet(n) {
   document.getElementById('sheet1').classList.toggle('hidden', n !== 1);
   document.getElementById('sheet2').classList.toggle('hidden', n !== 2);
-  document.getElementById('sheet3').classList.toggle('hidden', n !== 3);
   document.getElementById('sheet4').classList.toggle('hidden', n !== 4);
 
-  const order = [1,2,4,3];
-  document.querySelectorAll('.tab').forEach((b,i) => b.classList.toggle('active', order[i] === n));
-
-  if (n === 3) buildAnnualTable();
+  const order = [1, 2, 4];
+  document.querySelectorAll('.tab').forEach((b, i) => b.classList.toggle('active', order[i] === n));
 }
 
 function parseTime(s) {
@@ -2188,36 +2101,36 @@ function calc() {
   let pay2_0 = 0;
 
   for (let i = 1; i <= currentDaysCount; i++) {
+    updateMultiShiftUI(i);
+
     let timeElem = document.getElementById('time' + i);
     let breakElem = document.getElementById('break' + i);
-    let startText = document.getElementById('startText' + i);
-    let endText = document.getElementById('endText' + i);
+    let mealElem = document.getElementById('meal' + i);
+    let rangeElem = document.getElementById('shiftRange' + i);
     let bText = document.getElementById('bText' + i);
     let rowSheet2 = document.getElementById('rowSheet2_' + i);
     let typeElem = document.getElementById('type' + i);
-    let multElem = document.getElementById('mult' + i);
     let durationElem = document.getElementById('duration' + i);
     let payElem = document.getElementById('pay' + i);
-    let btnElem = document.getElementById('btnShift' + i);
+    let clearBtn = document.getElementById('btnClear' + i);
 
     let br = Number(breakElem ? breakElem.value : 0) || 0;
     if (bText) bText.textContent = br > 0 ? br : '0';
 
     const sList = dayShiftsData[i];
 
-    if (sList && sList.length > 0) {
-      if (btnElem) btnElem.classList.add('has-multi');
+    // Tek tıkla silme butonunun akıllı görünürlüğü
+    const hasData = (timeElem && timeElem.value.trim().length > 0) || 
+                    (sList && sList.length > 0) || 
+                    (breakElem && breakElem.value.trim().length > 0) || 
+                    (mealElem && mealElem.value.trim().length > 0);
+    if (clearBtn) clearBtn.classList.toggle('hidden', !hasData);
 
+    if (sList && sList.length > 0) {
       let raw1_5 = 0;
       let raw2_0 = 0;
-      let startList = [];
-      let endList = [];
 
       sList.forEach(s => {
-        const parts = (s.time || '').split('-');
-        if (parts[0]) startList.push(parts[0].trim());
-        if (parts[1]) endList.push(parts[1].trim());
-
         const sm = getShiftMinutes(s.time);
         if (sm !== null) {
           if (s.type === 'SERVİS(2X)') raw2_0 += sm;
@@ -2225,8 +2138,9 @@ function calc() {
         }
       });
 
-      if (startText) startText.textContent = startList.join(' / ');
-      if (endText) endText.textContent = endList.join(' / ');
+      if (rangeElem) {
+        rangeElem.innerHTML = sList.map(s => s.time).join('<br>');
+      }
 
       let cut1_5 = Math.min(raw1_5, br);
       let remBreak = br - cut1_5;
@@ -2237,14 +2151,20 @@ function calc() {
       let dayNetMins = net1_5 + net2_0;
 
       if (raw1_5 > 0 && raw2_0 > 0) {
-        if (typeElem) typeElem.disabled = true;
-        if (multElem) multElem.textContent = '1.5 & 2X';
+        if (typeElem) {
+          typeElem.disabled = true;
+          typeElem.innerHTML = '<option selected>1.5 & 2X</option>';
+        }
       } else if (raw2_0 > 0) {
-        if (typeElem) { typeElem.disabled = false; typeElem.value = 'SERVİS(2X)'; }
-        if (multElem) multElem.textContent = '2';
+        if (typeElem) {
+          typeElem.disabled = false;
+          typeElem.innerHTML = '<option>PUFA(1,5X)</option><option selected>SERVİS(2X)</option>';
+        }
       } else {
-        if (typeElem) { typeElem.disabled = false; typeElem.value = 'PUFA(1,5X)'; }
-        if (multElem) multElem.textContent = '1.5';
+        if (typeElem) {
+          typeElem.disabled = false;
+          typeElem.innerHTML = '<option selected>PUFA(1,5X)</option><option>SERVİS(2X)</option>';
+        }
       }
 
       if (rowSheet2) rowSheet2.classList.toggle('hidden-row', dayNetMins <= 0);
@@ -2256,14 +2176,16 @@ function calc() {
 
       if (durationElem) {
         if (dayNetMins > 0) {
-          let durHtml = `${formatHoursMinutes(dayNetMins)} <span style="font-size:11px;font-weight:normal;opacity:0.8;">(${dayNetMins} Dk)</span>`;
-          if (net1_5 > 0 && net2_0 > 0) {
-            durHtml += `
-              <div class="row-sub-breakdown">
-                <span class="badge-pufa">1.5X: ${formatHoursMinutes(net1_5)}</span>
-                <span class="badge-servis">2X: ${formatHoursMinutes(net2_0)}</span>
+          let durHtml = `
+            <div class="duration-cell-wrap">
+              <div class="main-duration-line">
+                <span>${formatHoursMinutes(dayNetMins)}</span>
+                <span class="dur-mins">(${dayNetMins} Dk)</span>
               </div>`;
+          if (net1_5 > 0 && net2_0 > 0) {
+            durHtml += `<div class="sub-split-text">(1.5X: ${formatHoursMinutes(net1_5)} + 2X: ${formatHoursMinutes(net2_0)})</div>`;
           }
+          durHtml += `</div>`;
           durationElem.innerHTML = durHtml;
         } else {
           durationElem.innerHTML = '';
@@ -2271,19 +2193,7 @@ function calc() {
       }
 
       if (payElem) {
-        if (dayPay > 0) {
-          let pHtml = `${money(dayPay)} ₺`;
-          if (net1_5 > 0 && net2_0 > 0) {
-            pHtml += `
-              <div class="row-sub-breakdown">
-                <span class="badge-pufa">${money(dPay1_5)} ₺</span>
-                <span class="badge-servis">${money(dPay2_0)} ₺</span>
-              </div>`;
-          }
-          payElem.innerHTML = pHtml;
-        } else {
-          payElem.innerHTML = '';
-        }
+        payElem.textContent = dayPay > 0 ? `${money(dayPay)} ₺` : '';
       }
 
       totalMin += dayNetMins;
@@ -2293,24 +2203,19 @@ function calc() {
       pay2_0 += dPay2_0;
 
     } else {
-      if (btnElem) btnElem.classList.remove('has-multi');
-      if (typeElem) typeElem.disabled = false;
-
-      let start = '-';
-      let end = '-';
-
-      if (timeElem) {
-        const s = timeElem.value || '';
-        const parts = s.split('-');
-        start = (parts[0] || '').trim() || '-';
-        end = (parts[1] || '').trim() || '-';
+      if (typeElem) {
+        typeElem.disabled = false;
+        if (typeElem.options.length !== 2) {
+          typeElem.innerHTML = '<option value="PUFA(1,5X)">PUFA(1,5X)</option><option value="SERVİS(2X)">SERVİS(2X)</option>';
+        }
       }
 
-      if (startText) startText.textContent = start;
-      if (endText) endText.textContent = end;
+      let timeVal = (timeElem?.value || '').trim();
+      if (rangeElem) rangeElem.textContent = timeVal || '-';
 
-      const a = parseTime(start);
-      const z = parseTime(end);
+      const parts = timeVal.split('-');
+      const a = parseTime((parts[0] || '').trim());
+      const z = parseTime((parts[1] || '').trim());
       let mins = 0;
 
       if (a !== null && z !== null) {
@@ -2327,7 +2232,7 @@ function calc() {
       if (rowSheet2) rowSheet2.classList.toggle('hidden-row', !hasOvertime);
 
       if (timeElem) {
-        const hasContent = (timeElem.value || '').trim().length > 0;
+        const hasContent = timeVal.length > 0;
         const isInvalid = hasContent && (a === null || z === null);
         timeElem.classList.toggle('invalid', isInvalid);
         timeElem.title = isInvalid ? 'Geçersiz format! "10001200" veya "10:00-12:00" biçiminde girin' : '';
@@ -2336,16 +2241,16 @@ function calc() {
       const type = typeElem ? typeElem.value : 'PUFA(1,5X)';
       const mult = type === 'SERVİS(2X)' ? 2 : 1.5;
 
-      if (multElem) multElem.textContent = mult;
-
       const pay = mins * normalMin * mult;
 
       if (durationElem) {
         durationElem.innerHTML = mins 
-          ? `${formatHoursMinutes(mins)} <span style="font-size:11px;font-weight:normal;opacity:0.8;">(${mins} Dk)</span>` 
+          ? `<div class="duration-cell-wrap"><div class="main-duration-line"><span>${formatHoursMinutes(mins)}</span><span class="dur-mins">(${mins} Dk)</span></div></div>` 
           : '';
       }
-      if (payElem) payElem.textContent = pay ? money(pay) + ' ₺' : '';
+      if (payElem) {
+        payElem.textContent = pay ? `${money(pay)} ₺` : '';
+      }
 
       totalMin += mins;
       if (mult === 1.5) {
@@ -2369,22 +2274,18 @@ function calc() {
     let type = typeElem.value;
     let mult = type === 'SERVİS(2X)' ? 2 : 1.5;
 
-    if (bElem.value.trim() === '') bElem.value = '0';
     if (rowSheet2) rowSheet2.classList.toggle('hidden-row', mins <= 0);
 
-    const multElem = document.getElementById('mult' + extraId);
     const durationElem = document.getElementById('duration' + extraId);
     const payElem = document.getElementById('pay' + extraId);
 
-    if (multElem) multElem.textContent = mult;
-
     const pay = mins * normalMin * mult;
     if (durationElem) {
-      durationElem.innerHTML = mins 
-        ? `${formatHoursMinutes(mins)} <span style="font-size:11px;font-weight:normal;opacity:0.8;">(${mins} Dk)</span>` 
-        : '';
+      durationElem.textContent = mins ? `(${formatHoursMinutes(mins)})` : '';
     }
-    if (payElem) payElem.textContent = pay ? money(pay) + ' ₺' : '';
+    if (payElem) {
+      payElem.textContent = pay ? `${money(pay)} ₺` : '';
+    }
 
     totalMin += mins;
     if (mult === 1.5) {
@@ -2419,7 +2320,6 @@ function calc() {
   const netOvertimePay = ((mins1_5 - cut1_5) * normalMin * 1.5) + ((mins2_0 - cut2_0) * normalMin * 2.0);
   const netPayVal = (salary + grossOvertimePay) - totalDeductionMoney;
 
-  // SHEET 2 KARTLARI GÜNCELLE
   document.getElementById('card15Hours').textContent = `${formatHoursMinutes(mins1_5)} (${mins1_5} Dk)`;
   document.getElementById('card15Pay').textContent = `${money(pay1_5)} ₺`;
 
@@ -2429,22 +2329,10 @@ function calc() {
   document.getElementById('cardGenelHours').textContent = `${formatHoursMinutes(totalMin)} (${totalMin} Dk)`;
   document.getElementById('cardGenelPay').textContent = `${money(grossOvertimePay)} ₺`;
 
-  // SHEET 2 TABLO ALTI TOPLAMLARI GÜNCELLE
-  document.getElementById('sum15Time').textContent = formatHoursMinutes(mins1_5);
-  document.getElementById('sum15Pay').textContent = `${money(pay1_5)} ₺`;
-
-  document.getElementById('sum20Time').textContent = formatHoursMinutes(mins2_0);
-  document.getElementById('sum20Pay').textContent = `${money(pay2_0)} ₺`;
-
-  document.getElementById('totalDurationCell').innerHTML = `${formatHoursMinutes(totalMin)} <span style="font-size:11px;font-weight:normal;opacity:0.85;">(${totalMin} Dk)</span>`;
-  document.getElementById('totalPay').textContent = `${money(grossOvertimePay)} ₺`;
-
-  // SHEET 4 (ÜCRET) GÜNCELLE
   document.getElementById('overtimePay').value = `${money(netOvertimePay)} ₺`;
   document.getElementById('deduction').value = `${money(totalDeductionMoney)} ₺`;
   document.getElementById('netPay').value = `${money(netPayVal)} ₺`;
 
-  buildAnnualTable();
   updateEmptyState();
 }
 
@@ -2548,12 +2436,9 @@ function applyArmedTemplate(dayNum) {
   if (!armedTemplate) return;
   const timeInput = document.getElementById('time' + dayNum);
   const breakInput = document.getElementById('break' + dayNum);
-  const btnElem = document.getElementById('btnShift' + dayNum);
 
   if (timeInput && breakInput) {
     delete dayShiftsData[dayNum];
-    if (btnElem) btnElem.classList.remove('has-multi');
-
     timeInput.value = armedTemplate.time;
     breakInput.value = armedTemplate.breakMin;
     save();
