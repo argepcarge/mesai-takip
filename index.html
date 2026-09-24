@@ -224,6 +224,20 @@ table#tableSheet1 tr.row-multi-active td {
   background: #fff;
 }
 
+#tableSheet1 input {
+  width: 100%;
+  height: 100%;
+  border: 0 !important;
+  outline: none !important;
+  background: transparent !important;
+  padding: 0 4px;
+  font-size: 13px;
+  font-weight: bold;
+  color: inherit;
+  text-align: center !important;
+  box-sizing: border-box;
+}
+
 .time-cell-wrap {
   display: flex;
   align-items: center;
@@ -233,27 +247,31 @@ table#tableSheet1 tr.row-multi-active td {
 }
 
 .time-cell-wrap input {
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
 .multi-shift-box {
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   padding: 1px 0;
-  line-height: 1.2;
+  line-height: 1.25;
   gap: 1px;
 }
 
+/* DİĞER HÜCRELERLE BİREBİR AYNI STANDART FONT VE KALINLIK */
 .multi-shift-line {
-  font-size: 11.5px;
-  font-weight: 800;
-  color: #0f172a;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  color: inherit;
   white-space: nowrap;
+  text-align: center;
+  letter-spacing: normal;
 }
 
 .btn-shift-modal {
@@ -283,47 +301,9 @@ table#tableSheet1 tr.row-multi-active td {
   font-size: 10px;
 }
 
-/* TEK TIKLA TEMİZLE BUTONU */
-.btn-day-clear {
-  background: #fee2e2;
-  color: #dc2626;
-  border: 1px solid #fca5a5;
-  border-radius: 3px;
-  font-size: 13px;
-  font-weight: 800;
-  padding: 0;
-  width: 19px;
-  height: 19px;
-  line-height: 17px;
-  cursor: pointer;
-  margin-right: 3px;
-  transition: all .15s ease;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.btn-day-clear:hover {
-  background: #fca5a5;
-  color: #991b1b;
-}
-
-#tableSheet1 input {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  background: transparent;
-  padding: 0 4px;
-  font-size: 13px;
-  font-weight: bold;
-  color: inherit;
-  text-align: center !important;
-  box-sizing: border-box;
-}
-
 #tableSheet1 input:focus {
-  outline: 1px solid #0066cc;
-  background: rgba(0, 102, 204, 0.08);
+  outline: 1px solid #0066cc !important;
+  background: rgba(0, 102, 204, 0.08) !important;
 }
 
 #tableSheet1 input.invalid {
@@ -593,11 +573,12 @@ col.col-4 { width: 22% !important; }
   flex: 1 1 auto;
   min-width: 0 !important;
   padding: 6px 6px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #cbd5e1 !important;
   border-radius: 4px;
   font-size: 13px;
   font-weight: bold;
   text-align: center;
+  background: #fff !important;
 }
 .shift-row select {
   flex: 0 0 120px !important;
@@ -638,11 +619,15 @@ col.col-4 { width: 22% !important; }
 }
 .modal-footer {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
   padding: 12px 18px;
   border-top: 1px solid #e2e8f0;
   background: #f8fafc;
+}
+.modal-footer-actions {
+  display: flex;
+  gap: 10px;
 }
 
 @media (max-width: 700px) {
@@ -672,7 +657,7 @@ col.col-4 { width: 22% !important; }
   #tableSheet1 input{font-size:12px}
   #tableSheet1 .label{font-size:11px !important}
 
-  .multi-shift-line{font-size:10.5px}
+  .multi-shift-line{font-size:11px}
 
   .save-toast{left:12px;right:12px;bottom:12px;text-align:center}
 
@@ -778,6 +763,7 @@ col.col-4 { width: 22% !important; }
   #tableSheet1 input {
     color: #ffffff !important;
     background: transparent !important;
+    border: 0 !important;
   }
   #tableSheet1 input:focus {
     background: #262c35 !important;
@@ -787,10 +773,6 @@ col.col-4 { width: 22% !important; }
     background: #450a0a !important;
     color: #fca5a5 !important;
     outline: 2px solid #ef4444 !important;
-  }
-
-  .multi-shift-line {
-    color: #e7e9ec;
   }
 
   .btn-shift-modal {
@@ -808,15 +790,6 @@ col.col-4 { width: 22% !important; }
     border-color: #3b82f6;
   }
 
-  .btn-day-clear {
-    background: #450a0a;
-    color: #fca5a5;
-    border-color: #991b1b;
-  }
-  .btn-day-clear:hover {
-    background: #5f1111;
-  }
-
   .modal-content {
     background: #1f2328;
     color: #e7e9ec;
@@ -832,7 +805,12 @@ col.col-4 { width: 22% !important; }
     border-color: #3a4048;
   }
   .shift-row-label { color: #cbd5e1; }
-  .shift-row input, .shift-row select {
+  .shift-row input {
+    background: #1f2328 !important;
+    color: #e7e9ec;
+    border-color: #3a4048 !important;
+  }
+  .shift-row select {
     background: #1f2328;
     color: #e7e9ec;
     border-color: #3a4048;
@@ -942,7 +920,7 @@ col.col-4 { width: 22% !important; }
     padding: 0 !important;
   }
 
-  .header-controls, .quick-bar, .tabs, .btn, .note, .save-toast, .empty-state-note, .btn-shift-modal, .btn-day-clear, .modal-overlay, #sheet2, #sheet4 {
+  .header-controls, .quick-bar, .tabs, .btn, .note, .save-toast, .empty-state-note, .btn-shift-modal, .modal-overlay, #sheet2, #sheet4 {
     display: none !important;
   }
 
@@ -985,7 +963,6 @@ col.col-4 { width: 22% !important; }
 
   #tableSheet1 input#name {
     font-size: 10pt !important;
-    color: #000 !important;
   }
 }
 </style>
@@ -1260,7 +1237,7 @@ col.col-4 { width: 22% !important; }
 
 </div>
 
-<!-- ÇOKLU MESAİ AÇILIR PENCERESİ (MODAL) -->
+<!-- ÇOKLU MESAİ VE GÜN DÜZENLEME AÇILIR PENCERESİ (MODAL) -->
 <div id="shiftModal" class="modal-overlay hidden" onclick="handleModalBackdropClick(event)">
   <div class="modal-content">
     <div class="modal-header">
@@ -1280,8 +1257,11 @@ col.col-4 { width: 22% !important; }
       </p>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" onclick="closeShiftModal()">Vazgeç</button>
-      <button type="button" class="btn btn-success" onclick="saveShiftModal()">Kaydet ve Uygula</button>
+      <button type="button" class="btn btn-danger" onclick="clearActiveDayFromModal()">Günü Temizle</button>
+      <div class="modal-footer-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeShiftModal()">Vazgeç</button>
+        <button type="button" class="btn btn-success" onclick="saveShiftModal()">Kaydet ve Uygula</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1692,12 +1672,6 @@ function buildTables() {
           <div id="multiDisplay${i}" class="multi-shift-box hidden" onclick="openShiftModal(${i})" title="Çoklu mesaiyi düzenlemek için tıklayın"></div>
           <button 
             type="button" 
-            id="btnClear${i}" 
-            class="btn-day-clear hidden" 
-            onclick="clearDayRow(${i})" 
-            title="Bu günün mesai, mola ve yemek bilgilerini temizle">&times;</button>
-          <button 
-            type="button" 
             id="btnShift${i}" 
             class="btn-shift-modal" 
             onclick="openShiftModal(${i})" 
@@ -1808,6 +1782,13 @@ function clearDayRow(dayNum) {
 
   save();
   calc();
+}
+
+/* MODAL İÇİNDEN GÜNÜ TEMİZLEME */
+function clearActiveDayFromModal() {
+  if (!activeModalDay) return;
+  clearDayRow(activeModalDay);
+  closeShiftModal();
 }
 
 /* ÇOKLU MESAİ AÇILIR PENCERE (MODAL) İŞLEMLERİ */
@@ -2105,26 +2086,17 @@ function calc() {
 
     let timeElem = document.getElementById('time' + i);
     let breakElem = document.getElementById('break' + i);
-    let mealElem = document.getElementById('meal' + i);
     let rangeElem = document.getElementById('shiftRange' + i);
     let bText = document.getElementById('bText' + i);
     let rowSheet2 = document.getElementById('rowSheet2_' + i);
     let typeElem = document.getElementById('type' + i);
     let durationElem = document.getElementById('duration' + i);
     let payElem = document.getElementById('pay' + i);
-    let clearBtn = document.getElementById('btnClear' + i);
 
     let br = Number(breakElem ? breakElem.value : 0) || 0;
     if (bText) bText.textContent = br > 0 ? br : '0';
 
     const sList = dayShiftsData[i];
-
-    // Tek tıkla silme butonunun akıllı görünürlüğü
-    const hasData = (timeElem && timeElem.value.trim().length > 0) || 
-                    (sList && sList.length > 0) || 
-                    (breakElem && breakElem.value.trim().length > 0) || 
-                    (mealElem && mealElem.value.trim().length > 0);
-    if (clearBtn) clearBtn.classList.toggle('hidden', !hasData);
 
     if (sList && sList.length > 0) {
       let raw1_5 = 0;
