@@ -187,8 +187,8 @@ table#tableSheet1 {
 
 table#tableSheet1 td, table#tableSheet1 th {
   border: 1.5px solid #000 !important;
-  padding: 1px 4px !important;
-  height: 23px;
+  padding: 2px 4px !important;
+  height: 29px;
   vertical-align: middle;
   text-align: center !important;
   font-weight: bold !important;
@@ -196,8 +196,7 @@ table#tableSheet1 td, table#tableSheet1 th {
 }
 
 table#tableSheet1 tr.row-multi-active td {
-  height: 38px !important;
-  padding: 2px 4px !important;
+  height: 40px !important;
 }
 
 #tableSheet1 .title {
@@ -231,11 +230,52 @@ table#tableSheet1 tr.row-multi-active td {
   outline: none !important;
   background: transparent !important;
   padding: 0 4px;
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 12.5px !important;
+  font-weight: bold !important;
   color: inherit;
   text-align: center !important;
   box-sizing: border-box;
+}
+
+/* TARİH VE GÜN ADI SOLA DAYALI HİZALAMA */
+#tableSheet1 td.cell-date-td {
+  text-align: left !important;
+  padding-left: 8px !important;
+}
+
+.cell-date-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important;
+  justify-content: center;
+  line-height: 1.15;
+  gap: 1.5px;
+}
+
+.main-date {
+  font-size: 12.5px !important;
+  font-weight: bold !important;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.sub-day-name {
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: #64748b;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
+.sub-day-name.weekend-day {
+  color: #d97706;
+}
+
+/* GÜNÜN TÜM SATIRINA TATLI VE HAFİF MAVİ VURGU */
+.row-today, 
+.row-today td {
+  background: #e6f0fa !important;
 }
 
 .time-cell-wrap {
@@ -263,15 +303,13 @@ table#tableSheet1 tr.row-multi-active td {
   gap: 1px;
 }
 
-/* DİĞER HÜCRELERLE BİREBİR AYNI STANDART FONT VE KALINLIK */
 .multi-shift-line {
   font-family: inherit;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 12.5px !important;
+  font-weight: bold !important;
   color: inherit;
   white-space: nowrap;
   text-align: center;
-  letter-spacing: normal;
 }
 
 .btn-shift-modal {
@@ -368,6 +406,7 @@ table#tableSheet1 tr.row-multi-active td {
 #tableSheet2 td, #tableSheet2 th {
   font-weight: bold !important;
   text-align: center !important;
+  font-size: 12.5px;
 }
 #tableSheet2 th {
   text-align: center !important;
@@ -379,6 +418,7 @@ table#tableSheet1 tr.row-multi-active td {
 #tableSheet2 td.cell-header {
   text-align: left !important;
   justify-content: flex-start !important;
+  padding-left: 8px !important;
 }
 #tableSheet2 th:last-child,
 #tableSheet2 td:last-child {
@@ -395,22 +435,13 @@ table#tableSheet1 tr.row-multi-active td {
   align-items: flex-start;
   line-height: 1.2;
 }
-#tableSheet2 .cell-header .date-text {
-  font-weight: bold;
-  font-size: 13px;
-}
-#tableSheet2 .cell-header .day-text {
-  font-size: 11px;
-  color: #3d3d3d;
-  font-weight: normal;
-}
 
 .clickable-date {
   cursor: pointer;
   transition: background .15s ease;
 }
 .clickable-date:hover {
-  background: #eff6ff !important;
+  background: #dbeafe !important;
 }
 .edit-icon-hint {
   font-size: 11px;
@@ -575,7 +606,7 @@ col.col-4 { width: 22% !important; }
   padding: 6px 6px;
   border: 1px solid #cbd5e1 !important;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: bold;
   text-align: center;
   background: #fff !important;
@@ -650,14 +681,14 @@ col.col-4 { width: 22% !important; }
   .sheet{padding:12px}
   .excel-page-border{padding:14px 8px}
 
-  table#tableSheet1 td, table#tableSheet1 th{padding:1px 2px !important;font-size:10px !important;height:26px}
-  table#tableSheet1 tr.row-multi-active td{height:36px !important}
+  table#tableSheet1 td, table#tableSheet1 th{padding:1px 2px !important;height:29px}
+  table#tableSheet1 tr.row-multi-active td{height:38px !important}
   #tableSheet1 .title{font-size:11px !important;line-height:1.2 !important;white-space:normal}
   #tableSheet1 th{font-size:9.5px !important}
-  #tableSheet1 input{font-size:12px}
   #tableSheet1 .label{font-size:11px !important}
 
-  .multi-shift-line{font-size:11px}
+  .main-date, #tableSheet1 input, .multi-shift-line{font-size:11px !important}
+  .sub-day-name{font-size:7.5px !important}
 
   .save-toast{left:12px;right:12px;bottom:12px;text-align:center}
 
@@ -675,6 +706,7 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tbody tr:nth-child(even):not(.weekend){background:#f7f9fb}
   #tableSheet2 tr.weekend{border-right:4px solid #e0a020}
   #tableSheet2 tr.extra-row{border-right:4px solid #6c757d}
+  #tableSheet2 tr.row-today{border-right:4px solid #0284c7 !important}
   
   #tableSheet2 td{display:flex;justify-content:space-between;align-items:center;gap:8px;border:none;border-bottom:1px solid #eee;padding:7px 10px;font-size:13px;text-align:right;font-weight:bold !important}
   #tableSheet2 tr td:last-child{border-bottom:none}
@@ -775,6 +807,15 @@ col.col-4 { width: 22% !important; }
     outline: 2px solid #ef4444 !important;
   }
 
+  .sub-day-name { color: #94a3b8; }
+  .sub-day-name.weekend-day { color: #f59e0b; }
+
+  /* DARK MODDA BUGÜNÜN TÜM SATIR VURGUSU */
+  .row-today, 
+  .row-today td { 
+    background: #17263c !important; 
+  }
+
   .btn-shift-modal {
     background: #2d333b;
     color: #c7cbd0;
@@ -837,7 +878,7 @@ col.col-4 { width: 22% !important; }
   .sub-split-text { color: #94a3b8; }
 
   .clickable-date:hover {
-    background: #263342 !important;
+    background: #1e3a5f !important;
   }
 
   .empty-state-note{background:#152437;border-color:#2f5b8f;color:#8ab4f8}
@@ -851,7 +892,6 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tbody tr:nth-child(even){background:#22262c}
   #tableSheet2 tr.weekend{background:#2a2417}
   #tableSheet2 tr.extra-row{background:#20242a}
-  #tableSheet2 .cell-header .day-text{color:#a9adb3}
   #tableSheet2 select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
 
   .salary-block { background: #1f2328; border-color: #33383f; }
@@ -877,22 +917,18 @@ col.col-4 { width: 22% !important; }
     color:#e7e9ec !important;
     border-bottom-color:#2c4438 !important;
   }
-  #tableSheet2 td.cell-header .date-text{ color:#e7e9ec; }
-  #tableSheet2 td.cell-header .day-text{ color:#9fb8ab; }
 
   #tableSheet2 tr.weekend td.cell-header{
     background:#332705 !important;
     color:#ffdd6a !important;
     border-bottom-color:#4d3c08 !important;
   }
-  #tableSheet2 tr.weekend td.cell-header .day-text{ color:#e0c268; }
 
   #tableSheet2 tr.extra-row td.cell-header{
     background:#22262c !important;
     color:#d6dae0 !important;
     border-bottom-color:#3a4048 !important;
   }
-  #tableSheet2 tr.extra-row td.cell-header .day-text{ color:#a9adb3; }
 }
 
 @media print {
@@ -920,8 +956,17 @@ col.col-4 { width: 22% !important; }
     padding: 0 !important;
   }
 
-  .header-controls, .quick-bar, .tabs, .btn, .note, .save-toast, .empty-state-note, .btn-shift-modal, .modal-overlay, #sheet2, #sheet4 {
+  .header-controls, .quick-bar, .tabs, .btn, .note, .save-toast, .empty-state-note, .btn-shift-modal, .modal-overlay, .sub-day-name, #sheet2, #sheet4 {
     display: none !important;
+  }
+
+  .row-today, .row-today td {
+    background: #fff !important;
+  }
+
+  #tableSheet1 td.cell-date-td {
+    text-align: center !important;
+    padding-left: 2px !important;
   }
 
   #sheet1 {
@@ -1595,17 +1640,18 @@ function syncName() {
 function initYearSelect() {
   const sel = document.getElementById('selectYear');
   sel.innerHTML = '';
-  const baseYear = 2026;
+  const now = new Date();
+  const currentYear = now.getFullYear();
 
-  for (let y = baseYear; y <= baseYear + 5; y++) {
+  for (let y = 2026; y <= 2031; y++) {
     const opt = document.createElement('option');
     opt.value = y;
     opt.textContent = y;
-    if (y === baseYear) opt.selected = true;
+    if (y === currentYear) opt.selected = true;
     sel.appendChild(opt);
   }
 
-  document.getElementById('selectMonth').value = new Date().getMonth();
+  document.getElementById('selectMonth').value = now.getMonth();
 }
 
 function getDaysInMonth(year, month) {
@@ -1631,6 +1677,11 @@ function buildTables() {
   const year = parseInt(document.getElementById('selectYear').value);
   const month = parseInt(document.getElementById('selectMonth').value);
 
+  const today = new Date();
+  const todayY = today.getFullYear();
+  const todayM = today.getMonth();
+  const todayD = today.getDate();
+
   currentDaysCount = getDaysInMonth(year, month);
 
   const subElem = document.getElementById('titleSub');
@@ -1650,16 +1701,22 @@ function buildTables() {
     const dow = new Date(year, month, i).getDay();
     const weekdayFull = weekDaysFullTR[dow];
     const isWeekend = dow === 0 || dow === 6;
+    const isToday = (year === todayY && month === todayM && i === todayD);
 
     const tr1 = document.createElement('tr');
     tr1.id = `rowSheet1_${i}`;
+    if (isToday) tr1.classList.add('row-today');
+
     tr1.innerHTML = `
       <td 
-        class="center" 
+        class="cell-date-td" 
         style="cursor:pointer" 
         title="Bir şablon seçtiyseniz uygulamak için tıklayın" 
         onclick="applyArmedTemplate(${i})">
-        ${dateFormatted}
+        <div class="cell-date-wrap">
+          <span class="main-date">${dateFormatted}</span>
+          <span class="sub-day-name ${isWeekend ? 'weekend-day' : ''}">${weekdayFull}</span>
+        </div>
       </td>
       <td>
         <div class="time-cell-wrap" id="timeWrap${i}">
@@ -1702,13 +1759,14 @@ function buildTables() {
     const tr2 = document.createElement('tr');
     tr2.id = `rowSheet2_${i}`;
     if (isWeekend) tr2.classList.add('weekend');
+    if (isToday) tr2.classList.add('row-today');
 
     tr2.innerHTML = `
       <td class="cell-header clickable-date" id="d${i}" data-label="TARİH" onclick="openShiftModal(${i})" title="Bu günü düzenlemek için tıklayın">
         <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-          <div>
-            <span class="date-text">${dateFormatted}</span>
-            <span class="day-text">${weekdayFull}</span>
+          <div class="cell-date-wrap">
+            <span class="main-date">${dateFormatted}</span>
+            <span class="sub-day-name ${isWeekend ? 'weekend-day' : ''}">${weekdayFull}</span>
           </div>
           <span class="edit-icon-hint" title="Düzenle">✏️</span>
         </div>
@@ -1735,8 +1793,8 @@ function buildTables() {
 
     trExtra.innerHTML = `
       <td class="cell-header" data-label="TARİH">
-        <span class="date-text">EKSTRA ${e}</span>
-        <span class="day-text">Özel Mesai</span>
+        <span class="main-date">EKSTRA ${e}</span>
+        <span class="sub-day-name">ÖZEL MESAİ</span>
       </td>
       <td data-label="MESAİ ARALIĞI">-</td>
       <td data-label="MOLA(DK)">0</td>
@@ -1753,7 +1811,7 @@ function buildTables() {
             type="text" 
             inputmode="numeric" 
             placeholder="0"
-            style="width:50px; text-align:center; border:1px solid #cbd5e1; border-radius:4px; background:transparent; color:inherit; padding:3px; font-weight:bold;" 
+            style="width:50px; text-align:center; border:1px solid #cbd5e1; border-radius:4px; background:transparent; color:inherit; padding:3px; font-weight:bold; font-size:12.5px;" 
             oninput="this.value=this.value.replace(/\\D/g,'');save();calc()">
           <span style="font-size:11px;font-weight:700;">Dk</span>
           <span id="duration${extraId}" style="font-size:11px;opacity:0.8;"></span>
@@ -1767,7 +1825,6 @@ function buildTables() {
   updateDynamicTitle();
 }
 
-/* TEK TIKLA GÜNÜ TEMİZLEME FONKSİYONU */
 function clearDayRow(dayNum) {
   const timeElem = document.getElementById('time' + dayNum);
   const breakElem = document.getElementById('break' + dayNum);
@@ -1784,14 +1841,13 @@ function clearDayRow(dayNum) {
   calc();
 }
 
-/* MODAL İÇİNDEN GÜNÜ TEMİZLEME */
 function clearActiveDayFromModal() {
   if (!activeModalDay) return;
   clearDayRow(activeModalDay);
   closeShiftModal();
 }
 
-/* ÇOKLU MESAİ AÇILIR PENCERE (MODAL) İŞLEMLERİ */
+/* ÇOKLU MESAİ MODAL İŞLEMLERİ */
 let activeModalDay = null;
 
 function openShiftModal(dayNum) {
