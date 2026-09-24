@@ -305,6 +305,47 @@ table#tableSheet1 td, table#tableSheet1 th {
   text-align: center;
 }
 
+/* HESAP SEKRESİ (SHEET 2) STİLLERİ */
+.sheet2-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+.summary-card.pufa-card { border-left: 4px solid #3b82f6; }
+.summary-card.servis-card { border-left: 4px solid #f59e0b; }
+.summary-card.total-card { border-left: 4px solid #22c55e; background: #f0fdf4; }
+
+.summary-card-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.summary-card.total-card .summary-card-title { color: #15803d; }
+
+.summary-card-hours {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+}
+.summary-card-pay {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #059669;
+  margin-top: 3px;
+}
+
 #tableSheet2 td, #tableSheet2 th {
   font-weight: bold !important;
   text-align: center !important;
@@ -345,16 +386,70 @@ table#tableSheet1 td, table#tableSheet1 th {
   font-weight: normal;
 }
 
-#tableSheet2 tfoot tr {
+.clickable-date {
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.clickable-date:hover {
+  background: #eff6ff !important;
+}
+.edit-icon-hint {
+  font-size: 11px;
+  opacity: 0.45;
+  margin-left: 6px;
+}
+.clickable-date:hover .edit-icon-hint {
+  opacity: 1;
+}
+
+.row-sub-breakdown {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+.badge-pufa, .badge-servis {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.badge-pufa {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+.badge-servis {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+#tableSheet2 tfoot tr.tfoot-sub-row {
+  background: #f8fafc !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+}
+#tableSheet2 tfoot tr.tfoot-sub-row td {
+  color: #334155 !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+}
+
+#tableSheet2 tfoot tr.tfoot-main-row {
   background: #f0fdf4 !important;
   color: #22C55E !important;
   border: 1.5px solid #22C55E !important;
 }
-#tableSheet2 tfoot td {
+#tableSheet2 tfoot tr.tfoot-main-row td {
   color: #22C55E !important;
-  display: table-cell !important;
   font-weight: bold !important;
   font-size: 13px !important;
+}
+#tableSheet2 tfoot td {
+  display: table-cell !important;
   text-align: center !important;
 }
 #tableSheet2 tfoot td:first-child {
@@ -370,7 +465,7 @@ table#tableSheet1 td, table#tableSheet1 th {
     bottom: 0;
     z-index: 5;
   }
-  #tableSheet2 tfoot tr {
+  #tableSheet2 tfoot tr.tfoot-main-row {
     box-shadow: 0 -3px 8px rgba(0,0,0,.10);
   }
 }
@@ -570,6 +665,11 @@ col.col-4 { width: 22% !important; }
 
   .save-toast{left:12px;right:12px;bottom:12px;text-align:center}
 
+  .sheet2-summary-cards {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
   .table-scroll{overflow-x:visible}
   #tableSheet2{min-width:0;border:none;border-spacing:0 0}
   #tableSheet2 thead{display:none}
@@ -579,8 +679,27 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tbody tr:nth-child(even):not(.weekend){background:#f7f9fb}
   #tableSheet2 tr.weekend{border-right:4px solid #e0a020}
   #tableSheet2 tr.extra-row{border-right:4px solid #6c757d}
+  
   #tableSheet2 tfoot{position:static}
-  #tableSheet2 tfoot tr{background:#f0fdf4 !important;border:1.5px solid #22C55E;border-right:4px solid #22C55E;color:#22C55E !important;display:block !important;box-shadow:none}
+  #tableSheet2 tfoot tr.tfoot-sub-row {
+    background: #f8fafc !important;
+    border: 1.5px solid #cbd5e1;
+    border-right: 4px solid #3b82f6;
+    color: #1e293b !important;
+    display: block !important;
+    margin-bottom: 8px;
+  }
+  #tableSheet2 tfoot tr.tfoot-sub-row.servis-sub {
+    border-right: 4px solid #f59e0b;
+  }
+  #tableSheet2 tfoot tr.tfoot-main-row{
+    background:#f0fdf4 !important;
+    border:1.5px solid #22C55E;
+    border-right:4px solid #22C55E;
+    color:#22C55E !important;
+    display:block !important;
+    box-shadow:none;
+  }
   #tableSheet2 tfoot td{display:flex !important;justify-content:space-between !important;align-items:center !important;text-align:right !important;font-weight:bold !important;}
   #tableSheet2 td{display:flex;justify-content:space-between;align-items:center;gap:8px;border:none;border-bottom:1px solid #eee;padding:7px 10px;font-size:13px;text-align:right;font-weight:bold !important}
   #tableSheet2 tr td:last-child{border-bottom:none}
@@ -687,6 +806,33 @@ col.col-4 { width: 22% !important; }
     border-color: #3a4048;
   }
 
+  .summary-card {
+    background: #1f2328;
+    border-color: #33383f;
+  }
+  .summary-card.total-card {
+    background: #052e16;
+    border-left-color: #22c55e;
+  }
+  .summary-card.total-card .summary-card-title { color: #86efac; }
+  .summary-card-hours { color: #e7e9ec; }
+  .summary-card-pay { color: #4ade80; }
+
+  .badge-pufa { background: #1e3a5f; color: #93c5fd; border-color: #3b82f6; }
+  .badge-servis { background: #452c06; color: #fde68a; border-color: #d97706; }
+
+  .clickable-date:hover {
+    background: #263342 !important;
+  }
+
+  #tableSheet2 tfoot tr.tfoot-sub-row {
+    background: #181b1f !important;
+    border-color: #33383f !important;
+  }
+  #tableSheet2 tfoot tr.tfoot-sub-row td {
+    color: #cbd5e1 !important;
+  }
+
   .empty-state-note{background:#152437;border-color:#2f5b8f;color:#8ab4f8}
 
   #tableSheet2, #tableSheet3{background:#1f2328}
@@ -701,8 +847,8 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 .cell-header .day-text{color:#a9adb3}
   #tableSheet2 select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
 
-  #tableSheet2 tfoot tr{background:#052e16 !important;color:#22C55E !important;border-color:#22C55E !important}
-  #tableSheet2 tfoot td{color:#22C55E !important}
+  #tableSheet2 tfoot tr.tfoot-main-row{background:#052e16 !important;color:#22C55E !important;border-color:#22C55E !important}
+  #tableSheet2 tfoot tr.tfoot-main-row td{color:#22C55E !important}
 
   .salary-block { background: #1f2328; border-color: #33383f; }
   .salary-block-title { color: #94a3b8; border-bottom-color: #2d333b; }
@@ -977,18 +1123,37 @@ col.col-4 { width: 22% !important; }
 </div>
 
 <div id="sheet2" class="sheet hidden">
+
+  <!-- YENİ: 1.5X / 2X VE GENEL TOPLAM ÖZET KARTLARI -->
+  <div class="sheet2-summary-cards">
+    <div class="summary-card pufa-card">
+      <div class="summary-card-title">PUFA (1.5X) TOPLAMI</div>
+      <div class="summary-card-hours" id="card15Hours">00:00 Sa (0 Dk)</div>
+      <div class="summary-card-pay" id="card15Pay">0,00 ₺</div>
+    </div>
+    <div class="summary-card servis-card">
+      <div class="summary-card-title">SERVİS (2.0X) TOPLAMI</div>
+      <div class="summary-card-hours" id="card20Hours">00:00 Sa (0 Dk)</div>
+      <div class="summary-card-pay" id="card20Pay">0,00 ₺</div>
+    </div>
+    <div class="summary-card total-card">
+      <div class="summary-card-title">GENEL MESAİ TOPLAMI</div>
+      <div class="summary-card-hours" id="cardGenelHours">00:00 Sa (0 Dk)</div>
+      <div class="summary-card-pay" id="cardGenelPay">0,00 ₺</div>
+    </div>
+  </div>
+
   <div class="table-scroll">
     <table id="tableSheet2">
       <colgroup>
+        <col style="width:16%">
+        <col style="width:11%">
+        <col style="width:11%">
+        <col style="width:9%">
+        <col style="width:15%">
+        <col style="width:8%">
         <col style="width:14%">
-        <col style="width:10%">
-        <col style="width:10%">
-        <col style="width:9%">
-        <col style="width:14%">
-        <col style="width:7%">
-        <col style="width:9%">
-        <col style="width:9%">
-        <col style="width:18%">
+        <col style="width:16%">
       </colgroup>
       <thead>
         <tr>
@@ -998,19 +1163,29 @@ col.col-4 { width: 22% !important; }
           <th>MOLA(DK)</th>
           <th>MESAİ TİPİ</th>
           <th>ÇARPAN</th>
-          <th>TOPLAM SAAT</th>
-          <th>TOPLAM DAKİKA</th>
+          <th>TOPLAM SÜRE</th>
           <th>ÜCRET</th>
         </tr>
       </thead>
       <tbody id="tbodySheet2"></tbody>
       <tfoot>
-        <tr>
-          <td colspan="5" data-label=""><b>TOPLAM SÜRE :</b></td>
+        <tr class="tfoot-sub-row">
+          <td colspan="5" data-label="KAPSAM"><b>PUFA (1.5X) TOPLAMI :</b></td>
           <td class="mobile-hide"></td>
-          <td class="center" id="totalHours" data-label="TOPLAM SAAT"></td>
-          <td class="center" id="totalMins" data-label="TOPLAM DAKİKA"></td>
-          <td class="right" id="totalPay" data-label="ÜCRET"></td>
+          <td class="center" id="sum15Time" data-label="1.5X SÜRE">00:00 Sa</td>
+          <td class="right" id="sum15Pay" data-label="1.5X ÜCRET">0,00 ₺</td>
+        </tr>
+        <tr class="tfoot-sub-row servis-sub">
+          <td colspan="5" data-label="KAPSAM"><b>SERVİS (2.0X) TOPLAMI :</b></td>
+          <td class="mobile-hide"></td>
+          <td class="center" id="sum20Time" data-label="2.0X SÜRE">00:00 Sa</td>
+          <td class="right" id="sum20Pay" data-label="2.0X ÜCRET">0,00 ₺</td>
+        </tr>
+        <tr class="tfoot-main-row">
+          <td colspan="5" data-label="KAPSAM"><b>GENEL TOPLAM :</b></td>
+          <td class="mobile-hide"></td>
+          <td class="center" id="totalDurationCell" data-label="TOPLAM SÜRE">00:00 Sa (0 Dk)</td>
+          <td class="right" id="totalPay" data-label="GENEL ÜCRET">0,00 ₺</td>
         </tr>
       </tfoot>
     </table>
@@ -1376,7 +1551,6 @@ async function shareVectorPDF(btn) {
         const breakVal = document.getElementById('break' + i)?.value || '';
         const mealVal = document.getElementById('meal' + i)?.value || '';
 
-        // Çoklu mesaide metin uzunsa puntoları hafif küçülterek satırın tek satırda kalmasını sağla
         let timeFontSize = 8.5;
         if (timeVal.length > 25) {
           timeFontSize = 7.0;
@@ -1509,10 +1683,10 @@ function getStorageKey() {
 let currentDaysCount = 31;
 
 function formatHoursMinutes(totalMins) {
-  if (!totalMins || totalMins <= 0) return '';
+  if (!totalMins || totalMins <= 0) return '00:00 Sa';
   const h = Math.floor(totalMins / 60);
   const m = totalMins % 60;
-  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ' Saat';
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ' Sa';
 }
 
 function buildTables() {
@@ -1561,7 +1735,7 @@ function buildTables() {
             id="btnShift${i}" 
             class="btn-shift-modal" 
             onclick="openShiftModal(${i})" 
-            title="Çoklu Mesai (Şehir Dışı vb.) Ekle / Düzenle">+</button>
+            title="Çoklu Mesai Ekle / Düzenle">+</button>
         </div>
       </td>
       <td class="center">
@@ -1590,9 +1764,14 @@ function buildTables() {
     if (isWeekend) tr2.classList.add('weekend');
 
     tr2.innerHTML = `
-      <td class="cell-header" id="d${i}" data-label="TARİH">
-        <span class="date-text">${dateFormatted}</span>
-        <span class="day-text">${weekdayFull}</span>
+      <td class="cell-header clickable-date" id="d${i}" data-label="TARİH" onclick="openShiftModal(${i})" title="Bu günü düzenlemek için tıklayın">
+        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+          <div>
+            <span class="date-text">${dateFormatted}</span>
+            <span class="day-text">${weekdayFull}</span>
+          </div>
+          <span class="edit-icon-hint" title="Düzenle">✏️</span>
+        </div>
       </td>
       <td id="startText${i}" data-label="BAŞLANGIÇ">-</td>
       <td id="endText${i}" data-label="BİTİŞ">-</td>
@@ -1604,8 +1783,7 @@ function buildTables() {
         </select>
       </td>
       <td class="center" id="mult${i}" data-label="ÇARPAN">1.5</td>
-      <td class="center" id="hours${i}" data-label="TOPLAM SAAT"></td>
-      <td class="center" id="mins${i}" data-label="TOPLAM DAKİKA"></td>
+      <td class="center" id="duration${i}" data-label="TOPLAM SÜRE"></td>
       <td class="right" id="pay${i}" data-label="ÜCRET"></td>
     `;
     tbody2.appendChild(tr2);
@@ -1638,8 +1816,7 @@ function buildTables() {
         </select>
       </td>
       <td class="center" id="mult${extraId}" data-label="ÇARPAN">1.5</td>
-      <td class="center" id="hours${extraId}" data-label="TOPLAM SAAT"></td>
-      <td class="center" id="mins${extraId}" data-label="TOPLAM DAKİKA"></td>
+      <td class="center" id="duration${extraId}" data-label="TOPLAM SÜRE"></td>
       <td class="right" id="pay${extraId}" data-label="ÜCRET"></td>
     `;
     tbody2.appendChild(trExtra);
@@ -1661,7 +1838,7 @@ function openShiftModal(dayNum) {
   const dow = new Date(year, month, dayNum).getDay();
   const dateText = `${dayStr}.${monthStr}.${year} - ${weekDaysFullTR[dow]}`;
 
-  document.getElementById('modalTitle').textContent = `Çoklu Mesai: ${dateText}`;
+  document.getElementById('modalTitle').textContent = `Mesai Düzenle: ${dateText}`;
   const container = document.getElementById('shiftRowsContainer');
   container.innerHTML = '';
 
@@ -1786,7 +1963,6 @@ function saveShiftModal() {
 }
 
 function onDirectTimeChange(dayNum) {
-  // Eğer kullanıcı çizelgeden doğrudan elle saat girerse veya silerse:
   const timeElem = document.getElementById('time' + dayNum);
   const val = (timeElem?.value || '').trim();
   const btnElem = document.getElementById('btnShift' + dayNum);
@@ -1798,7 +1974,6 @@ function onDirectTimeChange(dayNum) {
 }
 
 function onTypeChange(dayNum) {
-  // Sheet 2'den mesai tipi değiştirilirse tekli mesaiye yansıt
   if (dayShiftsData[dayNum] && dayShiftsData[dayNum].length === 1) {
     dayShiftsData[dayNum][0].type = document.getElementById('type' + dayNum).value;
   }
@@ -1857,7 +2032,6 @@ function buildAnnualTable() {
             }
           });
 
-          // Çalışan lehine mola düşümü: Önce 1.5X, sonra 2X
           let cut1_5 = Math.min(raw1_5, breakVal);
           let remBreak = breakVal - cut1_5;
           let cut2_0 = Math.min(raw2_0, remBreak);
@@ -1948,7 +2122,7 @@ function parseTime(s) {
 
 function formatTimeLive(input) {
   let val = input.value;
-  if (val.includes('/')) return; // Çoklu mesai formatını bozma
+  if (val.includes('/')) return;
 
   let clean = val.replace(/\D/g, '').slice(0, 8);
 
@@ -2010,6 +2184,8 @@ function calc() {
   let totalMin = 0;
   let mins1_5 = 0;
   let mins2_0 = 0;
+  let pay1_5 = 0;
+  let pay2_0 = 0;
 
   for (let i = 1; i <= currentDaysCount; i++) {
     let timeElem = document.getElementById('time' + i);
@@ -2020,8 +2196,7 @@ function calc() {
     let rowSheet2 = document.getElementById('rowSheet2_' + i);
     let typeElem = document.getElementById('type' + i);
     let multElem = document.getElementById('mult' + i);
-    let minsElem = document.getElementById('mins' + i);
-    let hoursElem = document.getElementById('hours' + i);
+    let durationElem = document.getElementById('duration' + i);
     let payElem = document.getElementById('pay' + i);
     let btnElem = document.getElementById('btnShift' + i);
 
@@ -2053,7 +2228,6 @@ function calc() {
       if (startText) startText.textContent = startList.join(' / ');
       if (endText) endText.textContent = endList.join(' / ');
 
-      // Çalışan lehine: Mola önce 1.5X mesaisinden düşülür
       let cut1_5 = Math.min(raw1_5, br);
       let remBreak = br - cut1_5;
       let cut2_0 = Math.min(raw2_0, remBreak);
@@ -2076,15 +2250,47 @@ function calc() {
       if (rowSheet2) rowSheet2.classList.toggle('hidden-row', dayNetMins <= 0);
       if (timeElem) timeElem.classList.remove('invalid');
 
-      if (minsElem) minsElem.textContent = dayNetMins ? dayNetMins.toFixed(0) : '';
-      if (hoursElem) hoursElem.textContent = dayNetMins ? formatHoursMinutes(dayNetMins) : '';
+      const dPay1_5 = net1_5 * normalMin * 1.5;
+      const dPay2_0 = net2_0 * normalMin * 2.0;
+      const dayPay = dPay1_5 + dPay2_0;
 
-      const dayPay = (net1_5 * normalMin * 1.5) + (net2_0 * normalMin * 2.0);
-      if (payElem) payElem.textContent = dayPay ? money(dayPay) + ' ₺' : '';
+      if (durationElem) {
+        if (dayNetMins > 0) {
+          let durHtml = `${formatHoursMinutes(dayNetMins)} <span style="font-size:11px;font-weight:normal;opacity:0.8;">(${dayNetMins} Dk)</span>`;
+          if (net1_5 > 0 && net2_0 > 0) {
+            durHtml += `
+              <div class="row-sub-breakdown">
+                <span class="badge-pufa">1.5X: ${formatHoursMinutes(net1_5)}</span>
+                <span class="badge-servis">2X: ${formatHoursMinutes(net2_0)}</span>
+              </div>`;
+          }
+          durationElem.innerHTML = durHtml;
+        } else {
+          durationElem.innerHTML = '';
+        }
+      }
+
+      if (payElem) {
+        if (dayPay > 0) {
+          let pHtml = `${money(dayPay)} ₺`;
+          if (net1_5 > 0 && net2_0 > 0) {
+            pHtml += `
+              <div class="row-sub-breakdown">
+                <span class="badge-pufa">${money(dPay1_5)} ₺</span>
+                <span class="badge-servis">${money(dPay2_0)} ₺</span>
+              </div>`;
+          }
+          payElem.innerHTML = pHtml;
+        } else {
+          payElem.innerHTML = '';
+        }
+      }
 
       totalMin += dayNetMins;
       mins1_5 += net1_5;
       mins2_0 += net2_0;
+      pay1_5 += dPay1_5;
+      pay2_0 += dPay2_0;
 
     } else {
       if (btnElem) btnElem.classList.remove('has-multi');
@@ -2131,15 +2337,24 @@ function calc() {
       const mult = type === 'SERVİS(2X)' ? 2 : 1.5;
 
       if (multElem) multElem.textContent = mult;
-      if (minsElem) minsElem.textContent = mins ? mins.toFixed(0) : '';
-      if (hoursElem) hoursElem.textContent = mins ? formatHoursMinutes(mins) : '';
 
       const pay = mins * normalMin * mult;
+
+      if (durationElem) {
+        durationElem.innerHTML = mins 
+          ? `${formatHoursMinutes(mins)} <span style="font-size:11px;font-weight:normal;opacity:0.8;">(${mins} Dk)</span>` 
+          : '';
+      }
       if (payElem) payElem.textContent = pay ? money(pay) + ' ₺' : '';
 
       totalMin += mins;
-      if (mult === 1.5) mins1_5 += mins;
-      else if (mult === 2) mins2_0 += mins;
+      if (mult === 1.5) {
+        mins1_5 += mins;
+        pay1_5 += pay;
+      } else if (mult === 2) {
+        mins2_0 += mins;
+        pay2_0 += pay;
+      }
     }
   }
 
@@ -2158,20 +2373,27 @@ function calc() {
     if (rowSheet2) rowSheet2.classList.toggle('hidden-row', mins <= 0);
 
     const multElem = document.getElementById('mult' + extraId);
-    const minsElem = document.getElementById('mins' + extraId);
-    const hoursElem = document.getElementById('hours' + extraId);
+    const durationElem = document.getElementById('duration' + extraId);
     const payElem = document.getElementById('pay' + extraId);
 
     if (multElem) multElem.textContent = mult;
-    if (minsElem) minsElem.textContent = mins ? mins.toFixed(0) : '';
-    if (hoursElem) hoursElem.textContent = mins ? formatHoursMinutes(mins) : '';
 
     const pay = mins * normalMin * mult;
+    if (durationElem) {
+      durationElem.innerHTML = mins 
+        ? `${formatHoursMinutes(mins)} <span style="font-size:11px;font-weight:normal;opacity:0.8;">(${mins} Dk)</span>` 
+        : '';
+    }
     if (payElem) payElem.textContent = pay ? money(pay) + ' ₺' : '';
 
     totalMin += mins;
-    if (mult === 1.5) mins1_5 += mins;
-    else if (mult === 2) mins2_0 += mins;
+    if (mult === 1.5) {
+      mins1_5 += mins;
+      pay1_5 += pay;
+    } else if (mult === 2) {
+      mins2_0 += mins;
+      pay2_0 += pay;
+    }
   }
 
   const dedHInput = document.getElementById('deductionHours')?.value;
@@ -2181,7 +2403,7 @@ function calc() {
   const dedM = (dedMInput && !isNaN(dedMInput)) ? parseInt(dedMInput, 10) : 0;
 
   let remainingDeduction = (dedH * 60) + dedM;
-  const grossOvertimePay = (mins1_5 * normalMin * 1.5) + (mins2_0 * normalMin * 2.0);
+  const grossOvertimePay = pay1_5 + pay2_0;
 
   let cut1_5 = Math.min(mins1_5, remainingDeduction);
   remainingDeduction -= cut1_5;
@@ -2197,12 +2419,30 @@ function calc() {
   const netOvertimePay = ((mins1_5 - cut1_5) * normalMin * 1.5) + ((mins2_0 - cut2_0) * normalMin * 2.0);
   const netPayVal = (salary + grossOvertimePay) - totalDeductionMoney;
 
-  document.getElementById('totalHours').textContent = formatHoursMinutes(totalMin);
-  document.getElementById('totalMins').textContent = totalMin + ' Dk';
-  document.getElementById('totalPay').textContent = money(grossOvertimePay) + ' ₺';
-  document.getElementById('overtimePay').value = money(netOvertimePay) + ' ₺';
-  document.getElementById('deduction').value = money(totalDeductionMoney) + ' ₺';
-  document.getElementById('netPay').value = money(netPayVal) + ' ₺';
+  // SHEET 2 KARTLARI GÜNCELLE
+  document.getElementById('card15Hours').textContent = `${formatHoursMinutes(mins1_5)} (${mins1_5} Dk)`;
+  document.getElementById('card15Pay').textContent = `${money(pay1_5)} ₺`;
+
+  document.getElementById('card20Hours').textContent = `${formatHoursMinutes(mins2_0)} (${mins2_0} Dk)`;
+  document.getElementById('card20Pay').textContent = `${money(pay2_0)} ₺`;
+
+  document.getElementById('cardGenelHours').textContent = `${formatHoursMinutes(totalMin)} (${totalMin} Dk)`;
+  document.getElementById('cardGenelPay').textContent = `${money(grossOvertimePay)} ₺`;
+
+  // SHEET 2 TABLO ALTI TOPLAMLARI GÜNCELLE
+  document.getElementById('sum15Time').textContent = formatHoursMinutes(mins1_5);
+  document.getElementById('sum15Pay').textContent = `${money(pay1_5)} ₺`;
+
+  document.getElementById('sum20Time').textContent = formatHoursMinutes(mins2_0);
+  document.getElementById('sum20Pay').textContent = `${money(pay2_0)} ₺`;
+
+  document.getElementById('totalDurationCell').innerHTML = `${formatHoursMinutes(totalMin)} <span style="font-size:11px;font-weight:normal;opacity:0.85;">(${totalMin} Dk)</span>`;
+  document.getElementById('totalPay').textContent = `${money(grossOvertimePay)} ₺`;
+
+  // SHEET 4 (ÜCRET) GÜNCELLE
+  document.getElementById('overtimePay').value = `${money(netOvertimePay)} ₺`;
+  document.getElementById('deduction').value = `${money(totalDeductionMoney)} ₺`;
+  document.getElementById('netPay').value = `${money(netPayVal)} ₺`;
 
   buildAnnualTable();
   updateEmptyState();
