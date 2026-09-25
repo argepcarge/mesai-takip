@@ -1281,7 +1281,8 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit" style="color: #dc2626;">Sa</span>
           </div>
         </div>
-        <div class="salary-row" style="color: #dc2626;">Kesinti Dakikası</span>
+        <div class="salary-row">
+          <span class="salary-label" style="color: #dc2626;">Kesinti Dakikası</span>
           <div class="salary-input-wrapper red-bg">
             <input id="deductionMinutes" type="text" inputmode="tel" pattern="[0-9]*" value="0" aria-label="Kesinti Dakikası" oninput="save();calc()" onblur="ensureNumber(this)">
             <span class="salary-unit" style="color: #dc2626;">Dk</span>
@@ -2312,6 +2313,7 @@ function saveShiftModal() {
   calc();
 }
 
+/* ÇOKLU MESAİDE BUTONU GİZLEYİP TEK MESAİDE + GETİREN FONKSİYON */
 function updateMultiShiftUI(dayNum) {
   const sList = dayShiftsData[dayNum];
   const inputElem = document.getElementById('time' + dayNum);
@@ -2325,10 +2327,9 @@ function updateMultiShiftUI(dayNum) {
       multiBox.classList.remove('hidden');
       multiBox.innerHTML = sList.map(s => `<span class="multi-shift-line">${s.time}</span>`).join('');
     }
+    // Çoklu mesaide kalem butonunu tamamen gizler, sadece saatler görünür
     if (btnElem) {
-      btnElem.classList.add('has-multi');
-      btnElem.textContent = '✏️';
-      btnElem.title = 'Çoklu Mesaiyi Düzenle';
+      btnElem.classList.add('hidden');
     }
     if (tr1Elem) tr1Elem.classList.add('row-multi-active');
   } else {
@@ -2337,7 +2338,9 @@ function updateMultiShiftUI(dayNum) {
       multiBox.classList.add('hidden');
       multiBox.innerHTML = '';
     }
+    // Tek mesaili veya boş günlerde + butonu yerinde kalır
     if (btnElem) {
+      btnElem.classList.remove('hidden');
       btnElem.classList.remove('has-multi');
       btnElem.textContent = '+';
       btnElem.title = 'Çoklu Mesai Ekle / Düzenle';
