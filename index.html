@@ -158,13 +158,13 @@ input[type=number] {
 .tabs{display:flex;gap:6px;margin-bottom:0}
 .tab{border:1px solid #aaa;background:#ddd;padding:9px 16px;border-radius:6px 6px 0 0;cursor:pointer;font-weight:700;transition:background .15s ease}
 .tab.active{background:#fff;border-bottom-color:#fff}
-.sheet{background:#fff;border:1px solid #aaa;border-radius:0 6px 6px 6px;padding:24px;box-shadow:0 2px 8px #0001;overflow-x:hidden !important}
+
+.sheet{background:#fff;border:1px solid #aaa;border-radius:0 6px 6px 6px;padding:16px;box-shadow:0 2px 8px #0001;overflow-x:hidden !important}
 
 .excel-page-border {
-  border: 1px solid #000;
-  padding: 20px 20px;
-  background: #fff;
-  transition: background .2s ease, border-color .2s ease;
+  border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
 }
 
 table#tableSheet1 {
@@ -173,6 +173,7 @@ table#tableSheet1 {
   max-width: 100% !important;
   table-layout: fixed !important;
   border: 2px solid #000 !important;
+  margin: 0 !important;
 }
 
 table#tableSheet1 td, table#tableSheet1 th {
@@ -522,7 +523,7 @@ col.col-2 { width: 37.5% !important; }
 col.col-3 { width: 18% !important; }
 col.col-4 { width: 22% !important; }
 
-/* MODAL / AÇILIR PENCERE STİLLERİ */
+/* MODAL / AÇILIR PENCERE STİLLERİ (YENİLENMİŞ VE SİMETRİK) */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -538,7 +539,7 @@ col.col-4 { width: 22% !important; }
   background: #fff;
   border-radius: 10px;
   width: 96%;
-  max-width: 520px;
+  max-width: 480px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
   display: flex;
   flex-direction: column;
@@ -579,11 +580,7 @@ col.col-4 { width: 22% !important; }
   overflow-y: auto;
   overflow-x: hidden !important;
 }
-.modal-desc {
-  margin: 0 0 12px 0;
-  font-size: 12px;
-  color: #64748b;
-}
+
 .shift-row {
   display: flex;
   align-items: center;
@@ -646,32 +643,61 @@ col.col-4 { width: 22% !important; }
   transition: background .15s ease;
 }
 .btn-shift-del:hover { background: #fecaca; }
-.modal-tip {
-  font-size: 11px;
-  color: #0066cc;
-  margin-top: 10px;
-  font-weight: 600;
+
+/* GENİŞ VE MODERN + YENİ MESAİ BUTONU */
+.btn-add-shift-row {
+  width: 100%;
+  background: #f8fafc;
+  border: 1.5px dashed #94a3b8;
+  color: #334155;
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s ease;
+  text-align: center;
+  margin-top: 4px;
 }
+.btn-add-shift-row:hover {
+  background: #e2e8f0;
+  border-color: #64748b;
+  color: #0f172a;
+}
+
+/* SEÇENEK B FOOTER YAPISI */
 .modal-footer {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 18px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 18px;
   border-top: 1px solid #e2e8f0;
   background: #f8fafc;
 }
-.modal-footer-actions {
+.modal-footer-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  width: 100%;
+}
+.modal-footer-row .btn {
+  flex: 1 1 50%;
+  padding: 9px;
+  font-size: 13px;
+  text-align: center;
+}
+.btn-apply {
+  width: 100%;
+  padding: 11px;
+  font-size: 13.5px;
+  font-weight: 800;
 }
 
 @media (max-width: 700px) {
   body{font-size:12px}
-  .wrap{margin:10px auto;padding:0 8px}
+  .wrap{margin:6px auto;padding:0 4px}
 
   .header-controls{padding:10px;gap:10px;flex-direction:column;align-items:stretch}
   
-  /* YIL VE AY MOBİLDE %50 - %50 YAN YANA */
   .header-date-selectors{
     width: 100%;
     display: flex;
@@ -700,8 +726,7 @@ col.col-4 { width: 22% !important; }
   .tabs{flex-wrap:nowrap}
   .tab{flex:1 1 0;text-align:center;padding:10px 6px;font-size:12px}
 
-  .sheet{padding:12px}
-  .excel-page-border{padding:14px 8px}
+  .sheet{padding:6px 4px}
 
   table#tableSheet1 td, table#tableSheet1 th{padding:1px 2px !important;height:29px}
   table#tableSheet1 tr.row-holiday td{height:31px !important}
@@ -780,6 +805,10 @@ col.col-4 { width: 22% !important; }
     height: 25px !important;
     font-size: 14px;
   }
+  .btn-apply {
+    padding: 12px;
+    font-size: 14px;
+  }
 }
 
 /* DARK MODE */
@@ -797,10 +826,6 @@ col.col-4 { width: 22% !important; }
   .tab{background:#262b31;border-color:#3a4048;color:#c7cbd0}
   .tab.active{background:#1f2328;color:#fff;border-bottom-color:#1f2328}
 
-  .excel-page-border {
-    background: #1a1d21 !important;
-    border-color: #3a4048 !important;
-  }
   table#tableSheet1 {
     border-color: #4a515a !important;
     background: #1a1d21 !important;
@@ -833,7 +858,6 @@ col.col-4 { width: 22% !important; }
   .sub-day-name.weekend-day { color: #f59e0b; }
   .sub-holiday-name { color: #fbbf24; }
 
-  /* DARK MODDA ŞEFFAF MAVİ VE KEHRİBAR */
   table#tableSheet1 tr.row-today td,
   table#tableSheet2 tr.row-today td { 
     background-color: rgba(59, 130, 246, 0.15) !important; 
@@ -873,7 +897,7 @@ col.col-4 { width: 22% !important; }
     border-color: #33383f;
   }
   .modal-header h3 { color: #e7e9ec; }
-  .modal-desc { color: #94a3b8; }
+  
   .shift-row {
     background: #262b31;
     border-color: #3a4048;
@@ -895,6 +919,17 @@ col.col-4 { width: 22% !important; }
     border-color: #991b1b;
   }
   .btn-shift-del:hover { background: #5f1111; }
+
+  .btn-add-shift-row {
+    background: #21262d;
+    border-color: #484f58;
+    color: #c9d1d9;
+  }
+  .btn-add-shift-row:hover {
+    background: #30363d;
+    border-color: #8b949e;
+    color: #f0f6fc;
+  }
 
   .summary-card {
     background: #1f2328;
@@ -1239,15 +1274,14 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit" style="color: #dc2626;">Sa</span>
           </div>
         </div>
-        <div class="salary-row">
+        <div class="salary-row" style="margin-top: 12px;">
           <span class="salary-label" style="color: #dc2626;">Kesinti Dakikası</span>
           <div class="salary-input-wrapper red-bg">
             <input id="deductionMinutes" type="text" inputmode="tel" pattern="[0-9]*" value="0" aria-label="Kesinti Dakikası" oninput="save();calc()" onblur="ensureNumber(this)">
             <span class="salary-unit" style="color: #dc2626;">Dk</span>
           </div>
         </div>
-        <div class="salary-row">
-          <span class="salary-label" style="font-weight: 800; color: #dc2626;">Yapılan Toplam Kesinti</span>
+        <div class="salary-row" style="font-weight: 800; color: #dc2626;">Yapılan Toplam Kesinti</span>
           <div class="salary-input-wrapper red-bg">
             <input id="deduction" type="text" readonly aria-label="Yapılan toplam kesinti ücreti">
             <span class="salary-unit" style="color: #dc2626;">₺</span>
@@ -1275,23 +1309,17 @@ col.col-4 { width: 22% !important; }
       <button type="button" class="modal-close" onclick="closeShiftModal()">&times;</button>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">
-        Aynı günde birden fazla mesai aralığı ve farklı çarpanlar (%50 veya %100) varsa ekleyin:
-      </p>
       <div id="shiftRowsContainer"></div>
-      <button type="button" class="btn btn-secondary btn-sm" id="btnAddShiftRow" onclick="addShiftRow()">
+      <button type="button" class="btn-add-shift-row" id="btnAddShiftRow" onclick="addShiftRow()">
         + Yeni Mesai Aralığı Ekle
       </button>
-      <p class="modal-tip">
-        İpucu: Saatleri "08001000" yazarak doğrudan "08:00-10:00" formatına dönüştürebilirsiniz.
-      </p>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-danger" onclick="clearActiveDayFromModal()">Günü Temizle</button>
-      <div class="modal-footer-actions">
+      <div class="modal-footer-row">
+        <button type="button" class="btn btn-danger" onclick="clearActiveDayFromModal()">Günü Temizle</button>
         <button type="button" class="btn btn-secondary" onclick="closeShiftModal()">Vazgeç</button>
-        <button type="button" class="btn btn-success" onclick="saveShiftModal()">Kaydet ve Uygula</button>
       </div>
+      <button type="button" class="btn btn-success btn-apply" onclick="saveShiftModal()">Kaydet ve Uygula</button>
     </div>
   </div>
 </div>
@@ -1442,7 +1470,7 @@ function preloadPdfFonts() {
   return fontPreloadPromise;
 }
 
-/* PDF PAYLAŞMA */
+/* PDF PAYLAŞMA - KESİNLİKLE DOKUNULMAMIŞTIR */
 async function shareVectorPDF(btn) {
   updateDynamicTitle();
 
