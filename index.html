@@ -14,11 +14,11 @@ html, body {
   touch-action: manipulation;
 }
 body{font-family:'Carlito',Arial,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
-.wrap{max-width:1100px;margin:24px auto;padding:0 16px}
-.header-controls{background:#fff;border:1px solid #aaa;border-radius:6px;padding:12px 16px;margin-bottom:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px #0001}
-.header-date-selectors{display:flex;gap:16px;align-items:center}
+.wrap{max-width:1100px;margin:16px auto;padding:0 12px}
+.header-controls{background:#fff;border:1px solid #aaa;border-radius:6px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px #0001}
+.header-date-selectors{display:flex;gap:12px;align-items:center}
 .date-select-item{display:flex;align-items:center;gap:6px}
-.header-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.header-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
 
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
@@ -143,28 +143,66 @@ input[type=number] {
   outline: none;
 }
 
-.header-controls label{font-weight:700;font-size:14px;color:#333}
-.header-controls select{padding:6px 10px;border:1px solid #ccc;border-radius:4px;background:#fff;font-size:14px;cursor:pointer}
-.btn{background:#0066cc;color:#fff;border:0;padding:7px 12px;border-radius:4px;cursor:pointer;font-size:13px;font-weight:700;transition:background .15s ease, box-shadow .15s ease}
+.header-controls label{font-weight:700;font-size:13px;color:#333}
+.header-controls select{padding:6px 10px;border:1px solid #ccc;border-radius:4px;background:#fff;font-size:13px;cursor:pointer}
+.btn{background:#0066cc;color:#fff;border:0;padding:7px 11px;border-radius:4px;cursor:pointer;font-size:12.5px;font-weight:700;transition:background .15s ease, box-shadow .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:4px}
 .btn:hover{background:#0052a3}
 .btn-sm{padding:4px 8px;font-size:12px}
-.btn-secondary{background:#6c757d}
-.btn-secondary:hover{background:#5a6268}
+.btn-secondary{background:#475569}
+.btn-secondary:hover{background:#334155}
+.btn-primary{background:#2563eb}
+.btn-primary:hover{background:#1d4ed8}
 .btn-success{background:#059669}
 .btn-success:hover{background:#047857}
 .btn-danger{background:#dc2626}
 .btn-danger:hover{background:#b91c1c}
 
-.tabs{display:flex;gap:6px;margin-bottom:0}
-.tab{border:1px solid #aaa;background:#ddd;padding:9px 16px;border-radius:6px 6px 0 0;cursor:pointer;font-weight:700;transition:background .15s ease}
+.tabs{display:flex;gap:4px;margin-bottom:0}
+.tab{border:1px solid #aaa;background:#ddd;padding:8px 14px;border-radius:6px 6px 0 0;cursor:pointer;font-weight:700;font-size:12.5px;transition:background .15s ease}
 .tab.active{background:#fff;border-bottom-color:#fff}
 
-.sheet{background:#fff;border:1px solid #aaa;border-radius:0 6px 6px 6px;padding:16px;box-shadow:0 2px 8px #0001;overflow-x:hidden !important}
+.sheet{
+  background:#fff;
+  border:1px solid #aaa;
+  border-radius:0 6px 6px 6px;
+  padding:10px;
+  box-shadow:0 2px 8px #0001;
+  overflow-x:hidden !important;
+}
 
-.excel-page-border {
-  border: none !important;
-  padding: 0 !important;
-  background: transparent !important;
+/* ŞABLON BUTONLARI ÇUBUĞU */
+.quick-templates-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  padding-bottom: 3px;
+  -webkit-overflow-scrolling: touch;
+}
+.quick-templates-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #475569;
+  white-space: nowrap;
+  padding: 0 2px;
+}
+.btn-template {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  padding: 4px 9px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s ease;
+}
+.btn-template:hover, .btn-template:active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #1d4ed8;
 }
 
 table#tableSheet1 {
@@ -173,7 +211,6 @@ table#tableSheet1 {
   max-width: 100% !important;
   table-layout: fixed !important;
   border: 2px solid #000 !important;
-  margin: 0 !important;
 }
 
 table#tableSheet1 td, table#tableSheet1 th {
@@ -523,7 +560,7 @@ col.col-2 { width: 37.5% !important; }
 col.col-3 { width: 18% !important; }
 col.col-4 { width: 22% !important; }
 
-/* MODAL / AÇILIR PENCERE STİLLERİ (YENİLENMİŞ VE SİMETRİK) */
+/* MODAL STİLLERİ */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -539,7 +576,7 @@ col.col-4 { width: 22% !important; }
   background: #fff;
   border-radius: 10px;
   width: 96%;
-  max-width: 480px;
+  max-width: 520px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
   display: flex;
   flex-direction: column;
@@ -580,7 +617,6 @@ col.col-4 { width: 22% !important; }
   overflow-y: auto;
   overflow-x: hidden !important;
 }
-
 .shift-row {
   display: flex;
   align-items: center;
@@ -643,60 +679,24 @@ col.col-4 { width: 22% !important; }
   transition: background .15s ease;
 }
 .btn-shift-del:hover { background: #fecaca; }
-
-/* GENİŞ VE MODERN + YENİ MESAİ BUTONU */
-.btn-add-shift-row {
-  width: 100%;
-  background: #f8fafc;
-  border: 1.5px dashed #94a3b8;
-  color: #334155;
-  border-radius: 6px;
-  padding: 9px 12px;
-  font-size: 12.5px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all .15s ease;
-  text-align: center;
-  margin-top: 4px;
-}
-.btn-add-shift-row:hover {
-  background: #e2e8f0;
-  border-color: #64748b;
-  color: #0f172a;
-}
-
-/* SEÇENEK B FOOTER YAPISI */
 .modal-footer {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 14px 18px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
   border-top: 1px solid #e2e8f0;
   background: #f8fafc;
 }
-.modal-footer-row {
+.modal-footer-actions {
   display: flex;
   gap: 8px;
-  width: 100%;
-}
-.modal-footer-row .btn {
-  flex: 1 1 50%;
-  padding: 9px;
-  font-size: 13px;
-  text-align: center;
-}
-.btn-apply {
-  width: 100%;
-  padding: 11px;
-  font-size: 13.5px;
-  font-weight: 800;
 }
 
 @media (max-width: 700px) {
   body{font-size:12px}
-  .wrap{margin:6px auto;padding:0 4px}
+  .wrap{margin:6px auto;padding:0 6px}
 
-  .header-controls{padding:10px;gap:10px;flex-direction:column;align-items:stretch}
+  .header-controls{padding:8px 10px;gap:8px;flex-direction:column;align-items:stretch}
   
   .header-date-selectors{
     width: 100%;
@@ -709,22 +709,32 @@ col.col-4 { width: 22% !important; }
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 4px;
+    gap: 3px;
   }
   .date-select-item label{
-    font-size: 12px;
+    font-size: 11.5px;
   }
   .date-select-item select{
     width: 100%;
-    font-size: 15px;
-    padding: 8px 6px;
+    font-size: 14px;
+    padding: 7px 6px;
   }
 
-  .header-actions{margin-left:0;width:100%;flex-direction:column}
-  .header-actions .btn{width:100%;padding:12px;font-size:14px}
+  .header-actions{
+    margin-left:0;
+    width:100%;
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .header-actions .btn{
+    width:100%;
+    padding:8px 4px;
+    font-size:12px;
+  }
 
   .tabs{flex-wrap:nowrap}
-  .tab{flex:1 1 0;text-align:center;padding:10px 6px;font-size:12px}
+  .tab{flex:1 1 0;text-align:center;padding:8px 4px;font-size:11.5px}
 
   .sheet{padding:6px 4px}
 
@@ -805,10 +815,6 @@ col.col-4 { width: 22% !important; }
     height: 25px !important;
     font-size: 14px;
   }
-  .btn-apply {
-    padding: 12px;
-    font-size: 14px;
-  }
 }
 
 /* DARK MODE */
@@ -825,6 +831,17 @@ col.col-4 { width: 22% !important; }
 
   .tab{background:#262b31;border-color:#3a4048;color:#c7cbd0}
   .tab.active{background:#1f2328;color:#fff;border-bottom-color:#1f2328}
+
+  .quick-templates-label { color: #94a3b8; }
+  .btn-template {
+    background: #1e293b;
+    color: #93c5fd;
+    border-color: #3b82f6;
+  }
+  .btn-template:hover, .btn-template:active {
+    background: #2563eb;
+    color: #fff;
+  }
 
   table#tableSheet1 {
     border-color: #4a515a !important;
@@ -897,7 +914,7 @@ col.col-4 { width: 22% !important; }
     border-color: #33383f;
   }
   .modal-header h3 { color: #e7e9ec; }
-  
+  .modal-desc { color: #94a3b8; }
   .shift-row {
     background: #262b31;
     border-color: #3a4048;
@@ -919,17 +936,6 @@ col.col-4 { width: 22% !important; }
     border-color: #991b1b;
   }
   .btn-shift-del:hover { background: #5f1111; }
-
-  .btn-add-shift-row {
-    background: #21262d;
-    border-color: #484f58;
-    color: #c9d1d9;
-  }
-  .btn-add-shift-row:hover {
-    background: #30363d;
-    border-color: #8b949e;
-    color: #f0f6fc;
-  }
 
   .summary-card {
     background: #1f2328;
@@ -1020,7 +1026,7 @@ col.col-4 { width: 22% !important; }
     padding: 0 !important;
   }
 
-  .header-controls, .tabs, .btn, .save-toast, .btn-shift-modal, .modal-overlay, .sub-day-name, .sub-holiday-name, #sheet2, #sheet4 {
+  .header-controls, .tabs, .btn, .save-toast, .quick-templates-bar, .btn-shift-modal, .modal-overlay, .sub-day-name, .sub-holiday-name, #sheet2, #sheet4 {
     display: none !important;
   }
 
@@ -1041,15 +1047,6 @@ col.col-4 { width: 22% !important; }
     padding: 0 !important;
     border: none !important;
     box-shadow: none !important;
-  }
-
-  .excel-page-border {
-    border: none !important;
-    padding: 6px 6px 10px 6px !important;
-    box-sizing: border-box !important;
-    min-height: 0 !important;
-    display: block !important;
-    background: #fff !important;
   }
 
   table#tableSheet1 {
@@ -1110,6 +1107,12 @@ col.col-4 { width: 22% !important; }
   </div>
 
   <div class="header-actions">
+    <button class="btn btn-secondary" onclick="openRestoreModal()" title="Kopyalanan metni geri yükle">
+      📥 Veri Yükle
+    </button>
+    <button class="btn btn-primary" onclick="copyWhatsAppReport(this)" title="WhatsApp / Not Defteri raporu kopyala">
+      📋 Kopyala
+    </button>
     <button class="btn btn-success" id="sharePdfBtn" onclick="shareVectorPDF(this)">
       PDF Paylaş
     </button>
@@ -1124,50 +1127,54 @@ col.col-4 { width: 22% !important; }
 
 <div id="sheet1" class="sheet">
 
-  <div class="excel-page-border">
-
-    <table id="tableSheet1">
-
-      <colgroup>
-        <col class="col-1">
-        <col class="col-2">
-        <col class="col-3">
-        <col class="col-4">
-      </colgroup>
-
-      <thead>
-
-        <tr>
-          <th colspan="4" class="title" id="title1">
-            <span>ŞENGÜN MAKİNA</span> <span id="titleSub">XXXXXX AYI FAZLA MESAİ ÇİZELGESİ</span>
-          </th>
-        </tr>
-
-        <tr>
-          <td class="label">ADI-SOYADI</td>
-          <td colspan="3">
-            <input 
-              id="name" 
-              aria-label="Adı Soyadı" 
-              oninput="syncName();save()"
-            >
-          </td>
-        </tr>
-
-        <tr>
-          <th>TARİH</th>
-          <th>MESAİ SAATLERİ</th>
-          <th>MOLA(DK)</th>
-          <th>YOL-YEMEK</th>
-        </tr>
-
-      </thead>
-
-      <tbody id="tbodySheet1"></tbody>
-
-    </table>
-
+  <!-- TABLO ÜSTÜ HIZLI ŞABLON ÇUBUĞU -->
+  <div class="quick-templates-bar">
+    <span class="quick-templates-label">⚡</span>
+    <button type="button" class="btn-template" onclick="applyTemplateToActiveDay('17:30-20:30')">17:30-20:30</button>
+    <button type="button" class="btn-template" onclick="applyTemplateToActiveDay('17:30-20:00')">17:30-20:00</button>
+    <button type="button" class="btn-template" onclick="applyTemplateToActiveDay('08:00-14:00')">08:00-14:00</button>
   </div>
+
+  <table id="tableSheet1">
+
+    <colgroup>
+      <col class="col-1">
+      <col class="col-2">
+      <col class="col-3">
+      <col class="col-4">
+    </colgroup>
+
+    <thead>
+
+      <tr>
+        <th colspan="4" class="title" id="title1">
+          <span>ŞENGÜN MAKİNA</span> <span id="titleSub">XXXXXX AYI FAZLA MESAİ ÇİZELGESİ</span>
+        </th>
+      </tr>
+
+      <tr>
+        <td class="label">ADI-SOYADI</td>
+        <td colspan="3">
+          <input 
+            id="name" 
+            aria-label="Adı Soyadı" 
+            oninput="syncName();save()"
+          >
+        </td>
+      </tr>
+
+      <tr>
+        <th>TARİH</th>
+        <th>MESAİ SAATLERİ</th>
+        <th>MOLA(DK)</th>
+        <th>YOL-YEMEK</th>
+      </tr>
+
+    </thead>
+
+    <tbody id="tbodySheet1"></tbody>
+
+  </table>
 
 </div>
 
@@ -1274,14 +1281,14 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit" style="color: #dc2626;">Sa</span>
           </div>
         </div>
-        <div class="salary-row" style="margin-top: 12px;">
-          <span class="salary-label" style="color: #dc2626;">Kesinti Dakikası</span>
+        <div class="salary-row" style="color: #dc2626;">Kesinti Dakikası</span>
           <div class="salary-input-wrapper red-bg">
             <input id="deductionMinutes" type="text" inputmode="tel" pattern="[0-9]*" value="0" aria-label="Kesinti Dakikası" oninput="save();calc()" onblur="ensureNumber(this)">
             <span class="salary-unit" style="color: #dc2626;">Dk</span>
           </div>
         </div>
-        <div class="salary-row" style="font-weight: 800; color: #dc2626;">Yapılan Toplam Kesinti</span>
+        <div class="salary-row">
+          <span class="salary-label" style="font-weight: 800; color: #dc2626;">Yapılan Toplam Kesinti</span>
           <div class="salary-input-wrapper red-bg">
             <input id="deduction" type="text" readonly aria-label="Yapılan toplam kesinti ücreti">
             <span class="salary-unit" style="color: #dc2626;">₺</span>
@@ -1309,17 +1316,45 @@ col.col-4 { width: 22% !important; }
       <button type="button" class="modal-close" onclick="closeShiftModal()">&times;</button>
     </div>
     <div class="modal-body">
+      <!-- MODAL İÇİ ŞABLON ÇUBUĞU -->
+      <div class="quick-templates-bar" style="margin-bottom:12px;">
+        <span class="quick-templates-label">⚡</span>
+        <button type="button" class="btn-template" onclick="applyTemplateToModalRow('17:30-20:30')">17:30-20:30</button>
+        <button type="button" class="btn-template" onclick="applyTemplateToModalRow('17:30-20:00')">17:30-20:00</button>
+        <button type="button" class="btn-template" onclick="applyTemplateToModalRow('08:00-14:00')">08:00-14:00</button>
+      </div>
+
       <div id="shiftRowsContainer"></div>
-      <button type="button" class="btn-add-shift-row" id="btnAddShiftRow" onclick="addShiftRow()">
+      <button type="button" class="btn btn-secondary btn-sm" id="btnAddShiftRow" onclick="addShiftRow()">
         + Yeni Mesai Aralığı Ekle
       </button>
     </div>
     <div class="modal-footer">
-      <div class="modal-footer-row">
-        <button type="button" class="btn btn-danger" onclick="clearActiveDayFromModal()">Günü Temizle</button>
+      <button type="button" class="btn btn-danger" onclick="clearActiveDayFromModal()">Günü Temizle</button>
+      <div class="modal-footer-actions">
         <button type="button" class="btn btn-secondary" onclick="closeShiftModal()">Vazgeç</button>
+        <button type="button" class="btn btn-success" onclick="saveShiftModal()">Kaydet</button>
       </div>
-      <button type="button" class="btn btn-success btn-apply" onclick="saveShiftModal()">Kaydet ve Uygula</button>
+    </div>
+  </div>
+</div>
+
+<!-- VERİ GERİ YÜKLEME AÇILIR PENCERESİ (MODAL) -->
+<div id="restoreModal" class="modal-overlay hidden" onclick="handleRestoreModalBackdrop(event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Mesai Verisi Geri Yükle</h3>
+      <button type="button" class="modal-close" onclick="closeRestoreModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin:0 0 10px 0;font-size:12px;color:#64748b;">
+        Kopyaladığınız çizelge metnini buraya yapıştırıp "Verileri Yükle"ye basarak personeli ve mesai saatlerini geri yükleyebilirsiniz:
+      </p>
+      <textarea id="restoreTextInput" style="width:100%;height:190px;font-family:monospace;font-size:12px;padding:8px;border:1px solid #cbd5e1;border-radius:6px;resize:vertical;outline:none;" placeholder="Kopyalanan metni buraya yapıştırın..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" onclick="closeRestoreModal()">Vazgeç</button>
+      <button type="button" class="btn btn-success" onclick="applyRestoredText()">Verileri Yükle</button>
     </div>
   </div>
 </div>
@@ -1336,7 +1371,7 @@ const weekDaysFullTR = [
   'PAZAR', 'PAZARTESİ', 'SALI', 'ÇARŞAMBA', 'PERŞEMBE', 'CUMA', 'CUMARTESİ'
 ];
 
-/* TÜRKİYE RESMİ TATİL VE DİNİ BAYRAM VERİLERİ (KOMPAKT İSİMLENDİRME) */
+/* TÜRKİYE RESMİ TATİL VE DİNİ BAYRAM VERİLERİ */
 const religiousHolidays = {
   2026: {
     '03-19': 'Ramazan B. (Arife)',
@@ -1395,6 +1430,8 @@ function getOfficialHoliday(year, monthIdx, dayNum) {
 }
 
 let dayShiftsData = {};
+let lastFocusedDay = 1;
+let activeModalRowIndex = 0;
 
 function is2XType(t) {
   if (!t) return false;
@@ -1470,7 +1507,211 @@ function preloadPdfFonts() {
   return fontPreloadPromise;
 }
 
-/* PDF PAYLAŞMA - KESİNLİKLE DOKUNULMAMIŞTIR */
+/* ŞABLON UYGULAMA İŞLEMLERİ */
+function applyTemplateToActiveDay(timeVal) {
+  if (!lastFocusedDay || lastFocusedDay < 1 || lastFocusedDay > currentDaysCount) {
+    lastFocusedDay = 1;
+  }
+  const timeInput = document.getElementById('time' + lastFocusedDay);
+  if (timeInput) {
+    timeInput.value = timeVal;
+    delete dayShiftsData[lastFocusedDay];
+    updateMultiShiftUI(lastFocusedDay);
+    save();
+    calc();
+    showSavedToast(`${lastFocusedDay}. Gün: ${timeVal}`);
+  }
+}
+
+function applyTemplateToModalRow(timeVal) {
+  const container = document.getElementById('shiftRowsContainer');
+  const rows = container.querySelectorAll('.shift-row');
+  if (rows.length === 0) return;
+
+  if (activeModalRowIndex >= rows.length || activeModalRowIndex < 0) {
+    activeModalRowIndex = 0;
+  }
+  const targetInput = rows[activeModalRowIndex].querySelector('.shift-time-input');
+  if (targetInput) {
+    targetInput.value = timeVal;
+    targetInput.focus();
+  }
+}
+
+/* YENİ SADELEŞTİRİLMİŞ WHATSAPP / NOT DEFTERİ RAPORU */
+async function copyWhatsAppReport(btn) {
+  const name = (document.getElementById('name')?.value || '').trim() || 'BELİRTİLMEDİ';
+  const year = document.getElementById('selectYear')?.value;
+  const monthIdx = parseInt(document.getElementById('selectMonth')?.value, 10);
+  const monthName = monthNames[monthIdx];
+
+  let text = `📋 ŞENGÜN MAKİNA ${monthName} ${year} FAZLA MESAİ ÇİZELGESİ\n`;
+  text += `👤 PERSONEL: ${name}\n\n`;
+
+  text += `\`\`\`\n`;
+  text += `TARİH       MESAİ SAATLERİ   MOLA  YEMEK\n`;
+  text += `----------------------------------------\n`;
+
+  const daysInMonth = getDaysInMonth(parseInt(year), monthIdx);
+  let hasData = false;
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const dayStr = String(i).padStart(2, '0');
+    const monthStr = String(monthIdx + 1).padStart(2, '0');
+    const dFormatted = `${dayStr}.${monthStr}.${year}`;
+
+    const timeVal = (document.getElementById('time' + i)?.value || '').trim();
+    const breakVal = (document.getElementById('break' + i)?.value || '').trim();
+    const mealVal = (document.getElementById('meal' + i)?.value || '').trim();
+
+    const sList = dayShiftsData[i];
+
+    if (sList && sList.length > 1) {
+      hasData = true;
+      const firstShift = sList[0].time.padEnd(16, ' ');
+      const brStr = (breakVal || '0').padEnd(5, ' ');
+      const mlStr = (mealVal || '-');
+      text += `${dFormatted}  ${firstShift} ${brStr} ${mlStr}\n`;
+
+      for (let s = 1; s < sList.length; s++) {
+        const subShift = sList[s].time.padEnd(16, ' ');
+        text += `            ${subShift}\n`;
+      }
+    } else if (timeVal) {
+      hasData = true;
+      const tStr = timeVal.padEnd(16, ' ');
+      const brStr = (breakVal || '0').padEnd(5, ' ');
+      const mlStr = (mealVal || '-');
+      text += `${dFormatted}  ${tStr} ${brStr} ${mlStr}\n`;
+    }
+  }
+
+  if (!hasData) {
+    text += `(Bu ay için henüz mesai kaydı girilmedi)\n`;
+  }
+
+  text += `\`\`\`\n`;
+
+  try {
+    await navigator.clipboard.writeText(text);
+    showSavedToast('Rapor panoya kopyalandı ✓');
+  } catch(e) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showSavedToast('Rapor panoya kopyalandı ✓');
+  }
+}
+
+/* VERİ GERİ YÜKLEME */
+function openRestoreModal() {
+  document.getElementById('restoreTextInput').value = '';
+  document.getElementById('restoreModal').classList.remove('hidden');
+}
+function closeRestoreModal() {
+  document.getElementById('restoreModal').classList.add('hidden');
+}
+function handleRestoreModalBackdrop(e) {
+  if (e.target.id === 'restoreModal') closeRestoreModal();
+}
+
+function applyRestoredText() {
+  const raw = document.getElementById('restoreTextInput')?.value || '';
+  if (!raw.trim()) {
+    alert('Lütfen yapıştırılacak metni girin.');
+    return;
+  }
+
+  const nameMatch = raw.match(/PERSONEL:\s*(.*)/i);
+  if (nameMatch && nameMatch[1]) {
+    const nameElem = document.getElementById('name');
+    if (nameElem) nameElem.value = nameMatch[1].trim();
+  }
+
+  const salaryMatch = raw.match(/MAAŞ:\s*([\d,.]+)/i);
+  if (salaryMatch && salaryMatch[1]) {
+    const salElem = document.getElementById('salary');
+    if (salElem) salElem.value = salaryMatch[1].trim();
+  }
+
+  const year = parseInt(document.getElementById('selectYear').value);
+  const month = parseInt(document.getElementById('selectMonth').value);
+
+  const lines = raw.split('\n');
+  let currentDay = null;
+
+  for (let line of lines) {
+    line = line.trim();
+    if (!line || line.startsWith('---') || line.startsWith('```') || line.startsWith('TARİH')) continue;
+
+    const dateMatch = line.match(/^(\d{2})\.(\d{2})\.(\d{4})\s+(.+)$/);
+    if (dateMatch) {
+      const dayNum = parseInt(dateMatch[1], 10);
+      const rest = dateMatch[4].trim();
+      const tokens = rest.split(/\s+/);
+      const shiftTime = tokens[0] || '';
+      const brk = (tokens[1] && tokens[1] !== '-' && tokens[1] !== '0') ? tokens[1] : (tokens[1] === '0' ? '0' : '');
+      const meal = (tokens[2] && tokens[2] !== '-') ? tokens[2] : '';
+
+      currentDay = dayNum;
+      const holidayName = getOfficialHoliday(year, month, dayNum);
+      const defaultType = holidayName ? '2X (%100)' : '1.5X (%50)';
+
+      const timeElem = document.getElementById('time' + dayNum);
+      const breakElem = document.getElementById('break' + dayNum);
+      const mealElem = document.getElementById('meal' + dayNum);
+      const typeElem = document.getElementById('type' + dayNum);
+
+      if (timeElem) timeElem.value = shiftTime;
+      if (breakElem) breakElem.value = (brk === '0' ? '' : brk);
+      if (mealElem) mealElem.value = meal;
+      if (typeElem) typeElem.value = defaultType;
+
+      delete dayShiftsData[dayNum];
+      if (shiftTime) {
+        dayShiftsData[dayNum] = [{
+          time: shiftTime,
+          type: defaultType
+        }];
+      }
+      continue;
+    }
+
+    if (currentDay && line.match(/^(\d{1,2}[:.]\d{2}-\d{1,2}[:.]\d{2})/)) {
+      const tokens = line.split(/\s+/);
+      const shiftTime = tokens[0];
+      const holidayName = getOfficialHoliday(year, month, currentDay);
+      const defaultType = holidayName ? '2X (%100)' : '1.5X (%50)';
+
+      if (!dayShiftsData[currentDay]) {
+        dayShiftsData[currentDay] = [];
+      }
+      dayShiftsData[currentDay].push({
+        time: shiftTime,
+        type: defaultType
+      });
+
+      const timeElem = document.getElementById('time' + currentDay);
+      if (timeElem) {
+        timeElem.value = dayShiftsData[currentDay].map(s => s.time).join(' / ');
+      }
+    }
+  }
+
+  for (let i = 1; i <= currentDaysCount; i++) {
+    updateMultiShiftUI(i);
+  }
+
+  closeRestoreModal();
+  save();
+  calc();
+  showSavedToast('Veriler başarıyla yüklendi ✓');
+}
+
+/* PDF PAYLAŞMA */
 async function shareVectorPDF(btn) {
   updateDynamicTitle();
 
@@ -1728,6 +1969,11 @@ function buildTables() {
   const todayD = today.getDate();
 
   currentDaysCount = getDaysInMonth(year, month);
+  if (todayY === year && todayM === month) {
+    lastFocusedDay = todayD;
+  } else {
+    lastFocusedDay = 1;
+  }
 
   const subElem = document.getElementById('titleSub');
   if (subElem) subElem.textContent = `${monthNames[month].toUpperCase()} AYI FAZLA MESAİ ÇİZELGESİ`;
@@ -1781,6 +2027,7 @@ function buildTables() {
             inputmode="tel"
             pattern="[0-9]*"
             aria-label="${dateFormatted} mesai saatleri" 
+            onfocus="lastFocusedDay=${i}"
             oninput="formatTimeLive(this);onDirectTimeChange(${i});save();calc()" 
             onblur="autoZero(${i})">
           <div id="multiDisplay${i}" class="multi-shift-box hidden" onclick="openShiftModal(${i})" title="Çoklu mesaiyi düzenlemek için tıklayın"></div>
@@ -1801,6 +2048,7 @@ function buildTables() {
           pattern="[0-9]*"
           maxlength="4" 
           aria-label="${dateFormatted} mola dakika" 
+          onfocus="lastFocusedDay=${i}"
           oninput="this.value=this.value.replace(/\\D/g,'');save();calc()" 
           onblur="autoZero(${i})">
       </td>
@@ -1808,6 +2056,7 @@ function buildTables() {
         <input 
           id="meal${i}" 
           aria-label="${dateFormatted} yol-yemek" 
+          onfocus="lastFocusedDay=${i}"
           oninput="save();calc()" 
           onblur="autoZero(${i})">
       </td>
@@ -1889,6 +2138,7 @@ function clearDayRow(dayNum) {
   const timeElem = document.getElementById('time' + dayNum);
   const breakElem = document.getElementById('break' + dayNum);
   const mealElem = document.getElementById('meal' + dayNum);
+  const typeElem = document.getElementById('type' + dayNum);
 
   if (timeElem) timeElem.value = '';
   if (breakElem) breakElem.value = '';
@@ -1896,6 +2146,14 @@ function clearDayRow(dayNum) {
 
   delete dayShiftsData[dayNum];
   updateMultiShiftUI(dayNum);
+
+  const year = parseInt(document.getElementById('selectYear').value);
+  const month = parseInt(document.getElementById('selectMonth').value);
+  const holidayName = getOfficialHoliday(year, month, dayNum);
+  if (typeElem) {
+    typeElem.disabled = false;
+    typeElem.value = holidayName ? '2X (%100)' : '1.5X (%50)';
+  }
 
   save();
   calc();
@@ -1912,6 +2170,7 @@ let activeModalDay = null;
 
 function openShiftModal(dayNum) {
   activeModalDay = dayNum;
+  activeModalRowIndex = 0;
   const year = parseInt(document.getElementById('selectYear').value);
   const month = parseInt(document.getElementById('selectMonth').value);
   const dayStr = String(dayNum).padStart(2, '0');
@@ -1981,6 +2240,7 @@ function addShiftRow(timeVal = '', typeVal = '1.5X (%50)') {
       pattern="[0-9]*"
       placeholder="örn: 17:30-20:30" 
       value="${timeVal}" 
+      onfocus="trackModalRowFocus(this)"
       oninput="formatTimeLive(this)">
     <select class="shift-type-select">
       <option value="1.5X (%50)" ${!is2X ? 'selected' : ''}>1.5X (%50)</option>
@@ -1989,6 +2249,12 @@ function addShiftRow(timeVal = '', typeVal = '1.5X (%50)') {
     <button type="button" class="btn-shift-del" title="Sil" onclick="this.parentElement.remove();relabelShiftRows()">&times;</button>
   `;
   container.appendChild(row);
+}
+
+function trackModalRowFocus(inputElem) {
+  const rows = Array.from(document.querySelectorAll('#shiftRowsContainer .shift-row'));
+  const parent = inputElem.closest('.shift-row');
+  activeModalRowIndex = rows.indexOf(parent);
 }
 
 function relabelShiftRows() {
@@ -2088,12 +2354,31 @@ function onDirectTimeChange(dayNum) {
     delete dayShiftsData[dayNum];
     updateMultiShiftUI(dayNum);
   }
+
+  if (!val) {
+    const year = parseInt(document.getElementById('selectYear').value);
+    const month = parseInt(document.getElementById('selectMonth').value);
+    const holidayName = getOfficialHoliday(year, month, dayNum);
+    const typeElem = document.getElementById('type' + dayNum);
+    if (typeElem) {
+      typeElem.disabled = false;
+      typeElem.value = holidayName ? '2X (%100)' : '1.5X (%50)';
+    }
+  }
 }
 
 function onTypeChange(dayNum) {
-  if (dayShiftsData[dayNum] && dayShiftsData[dayNum].length === 1) {
-    dayShiftsData[dayNum][0].type = document.getElementById('type' + dayNum).value;
+  const typeSelect = document.getElementById('type' + dayNum);
+  if (!typeSelect) return;
+  const val = typeSelect.value;
+
+  if (dayShiftsData[dayNum] && dayShiftsData[dayNum].length > 0) {
+    dayShiftsData[dayNum].forEach(s => {
+      s.type = val;
+    });
   }
+  save();
+  calc();
 }
 
 function getShiftMinutes(timeStr) {
@@ -2239,11 +2524,13 @@ function calc() {
         if (typeElem) {
           typeElem.disabled = false;
           typeElem.innerHTML = '<option value="1.5X (%50)">1.5X (%50)</option><option value="2X (%100)" selected>2X (%100)</option>';
+          typeElem.value = '2X (%100)';
         }
       } else {
         if (typeElem) {
           typeElem.disabled = false;
           typeElem.innerHTML = '<option value="1.5X (%50)" selected>1.5X (%50)</option><option value="2X (%100)">2X (%100)</option>';
+          typeElem.value = '1.5X (%50)';
         }
       }
 
@@ -2417,10 +2704,11 @@ function calc() {
 }
 
 let toastTimer = null;
-function showSavedToast() {
+function showSavedToast(customMsg) {
   const toast = document.getElementById('saveToast');
   if (!toast) return;
 
+  toast.textContent = customMsg || 'Kaydedildi ✓';
   toast.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 1200);
