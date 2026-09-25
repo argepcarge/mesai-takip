@@ -16,6 +16,8 @@ html, body {
 body{font-family:'Carlito',Arial,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
 .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
 .header-controls{background:#fff;border:1px solid #aaa;border-radius:6px;padding:12px 16px;margin-bottom:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px #0001}
+.header-date-selectors{display:flex;gap:16px;align-items:center}
+.date-select-item{display:flex;align-items:center;gap:6px}
 .header-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
 
 input[type=number]::-webkit-inner-spin-button, 
@@ -276,13 +278,13 @@ table#tableSheet1 tr.row-multi-active td {
   opacity: 0.95;
 }
 
-/* BUGÜN VURGUSU: GÖZÜ YORMAYAN ŞEFFAF TATLI MAVİ */
+/* BUGÜN VURGUSU */
 table#tableSheet1 tr.row-today td,
 table#tableSheet2 tr.row-today td {
   background-color: rgba(59, 130, 246, 0.08) !important;
 }
 
-/* RESMİ TATİL VURGUSU: ŞEFFAF TATLI KEHRİBAR / SARI */
+/* RESMİ TATİL VURGUSU */
 table#tableSheet1 tr.row-holiday td,
 table#tableSheet2 tr.row-holiday td {
   background-color: rgba(245, 158, 11, 0.12) !important;
@@ -363,19 +365,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
 #tableSheet1 input.invalid {
   outline: 2px solid #d9534f !important;
   background: #fdecea !important;
-}
-
-.empty-state-note {
-  display: none;
-  background: #eef6ff;
-  border: 1px dashed #99c2ea;
-  color: #0b4b8f;
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-size: 12.5px;
-  font-weight: 700;
-  margin: 0 0 12px 0;
-  text-align: center;
 }
 
 /* HESAP SEKRESİ (SHEET 2) STİLLERİ */
@@ -503,7 +492,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
 
 .center{text-align:center !important} 
 .right{text-align:right !important}
-.note{font-size:12px;color:#4a4a4a;margin:10px 0}
 .hidden{display:none !important}
 .hidden-row { display: none !important; }
 
@@ -682,8 +670,30 @@ col.col-4 { width: 22% !important; }
   .wrap{margin:10px auto;padding:0 8px}
 
   .header-controls{padding:10px;gap:10px;flex-direction:column;align-items:stretch}
-  .header-controls > div:not(.header-actions){width:100%}
-  .header-controls select{width:100%;font-size:16px;padding:10px}
+  
+  /* YIL VE AY MOBİLDE %50 - %50 YAN YANA */
+  .header-date-selectors{
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+  .date-select-item{
+    flex: 1 1 50%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+  .date-select-item label{
+    font-size: 12px;
+  }
+  .date-select-item select{
+    width: 100%;
+    font-size: 15px;
+    padding: 8px 6px;
+  }
+
   .header-actions{margin-left:0;width:100%;flex-direction:column}
   .header-actions .btn{width:100%;padding:12px;font-size:14px}
 
@@ -739,8 +749,6 @@ col.col-4 { width: 22% !important; }
     align-items: flex-end !important;
     text-align: right !important;
   }
-
-  .note{font-size:11px}
 
   .modal-content {
     width: 98%;
@@ -906,8 +914,6 @@ col.col-4 { width: 22% !important; }
     background: #2563eb !important;
   }
 
-  .empty-state-note{background:#152437;border-color:#2f5b8f;color:#8ab4f8}
-
   #tableSheet2 { background:#1f2328; }
   #tableSheet2 td, #tableSheet2 th {
     border-color:#3a4048;
@@ -929,8 +935,6 @@ col.col-4 { width: 22% !important; }
   .salary-input-wrapper.green-bg input { color: #4ade80; }
   .salary-input-wrapper.red-bg { background: #450a0a; border-color: #991b1b; }
   .salary-input-wrapper.red-bg input { color: #f87171; }
-
-  .note{color:#a9adb3}
 
   .btn-secondary{background:#3a4048}
   .btn-secondary:hover{background:#454c55}
@@ -981,7 +985,7 @@ col.col-4 { width: 22% !important; }
     padding: 0 !important;
   }
 
-  .header-controls, .tabs, .btn, .note, .save-toast, .empty-state-note, .btn-shift-modal, .modal-overlay, .sub-day-name, .sub-holiday-name, #sheet2, #sheet4 {
+  .header-controls, .tabs, .btn, .save-toast, .btn-shift-modal, .modal-overlay, .sub-day-name, .sub-holiday-name, #sheet2, #sheet4 {
     display: none !important;
   }
 
@@ -1045,34 +1049,32 @@ col.col-4 { width: 22% !important; }
 <div class="wrap">
 
 <div class="header-controls">
-  <div>
-    <label for="selectYear">Yıl: </label>
-    <select id="selectYear" onchange="updateMonthDays()"></select>
-  </div>
+  <div class="header-date-selectors">
+    <div class="date-select-item">
+      <label for="selectYear">Yıl: </label>
+      <select id="selectYear" onchange="updateMonthDays()"></select>
+    </div>
 
-  <div>
-    <label for="selectMonth">Ay: </label>
-    <select id="selectMonth" onchange="updateMonthDays()">
-      <option value="0">OCAK</option>
-      <option value="1">ŞUBAT</option>
-      <option value="2">MART</option>
-      <option value="3">NİSAN</option>
-      <option value="4">MAYIS</option>
-      <option value="5">HAZİRAN</option>
-      <option value="6">TEMMUZ</option>
-      <option value="7">AĞUSTOS</option>
-      <option value="8">EYLÜL</option>
-      <option value="9">EKİM</option>
-      <option value="10">KASIM</option>
-      <option value="11">ARALIK</option>
-    </select>
+    <div class="date-select-item">
+      <label for="selectMonth">Ay: </label>
+      <select id="selectMonth" onchange="updateMonthDays()">
+        <option value="0">OCAK</option>
+        <option value="1">ŞUBAT</option>
+        <option value="2">MART</option>
+        <option value="3">NİSAN</option>
+        <option value="4">MAYIS</option>
+        <option value="5">HAZİRAN</option>
+        <option value="6">TEMMUZ</option>
+        <option value="7">AĞUSTOS</option>
+        <option value="8">EYLÜL</option>
+        <option value="9">EKİM</option>
+        <option value="10">KASIM</option>
+        <option value="11">ARALIK</option>
+      </select>
+    </div>
   </div>
 
   <div class="header-actions">
-    <button class="btn btn-danger" onclick="clearCurrentMonth()">
-      Tabloyu Temizle
-    </button>
-
     <button class="btn btn-success" id="sharePdfBtn" onclick="shareVectorPDF(this)">
       PDF Paylaş
     </button>
@@ -1086,10 +1088,6 @@ col.col-4 { width: 22% !important; }
 </div>
 
 <div id="sheet1" class="sheet">
-
-  <p class="empty-state-note" id="emptyStateNote">
-    Bu ay için henüz mesai kaydı girilmemiş. Aşağıdaki tabloya başlangıç-bitiş saatlerini girerek başlayabilirsiniz.
-  </p>
 
   <div class="excel-page-border">
 
@@ -1135,11 +1133,6 @@ col.col-4 { width: 22% !important; }
     </table>
 
   </div>
-
-  <p class="note">
-    Mesai saatini doğrudan "2120" yazarak canlı olarak "21:20" yapabilir veya 
-    "10001200" yazarak "10:00-12:00" formatına dönüştürebilirsiniz. Çoklu mesai için saat kutusunun sağındaki <b>+</b> butonunu kullanabilirsiniz.
-  </p>
 
 </div>
 
@@ -1242,14 +1235,14 @@ col.col-4 { width: 22% !important; }
         <div class="salary-row" style="margin-top: 12px;">
           <span class="salary-label" style="color: #dc2626;">Kesinti Saati</span>
           <div class="salary-input-wrapper red-bg">
-            <input id="deductionHours" type="text" value="0" aria-label="Kesinti Saati" oninput="save();calc()" onblur="ensureNumber(this)">
+            <input id="deductionHours" type="text" inputmode="tel" pattern="[0-9]*" value="0" aria-label="Kesinti Saati" oninput="save();calc()" onblur="ensureNumber(this)">
             <span class="salary-unit" style="color: #dc2626;">Sa</span>
           </div>
         </div>
         <div class="salary-row">
           <span class="salary-label" style="color: #dc2626;">Kesinti Dakikası</span>
           <div class="salary-input-wrapper red-bg">
-            <input id="deductionMinutes" type="text" value="0" aria-label="Kesinti Dakikası" oninput="save();calc()" onblur="ensureNumber(this)">
+            <input id="deductionMinutes" type="text" inputmode="tel" pattern="[0-9]*" value="0" aria-label="Kesinti Dakikası" oninput="save();calc()" onblur="ensureNumber(this)">
             <span class="salary-unit" style="color: #dc2626;">Dk</span>
           </div>
         </div>
@@ -1357,7 +1350,6 @@ function getOfficialHoliday(year, monthIdx, dayNum) {
   const dd = String(dayNum).padStart(2, '0');
   const mmdd = `${mm}-${dd}`;
 
-  // Sabit Resmi Tatiller (Kompakt)
   if (mmdd === '01-01') return 'Yılbaşı';
   if (mmdd === '04-23') return '23 Nisan';
   if (mmdd === '05-01') return '1 Mayıs';
@@ -1367,7 +1359,6 @@ function getOfficialHoliday(year, monthIdx, dayNum) {
   if (mmdd === '10-28') return '29 Ekim (Arife)';
   if (mmdd === '10-29') return '29 Ekim';
 
-  // Dini Bayramlar
   if (religiousHolidays[year] && religiousHolidays[year][mmdd]) {
     return religiousHolidays[year][mmdd];
   }
@@ -1449,40 +1440,6 @@ function preloadPdfFonts() {
   });
 
   return fontPreloadPromise;
-}
-
-function clearCurrentMonth() {
-  const monthIdx = parseInt(document.getElementById('selectMonth').value, 10);
-  const monthName = monthNames[monthIdx];
-
-  const ok = confirm(`${monthName} ayına ait tüm mesai saatleri ve molalar temizlensin mi?`);
-  if (!ok) return;
-
-  dayShiftsData = {};
-
-  for (let i = 1; i <= currentDaysCount; i++) {
-    const timeElem = document.getElementById('time' + i);
-    const breakElem = document.getElementById('break' + i);
-    const mealElem = document.getElementById('meal' + i);
-
-    if (timeElem) timeElem.value = '';
-    if (breakElem) breakElem.value = '';
-    if (mealElem) mealElem.value = '';
-    updateMultiShiftUI(i);
-  }
-
-  for (let extraId = 34; extraId <= 39; extraId++) {
-    const bElem = document.getElementById('b' + extraId);
-    if (bElem) bElem.value = '';
-  }
-
-  const dedH = document.getElementById('deductionHours');
-  const dedM = document.getElementById('deductionMinutes');
-  if (dedH) dedH.value = '0';
-  if (dedM) dedM.value = '0';
-
-  save();
-  calc();
 }
 
 /* PDF PAYLAŞMA */
@@ -1793,6 +1750,8 @@ function buildTables() {
           <input 
             id="time${i}" 
             type="text"
+            inputmode="tel"
+            pattern="[0-9]*"
             aria-label="${dateFormatted} mesai saatleri" 
             oninput="formatTimeLive(this);onDirectTimeChange(${i});save();calc()" 
             onblur="autoZero(${i})">
@@ -1810,7 +1769,8 @@ function buildTables() {
           id="break${i}" 
           class="center" 
           type="text" 
-          inputmode="numeric" 
+          inputmode="tel" 
+          pattern="[0-9]*"
           maxlength="4" 
           aria-label="${dateFormatted} mola dakika" 
           oninput="this.value=this.value.replace(/\\D/g,'');save();calc()" 
@@ -1880,7 +1840,8 @@ function buildTables() {
           <input 
             id="b${extraId}" 
             type="text" 
-            inputmode="numeric" 
+            inputmode="tel" 
+            pattern="[0-9]*"
             placeholder="0"
             style="width:50px; text-align:center; border:1px solid #cbd5e1; border-radius:4px; background:transparent; color:inherit; padding:3px; font-weight:bold; font-size:12.5px;" 
             oninput="this.value=this.value.replace(/\\D/g,'');save();calc()">
@@ -1988,6 +1949,8 @@ function addShiftRow(timeVal = '', typeVal = '1.5X (%50)') {
     <input 
       type="text" 
       class="shift-time-input" 
+      inputmode="tel"
+      pattern="[0-9]*"
       placeholder="örn: 17:30-20:30" 
       value="${timeVal}" 
       oninput="formatTimeLive(this)">
@@ -2178,21 +2141,6 @@ function money(x) {
   return isFinite(x)
     ? x.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     : '0,00';
-}
-
-function updateEmptyState() {
-  const note = document.getElementById('emptyStateNote');
-  if (!note) return;
-
-  let hasAny = false;
-  for (let i = 1; i <= currentDaysCount; i++) {
-    const t = document.getElementById('time' + i);
-    if (t && t.value && t.value.trim().length > 0) {
-      hasAny = true;
-      break;
-    }
-  }
-  note.style.display = hasAny ? 'none' : 'block';
 }
 
 function calc() {
@@ -2438,8 +2386,6 @@ function calc() {
   document.getElementById('overtimePay').value = `${money(netOvertimePay)} ₺`;
   document.getElementById('deduction').value = `${money(totalDeductionMoney)} ₺`;
   document.getElementById('netPay').value = `${money(netPayVal)} ₺`;
-
-  updateEmptyState();
 }
 
 let toastTimer = null;
