@@ -152,18 +152,6 @@ input[type=number] {
 .btn-success:hover{background:#047857}
 .btn-danger{background:#dc2626}
 .btn-danger:hover{background:#b91c1c}
-.quick-bar{background:#fff;border:1px solid #aaa;border-radius:6px;padding:8px 16px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.quick-bar span{font-size:13px;font-weight:700;color:#3d3d3d}
-
-.quick-bar .btn.armed{
-  background:#0066cc;
-  color:#fff;
-  box-shadow:0 0 0 3px rgba(0,102,204,.25);
-}
-.quick-bar .btn.armed::after{
-  content:" ✓";
-  font-weight:800;
-}
 
 .tabs{display:flex;gap:6px;margin-bottom:0}
 .tab{border:1px solid #aaa;background:#ddd;padding:9px 16px;border-radius:6px 6px 0 0;cursor:pointer;font-weight:700;transition:background .15s ease}
@@ -195,8 +183,12 @@ table#tableSheet1 td, table#tableSheet1 th {
   color: #000;
 }
 
+table#tableSheet1 tr.row-holiday td {
+  height: 32px !important;
+}
+
 table#tableSheet1 tr.row-multi-active td {
-  height: 40px !important;
+  height: 42px !important;
 }
 
 #tableSheet1 .title {
@@ -237,7 +229,7 @@ table#tableSheet1 tr.row-multi-active td {
   box-sizing: border-box;
 }
 
-/* TARİH VE GÜN ADI SOLA DAYALI HİZALAMA */
+/* TARİH VE GÜN ADI SOLA DAYALI */
 #tableSheet1 td.cell-date-td {
   text-align: left !important;
   padding-left: 8px !important;
@@ -249,7 +241,7 @@ table#tableSheet1 tr.row-multi-active td {
   align-items: flex-start !important;
   justify-content: center;
   line-height: 1.15;
-  gap: 1.5px;
+  gap: 1px;
 }
 
 .main-date {
@@ -260,22 +252,46 @@ table#tableSheet1 tr.row-multi-active td {
 }
 
 .sub-day-name {
-  font-size: 8.5px !important;
+  font-size: 8px !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   color: #64748b;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
   white-space: nowrap;
+  line-height: 1.05;
 }
 
 .sub-day-name.weekend-day {
   color: #d97706;
 }
 
-/* GÜNÜN TÜM SATIRINA TATLI VE HAFİF MAVİ VURGU */
-.row-today, 
-.row-today td {
-  background: #e6f0fa !important;
+.sub-holiday-name {
+  font-size: 7px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: #b45309;
+  letter-spacing: 0 !important;
+  white-space: nowrap;
+  line-height: 1.05;
+  opacity: 0.95;
+}
+
+/* BUGÜN VURGUSU: GÖZÜ YORMAYAN ŞEFFAF TATLI MAVİ */
+table#tableSheet1 tr.row-today td,
+table#tableSheet2 tr.row-today td {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* RESMİ TATİL VURGUSU: ŞEFFAF TATLI KEHRİBAR / SARI */
+table#tableSheet1 tr.row-holiday td,
+table#tableSheet2 tr.row-holiday td {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+
+/* HEM BUGÜN HEM TATİL İSE */
+table#tableSheet1 tr.row-today.row-holiday td,
+table#tableSheet2 tr.row-today.row-holiday td {
+  background-color: rgba(59, 130, 246, 0.13) !important;
 }
 
 .time-cell-wrap {
@@ -441,7 +457,7 @@ table#tableSheet1 tr.row-multi-active td {
   transition: background .15s ease;
 }
 .clickable-date:hover {
-  background: #dbeafe !important;
+  background: #bfdbfe !important;
 }
 .edit-icon-hint {
   font-size: 11px;
@@ -671,10 +687,6 @@ col.col-4 { width: 22% !important; }
   .header-actions{margin-left:0;width:100%;flex-direction:column}
   .header-actions .btn{width:100%;padding:12px;font-size:14px}
 
-  .quick-bar{flex-direction:column;align-items:stretch;padding:10px}
-  .quick-bar .btn{width:100%;padding:10px !important;font-size:13px !important}
-  #tplHint{text-align:center}
-
   .tabs{flex-wrap:nowrap}
   .tab{flex:1 1 0;text-align:center;padding:10px 6px;font-size:12px}
 
@@ -682,13 +694,15 @@ col.col-4 { width: 22% !important; }
   .excel-page-border{padding:14px 8px}
 
   table#tableSheet1 td, table#tableSheet1 th{padding:1px 2px !important;height:29px}
-  table#tableSheet1 tr.row-multi-active td{height:38px !important}
+  table#tableSheet1 tr.row-holiday td{height:31px !important}
+  table#tableSheet1 tr.row-multi-active td{height:40px !important}
   #tableSheet1 .title{font-size:11px !important;line-height:1.2 !important;white-space:normal}
   #tableSheet1 th{font-size:9.5px !important}
   #tableSheet1 .label{font-size:11px !important}
 
   .main-date, #tableSheet1 input, .multi-shift-line{font-size:11px !important}
   .sub-day-name{font-size:7.5px !important}
+  .sub-holiday-name{font-size:6.2px !important;letter-spacing:-0.2px !important}
 
   .save-toast{left:12px;right:12px;bottom:12px;text-align:center}
 
@@ -705,8 +719,9 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tr.hidden-row { display: none !important; }
   #tableSheet2 tbody tr:nth-child(even):not(.weekend){background:#f7f9fb}
   #tableSheet2 tr.weekend{border-right:4px solid #e0a020}
+  #tableSheet2 tr.row-holiday{border-right:4px solid #f59e0b !important}
   #tableSheet2 tr.extra-row{border-right:4px solid #6c757d}
-  #tableSheet2 tr.row-today{border-right:4px solid #0284c7 !important}
+  #tableSheet2 tr.row-today{border-right:4px solid #2563eb !important}
   
   #tableSheet2 td{display:flex;justify-content:space-between;align-items:center;gap:8px;border:none;border-bottom:1px solid #eee;padding:7px 10px;font-size:13px;text-align:right;font-weight:bold !important}
   #tableSheet2 tr td:last-child{border-bottom:none}
@@ -763,14 +778,13 @@ col.col-4 { width: 22% !important; }
 @media (prefers-color-scheme: dark) {
   body{background:#15181c;color:#e7e9ec}
 
-  .header-controls, .quick-bar, .sheet{
+  .header-controls, .sheet{
     background:#1f2328;
     border-color:#33383f;
     box-shadow:0 2px 8px rgba(0,0,0,.35);
   }
   .header-controls label{color:#d7dadd}
   .header-controls select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
-  .quick-bar span{color:#c7cbd0}
 
   .tab{background:#262b31;border-color:#3a4048;color:#c7cbd0}
   .tab.active{background:#1f2328;color:#fff;border-bottom-color:#1f2328}
@@ -809,11 +823,22 @@ col.col-4 { width: 22% !important; }
 
   .sub-day-name { color: #94a3b8; }
   .sub-day-name.weekend-day { color: #f59e0b; }
+  .sub-holiday-name { color: #fbbf24; }
 
-  /* DARK MODDA BUGÜNÜN TÜM SATIR VURGUSU */
-  .row-today, 
-  .row-today td { 
-    background: #17263c !important; 
+  /* DARK MODDA ŞEFFAF MAVİ VE KEHRİBAR */
+  table#tableSheet1 tr.row-today td,
+  table#tableSheet2 tr.row-today td { 
+    background-color: rgba(59, 130, 246, 0.15) !important; 
+  }
+
+  table#tableSheet1 tr.row-holiday td,
+  table#tableSheet2 tr.row-holiday td {
+    background-color: rgba(245, 158, 11, 0.16) !important;
+  }
+
+  table#tableSheet1 tr.row-today.row-holiday td,
+  table#tableSheet2 tr.row-today.row-holiday td {
+    background-color: rgba(59, 130, 246, 0.20) !important;
   }
 
   .btn-shift-modal {
@@ -878,7 +903,7 @@ col.col-4 { width: 22% !important; }
   .sub-split-text { color: #94a3b8; }
 
   .clickable-date:hover {
-    background: #1e3a5f !important;
+    background: #2563eb !important;
   }
 
   .empty-state-note{background:#152437;border-color:#2f5b8f;color:#8ab4f8}
@@ -956,11 +981,14 @@ col.col-4 { width: 22% !important; }
     padding: 0 !important;
   }
 
-  .header-controls, .quick-bar, .tabs, .btn, .note, .save-toast, .empty-state-note, .btn-shift-modal, .modal-overlay, .sub-day-name, #sheet2, #sheet4 {
+  .header-controls, .tabs, .btn, .note, .save-toast, .empty-state-note, .btn-shift-modal, .modal-overlay, .sub-day-name, .sub-holiday-name, #sheet2, #sheet4 {
     display: none !important;
   }
 
-  .row-today, .row-today td {
+  table#tableSheet1 tr.row-today td,
+  table#tableSheet1 tr.row-holiday td,
+  .row-today, .row-today td,
+  .row-holiday, .row-holiday td {
     background: #fff !important;
   }
 
@@ -1041,20 +1069,6 @@ col.col-4 { width: 22% !important; }
   </div>
 
   <div class="header-actions">
-    <button class="btn btn-secondary" onclick="exportJSON()">Yedek İndir</button>
-
-    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">
-      Yedek Yükle
-    </button>
-
-    <input 
-      type="file" 
-      id="importFile" 
-      style="display:none" 
-      accept=".json" 
-      onchange="importJSON(event)"
-    >
-
     <button class="btn btn-danger" onclick="clearCurrentMonth()">
       Tabloyu Temizle
     </button>
@@ -1063,28 +1077,6 @@ col.col-4 { width: 22% !important; }
       PDF Paylaş
     </button>
   </div>
-</div>
-
-<div class="quick-bar">
-  <span>Hızlı Şablon:</span>
-
-  <button 
-    class="btn btn-secondary" 
-    id="tpl-1730" 
-    style="padding:4px 8px;font-size:12px;" 
-    onclick="armTemplate(this,'17:30-20:30','')">
-    17:30-20:30 (Molasız)
-  </button>
-
-  <button 
-    class="btn btn-secondary" 
-    id="tpl-0800" 
-    style="padding:4px 8px;font-size:12px;" 
-    onclick="armTemplate(this,'08:00-16:00','')">
-    08:00-16:00 (Molasız)
-  </button>
-
-  <span id="tplHint" style="font-size:12px;color:#0066cc;font-weight:700;"></span>
 </div>
 
 <div class="tabs">
@@ -1155,12 +1147,12 @@ col.col-4 { width: 22% !important; }
 
   <div class="sheet2-summary-cards">
     <div class="summary-card pufa-card">
-      <div class="summary-card-title">PUFA (1.5X) TOPLAMI</div>
+      <div class="summary-card-title">1.5X (%50) TOPLAMI</div>
       <div class="summary-card-hours" id="card15Hours">00:00 Sa (0 Dk)</div>
       <div class="summary-card-pay" id="card15Pay">0,00 ₺</div>
     </div>
     <div class="summary-card servis-card">
-      <div class="summary-card-title">SERVİS (2.0X) TOPLAMI</div>
+      <div class="summary-card-title">2X (%100) TOPLAMI</div>
       <div class="summary-card-hours" id="card20Hours">00:00 Sa (0 Dk)</div>
       <div class="summary-card-pay" id="card20Pay">0,00 ₺</div>
     </div>
@@ -1291,7 +1283,7 @@ col.col-4 { width: 22% !important; }
     </div>
     <div class="modal-body">
       <p class="modal-desc">
-        Aynı günde birden fazla mesai aralığı ve farklı çarpanlar (PUFA %50 / SERVİS %100) varsa ekleyin:
+        Aynı günde birden fazla mesai aralığı ve farklı çarpanlar (%50 veya %100) varsa ekleyin:
       </p>
       <div id="shiftRowsContainer"></div>
       <button type="button" class="btn btn-secondary btn-sm" id="btnAddShiftRow" onclick="addShiftRow()">
@@ -1323,7 +1315,72 @@ const weekDaysFullTR = [
   'PAZAR', 'PAZARTESİ', 'SALI', 'ÇARŞAMBA', 'PERŞEMBE', 'CUMA', 'CUMARTESİ'
 ];
 
+/* TÜRKİYE RESMİ TATİL VE DİNİ BAYRAM VERİLERİ (KOMPAKT İSİMLENDİRME) */
+const religiousHolidays = {
+  2026: {
+    '03-19': 'Ramazan B. (Arife)',
+    '03-20': 'Ramazan B. 1',
+    '03-21': 'Ramazan B. 2',
+    '03-22': 'Ramazan B. 3',
+    '05-26': 'Kurban B. (Arife)',
+    '05-27': 'Kurban B. 1',
+    '05-28': 'Kurban B. 2',
+    '05-29': 'Kurban B. 3',
+    '05-30': 'Kurban B. 4'
+  },
+  2027: {
+    '03-09': 'Ramazan B. (Arife)',
+    '03-10': 'Ramazan B. 1',
+    '03-11': 'Ramazan B. 2',
+    '03-12': 'Ramazan B. 3',
+    '05-16': 'Kurban B. (Arife)',
+    '05-17': 'Kurban B. 1',
+    '05-18': 'Kurban B. 2',
+    '05-19': 'Kurban B. 3',
+    '05-20': 'Kurban B. 4'
+  },
+  2028: {
+    '02-26': 'Ramazan B. (Arife)',
+    '02-27': 'Ramazan B. 1',
+    '02-28': 'Ramazan B. 2',
+    '02-29': 'Ramazan B. 3',
+    '05-04': 'Kurban B. (Arife)',
+    '05-05': 'Kurban B. 1',
+    '05-06': 'Kurban B. 2',
+    '05-07': 'Kurban B. 3',
+    '05-08': 'Kurban B. 4'
+  }
+};
+
+function getOfficialHoliday(year, monthIdx, dayNum) {
+  const mm = String(monthIdx + 1).padStart(2, '0');
+  const dd = String(dayNum).padStart(2, '0');
+  const mmdd = `${mm}-${dd}`;
+
+  // Sabit Resmi Tatiller (Kompakt)
+  if (mmdd === '01-01') return 'Yılbaşı';
+  if (mmdd === '04-23') return '23 Nisan';
+  if (mmdd === '05-01') return '1 Mayıs';
+  if (mmdd === '05-19') return '19 Mayıs';
+  if (mmdd === '07-15') return '15 Temmuz';
+  if (mmdd === '08-30') return '30 Ağustos';
+  if (mmdd === '10-28') return '29 Ekim (Arife)';
+  if (mmdd === '10-29') return '29 Ekim';
+
+  // Dini Bayramlar
+  if (religiousHolidays[year] && religiousHolidays[year][mmdd]) {
+    return religiousHolidays[year][mmdd];
+  }
+
+  return null;
+}
+
 let dayShiftsData = {};
+
+function is2XType(t) {
+  if (!t) return false;
+  return t.includes('2') || t.includes('SERVİS') || t.includes('%100');
+}
 
 function toSafeUpperAscii(str) {
   const trUpperMap = {
@@ -1643,7 +1700,10 @@ function initYearSelect() {
   const now = new Date();
   const currentYear = now.getFullYear();
 
-  for (let y = 2026; y <= 2031; y++) {
+  const startYear = Math.min(2026, currentYear);
+  const endYear = Math.max(2031, currentYear + 5);
+
+  for (let y = startYear; y <= endYear; y++) {
     const opt = document.createElement('option');
     opt.value = y;
     opt.textContent = y;
@@ -1703,19 +1763,29 @@ function buildTables() {
     const isWeekend = dow === 0 || dow === 6;
     const isToday = (year === todayY && month === todayM && i === todayD);
 
+    const holidayName = getOfficialHoliday(year, month, i);
+    const isHoliday = !!holidayName;
+
     const tr1 = document.createElement('tr');
     tr1.id = `rowSheet1_${i}`;
     if (isToday) tr1.classList.add('row-today');
+    if (isHoliday) tr1.classList.add('row-holiday');
+
+    let subDayHtml = '';
+    if (isHoliday) {
+      subDayHtml = `
+        <span class="sub-day-name ${isWeekend ? 'weekend-day' : ''}">${weekdayFull}</span>
+        <span class="sub-holiday-name">${holidayName.toUpperCase()}</span>
+      `;
+    } else {
+      subDayHtml = `<span class="sub-day-name ${isWeekend ? 'weekend-day' : ''}">${weekdayFull}</span>`;
+    }
 
     tr1.innerHTML = `
-      <td 
-        class="cell-date-td" 
-        style="cursor:pointer" 
-        title="Bir şablon seçtiyseniz uygulamak için tıklayın" 
-        onclick="applyArmedTemplate(${i})">
+      <td class="cell-date-td">
         <div class="cell-date-wrap">
           <span class="main-date">${dateFormatted}</span>
-          <span class="sub-day-name ${isWeekend ? 'weekend-day' : ''}">${weekdayFull}</span>
+          ${subDayHtml}
         </div>
       </td>
       <td>
@@ -1759,6 +1829,7 @@ function buildTables() {
     const tr2 = document.createElement('tr');
     tr2.id = `rowSheet2_${i}`;
     if (isWeekend) tr2.classList.add('weekend');
+    if (isHoliday) tr2.classList.add('row-holiday');
     if (isToday) tr2.classList.add('row-today');
 
     tr2.innerHTML = `
@@ -1766,7 +1837,7 @@ function buildTables() {
         <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
           <div class="cell-date-wrap">
             <span class="main-date">${dateFormatted}</span>
-            <span class="sub-day-name ${isWeekend ? 'weekend-day' : ''}">${weekdayFull}</span>
+            ${subDayHtml}
           </div>
           <span class="edit-icon-hint" title="Düzenle">✏️</span>
         </div>
@@ -1774,9 +1845,9 @@ function buildTables() {
       <td id="shiftRange${i}" data-label="MESAİ ARALIĞI">-</td>
       <td id="bText${i}" data-label="MOLA(DK)">0</td>
       <td data-label="MESAİ TİPİ">
-        <select id="type${i}" title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" onchange="onTypeChange(${i});save();calc()">
-          <option>PUFA(1,5X)</option>
-          <option>SERVİS(2X)</option>
+        <select id="type${i}" title="1.5X: %50 zamlı | 2X: %100 zamlı" onchange="onTypeChange(${i});save();calc()">
+          <option value="1.5X (%50)">1.5X (%50)</option>
+          <option value="2X (%100)" ${isHoliday ? 'selected' : ''}>2X (%100)</option>
         </select>
       </td>
       <td class="center" id="duration${i}" data-label="TOPLAM SÜRE"></td>
@@ -1799,9 +1870,9 @@ function buildTables() {
       <td data-label="MESAİ ARALIĞI">-</td>
       <td data-label="MOLA(DK)">0</td>
       <td data-label="MESAİ TİPİ">
-        <select id="type${extraId}" title="PUFA: %50 zamlı (x1,5) | SERVİS: %100 zamlı (x2)" onchange="save();calc()">
-          <option>PUFA(1,5X)</option>
-          <option>SERVİS(2X)</option>
+        <select id="type${extraId}" title="1.5X: %50 zamlı | 2X: %100 zamlı" onchange="save();calc()">
+          <option value="1.5X (%50)">1.5X (%50)</option>
+          <option value="2X (%100)">2X (%100)</option>
         </select>
       </td>
       <td class="center" data-label="TOPLAM SÜRE">
@@ -1852,12 +1923,14 @@ let activeModalDay = null;
 
 function openShiftModal(dayNum) {
   activeModalDay = dayNum;
-  const year = document.getElementById('selectYear').value;
+  const year = parseInt(document.getElementById('selectYear').value);
   const month = parseInt(document.getElementById('selectMonth').value);
   const dayStr = String(dayNum).padStart(2, '0');
   const monthStr = String(month + 1).padStart(2, '0');
   const dow = new Date(year, month, dayNum).getDay();
-  const dateText = `${dayStr}.${monthStr}.${year} - ${weekDaysFullTR[dow]}`;
+  const holidayName = getOfficialHoliday(year, month, dayNum);
+  const labelSuffix = holidayName ? `(${weekDaysFullTR[dow]} • ${holidayName})` : weekDaysFullTR[dow];
+  const dateText = `${dayStr}.${monthStr}.${year} - ${labelSuffix}`;
 
   document.getElementById('modalTitle').textContent = `Mesai Düzenle: ${dateText}`;
   const container = document.getElementById('shiftRowsContainer');
@@ -1869,17 +1942,18 @@ function openShiftModal(dayNum) {
     existingShifts.forEach(s => addShiftRow(s.time, s.type));
   } else {
     const directVal = (document.getElementById('time' + dayNum)?.value || '').trim();
-    const currentType = document.getElementById('type' + dayNum)?.value || 'PUFA(1,5X)';
+    const defaultType = holidayName ? '2X (%100)' : '1.5X (%50)';
+    const currentType = document.getElementById('type' + dayNum)?.value || defaultType;
 
     if (directVal.includes('/')) {
       const parts = directVal.split('/').map(p => p.trim());
       parts.forEach(p => addShiftRow(p, currentType));
     } else if (directVal.length > 0) {
       addShiftRow(directVal, currentType);
-      addShiftRow('', 'SERVİS(2X)');
+      addShiftRow('', '2X (%100)');
     } else {
-      addShiftRow('', 'PUFA(1,5X)');
-      addShiftRow('', 'SERVİS(2X)');
+      addShiftRow('', defaultType);
+      addShiftRow('', '2X (%100)');
     }
   }
 
@@ -1897,13 +1971,15 @@ function handleModalBackdropClick(e) {
   }
 }
 
-function addShiftRow(timeVal = '', typeVal = 'PUFA(1,5X)') {
+function addShiftRow(timeVal = '', typeVal = '1.5X (%50)') {
   const container = document.getElementById('shiftRowsContainer');
   const count = container.children.length;
   if (count >= 4) {
     alert('Bir güne en fazla 4 mesai aralığı ekleyebilirsiniz.');
     return;
   }
+
+  const is2X = is2XType(typeVal);
 
   const row = document.createElement('div');
   row.className = 'shift-row';
@@ -1916,8 +1992,8 @@ function addShiftRow(timeVal = '', typeVal = 'PUFA(1,5X)') {
       value="${timeVal}" 
       oninput="formatTimeLive(this)">
     <select class="shift-type-select">
-      <option value="PUFA(1,5X)" ${typeVal === 'PUFA(1,5X)' ? 'selected' : ''}>PUFA (1.5X)</option>
-      <option value="SERVİS(2X)" ${typeVal === 'SERVİS(2X)' ? 'selected' : ''}>SERVİS (2X)</option>
+      <option value="1.5X (%50)" ${!is2X ? 'selected' : ''}>1.5X (%50)</option>
+      <option value="2X (%100)" ${is2X ? 'selected' : ''}>2X (%100)</option>
     </select>
     <button type="button" class="btn-shift-del" title="Sil" onclick="this.parentElement.remove();relabelShiftRows()">&times;</button>
   `;
@@ -2161,7 +2237,7 @@ function calc() {
       sList.forEach(s => {
         const sm = getShiftMinutes(s.time);
         if (sm !== null) {
-          if (s.type === 'SERVİS(2X)') raw2_0 += sm;
+          if (is2XType(s.type)) raw2_0 += sm;
           else raw1_5 += sm;
         }
       });
@@ -2186,12 +2262,12 @@ function calc() {
       } else if (raw2_0 > 0) {
         if (typeElem) {
           typeElem.disabled = false;
-          typeElem.innerHTML = '<option>PUFA(1,5X)</option><option selected>SERVİS(2X)</option>';
+          typeElem.innerHTML = '<option value="1.5X (%50)">1.5X (%50)</option><option value="2X (%100)" selected>2X (%100)</option>';
         }
       } else {
         if (typeElem) {
           typeElem.disabled = false;
-          typeElem.innerHTML = '<option selected>PUFA(1,5X)</option><option>SERVİS(2X)</option>';
+          typeElem.innerHTML = '<option value="1.5X (%50)" selected>1.5X (%50)</option><option value="2X (%100)">2X (%100)</option>';
         }
       }
 
@@ -2233,8 +2309,10 @@ function calc() {
     } else {
       if (typeElem) {
         typeElem.disabled = false;
-        if (typeElem.options.length !== 2) {
-          typeElem.innerHTML = '<option value="PUFA(1,5X)">PUFA(1,5X)</option><option value="SERVİS(2X)">SERVİS(2X)</option>';
+        if (typeElem.options.length !== 2 || !typeElem.options[0].value.includes('1.5')) {
+          const curVal = typeElem.value;
+          typeElem.innerHTML = '<option value="1.5X (%50)">1.5X (%50)</option><option value="2X (%100)">2X (%100)</option>';
+          typeElem.value = is2XType(curVal) ? '2X (%100)' : '1.5X (%50)';
         }
       }
 
@@ -2266,8 +2344,8 @@ function calc() {
         timeElem.title = isInvalid ? 'Geçersiz format! "10001200" veya "10:00-12:00" biçiminde girin' : '';
       }
 
-      const type = typeElem ? typeElem.value : 'PUFA(1,5X)';
-      const mult = type === 'SERVİS(2X)' ? 2 : 1.5;
+      const type = typeElem ? typeElem.value : '1.5X (%50)';
+      const mult = is2XType(type) ? 2 : 1.5;
 
       const pay = mins * normalMin * mult;
 
@@ -2300,7 +2378,7 @@ function calc() {
 
     let mins = Number(bElem.value) || 0;
     let type = typeElem.value;
-    let mult = type === 'SERVİS(2X)' ? 2 : 1.5;
+    let mult = is2XType(type) ? 2 : 1.5;
 
     if (rowSheet2) rowSheet2.classList.toggle('hidden-row', mins <= 0);
 
@@ -2395,82 +2473,18 @@ function restore() {
     Object.entries(o).forEach(([id,v]) => {
       if (id === '__shiftsData') return;
       const e = document.getElementById(id);
-      if (e) e.value = v;
+      if (e) {
+        if (e.tagName === 'SELECT' && id.startsWith('type')) {
+          e.value = is2XType(v) ? '2X (%100)' : '1.5X (%50)';
+        } else {
+          e.value = v;
+        }
+      }
     });
 
     syncName();
   } catch(e) {
     console.warn('Kayıtlı veri geri yükleme hatası:', e);
-  }
-}
-
-function exportJSON() {
-  const data = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.startsWith('fazlaMesaiCizelgesi_')) {
-      data[key] = localStorage.getItem(key);
-    }
-  }
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'mesai_yedekleri.json';
-  a.click();
-}
-
-function importJSON(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      Object.entries(data).forEach(([key,val]) => {
-        if (key.startsWith('fazlaMesaiCizelgesi_')) {
-          localStorage.setItem(key, val);
-        }
-      });
-      updateMonthDays();
-      alert('Yedek başarıyla yüklendi!');
-    } catch(err) {
-      alert('Geçersiz dosya formatı!');
-    }
-  };
-  reader.readAsText(file);
-}
-
-let armedTemplate = null;
-function armTemplate(btn, timeStr, breakMin) {
-  document.querySelectorAll('.quick-bar .btn').forEach(b => {
-    b.style.outline = '';
-    b.classList.remove('armed');
-  });
-
-  if (armedTemplate && armedTemplate.time === timeStr && armedTemplate.breakMin === breakMin) {
-    armedTemplate = null;
-    document.getElementById('tplHint').textContent = '';
-    return;
-  }
-
-  armedTemplate = { time: timeStr, breakMin: breakMin };
-  btn.classList.add('armed');
-  document.getElementById('tplHint').textContent = 'Şimdi çizelgede bir tarihe tıklayın →';
-}
-
-function applyArmedTemplate(dayNum) {
-  if (!armedTemplate) return;
-  const timeInput = document.getElementById('time' + dayNum);
-  const breakInput = document.getElementById('break' + dayNum);
-
-  if (timeInput && breakInput) {
-    delete dayShiftsData[dayNum];
-    timeInput.value = armedTemplate.time;
-    breakInput.value = armedTemplate.breakMin;
-    save();
-    calc();
   }
 }
 
