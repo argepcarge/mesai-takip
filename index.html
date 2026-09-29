@@ -982,13 +982,53 @@ col.col-4 { width: 22% !important; }
 }
 
 @media (prefers-color-scheme: dark) and (max-width: 700px) {
+  #tableSheet2 tr {
+    background: #1f2328 !important;
+    border-color: #33383f !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,.4) !important;
+  }
+
+  #tableSheet2 tbody tr:nth-child(even):not(.weekend) {
+    background: #22262c !important;
+  }
+
+  #tableSheet2 tr.weekend {
+    background: #2a2417 !important;
+  }
+
+  #tableSheet2 tr.extra-row {
+    background: #20242a !important;
+  }
+
+  #tableSheet2 td {
+    border-bottom-color: #2d333b !important;
+  }
+
+  #tableSheet2 td::before {
+    color: #94a3b8 !important;
+  }
+
   #tableSheet2 td.cell-header{
     background:#182620 !important;
     color:#e7e9ec !important;
     border-bottom-color:#2c4438 !important;
   }
 
+  #tableSheet2 tr.row-today td.cell-header,
+  table#tableSheet2 tr.row-today td.cell-header {
+    background:#1a2f4c !important;
+    color:#e7e9ec !important;
+    border-bottom-color:#2563eb !important;
+  }
+
   #tableSheet2 tr.weekend td.cell-header{
+    background:#332705 !important;
+    color:#ffdd6a !important;
+    border-bottom-color:#4d3c08 !important;
+  }
+
+  #tableSheet2 tr.row-holiday td.cell-header,
+  table#tableSheet2 tr.row-holiday td.cell-header {
     background:#332705 !important;
     color:#ffdd6a !important;
     border-bottom-color:#4d3c08 !important;
@@ -2327,7 +2367,6 @@ function updateMultiShiftUI(dayNum) {
       multiBox.classList.remove('hidden');
       multiBox.innerHTML = sList.map(s => `<span class="multi-shift-line">${s.time}</span>`).join('');
     }
-    // Çoklu mesaide kalem butonunu tamamen gizler, sadece saatler görünür
     if (btnElem) {
       btnElem.classList.add('hidden');
     }
@@ -2338,7 +2377,6 @@ function updateMultiShiftUI(dayNum) {
       multiBox.classList.add('hidden');
       multiBox.innerHTML = '';
     }
-    // Tek mesaili veya boş günlerde + butonu yerinde kalır
     if (btnElem) {
       btnElem.classList.remove('hidden');
       btnElem.classList.remove('has-multi');
