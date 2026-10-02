@@ -1091,7 +1091,7 @@ col.col-4 { width: 22% !important; }
     padding: 0 !important;
   }
 
-  .header-controls, .tabs, .btn, .save-toast, .quick-templates-bar, .btn-shift-modal, .modal-overlay, .sub-day-name, .sub-holiday-name, #sheet2, #sheet4 {
+  .header-controls, .tabs, .btn, .save-toast, .app-version, .quick-templates-bar, .btn-shift-modal, .modal-overlay, .sub-day-name, .sub-holiday-name, #sheet2, #sheet4 {
     display: none !important;
   }
 
@@ -1433,9 +1433,14 @@ col.col-4 { width: 22% !important; }
   </div>
 </div>
 
+<div id="appVersion" class="app-version" style="text-align:center;font-size:11px;color:#64748b;margin:14px 0 24px;"></div>
+
 <div id="saveToast" class="save-toast">Kaydedildi ✓</div>
 
 <script>
+/* SÜRÜM KODU: HTML'de her değişiklikte bunu artır (örn: 2026.10.02-b) */
+const APP_VERSION = '2026.10.02-a';
+
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
   "TEMMUZ", "AĞUSTOS", "EYLÜL", "EKİM", "KASIM", "ARALIK"
@@ -2875,7 +2880,33 @@ window.addEventListener('load', () => {
   restore();
   calc();
   preloadPdfFonts();
+
+  const verEl = document.getElementById('appVersion');
+  if (verEl) verEl.textContent = 'Sürüm ' + APP_VERSION;
+  setTimeout(checkNewVersion, 3000);
 });
+
+/* YENİ SÜRÜM KONTROLÜ: service worker arkada yeni index.html'i indirirse uyarı gösterir */
+async function checkNewVersion() {
+  try {
+    await fetch('./index.html');                     // service worker'ı arkada yenilemeye tetikler
+    await new Promise(r => setTimeout(r, 3000));     // yeni dosyanın önbelleğe yazılması için bekle
+    const res = await fetch('./index.html');
+    const txt = await res.text();
+    const m = txt.match(/APP_VERSION\s*=\s*'([^']+)'/);
+    if (m && m[1] !== APP_VERSION) {
+      const el = document.getElementById('appVersion');
+      if (!el) return;
+      el.textContent = 'Yeni sürüm hazır (' + m[1] + ') — ';
+      const a = document.createElement('a');
+      a.href = '#';
+      a.textContent = 'Yenile';
+      a.style.cssText = 'color:#2563eb;font-weight:700;';
+      a.onclick = e => { e.preventDefault(); location.reload(); };
+      el.appendChild(a);
+    }
+  } catch (e) {}
+}
 </script>
 
 <script>
