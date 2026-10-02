@@ -80,6 +80,27 @@ input[type=number] {
   color: #334155;
 }
 
+.salary-value-text {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  text-align: right;
+}
+.salary-value-text.green-text {
+  color: #16a34a;
+  font-size: 14.5px;
+}
+.salary-value-text.red-text {
+  color: #dc2626;
+  font-size: 14.5px;
+}
+
+.deduction-inputs-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .salary-input-wrapper {
   display: flex;
   align-items: center;
@@ -88,6 +109,10 @@ input[type=number] {
   border-radius: 6px;
   padding: 4px 8px;
   width: 140px;
+}
+.salary-input-wrapper.deduction-compact {
+  width: 70px;
+  padding: 4px 6px;
 }
 
 .salary-input-wrapper.primary-input {
@@ -132,15 +157,12 @@ input[type=number] {
 
 .net-pay-title { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; }
 .net-pay-value-wrap { display: flex; align-items: center; gap: 4px; }
-.net-pay-card input {
-  background: transparent;
-  border: none;
-  color: #ffffff;
+.net-pay-value {
   font-size: 22px;
   font-weight: 900;
   text-align: right;
-  width: 180px;
-  outline: none;
+  color: #ffffff;
+  white-space: nowrap;
 }
 
 .header-controls label{font-weight:700;font-size:13px;color:#333}
@@ -882,7 +904,7 @@ col.col-4 { width: 22% !important; }
 
   table#tableSheet1 tr.row-holiday td,
   table#tableSheet2 tr.row-holiday td {
-    background-color: rgba(245, 158, 11, 0.16) !important;
+    background-color: rgba(245, 158, 11, 0.16) !important; 
   }
 
   table#tableSheet1 tr.row-today.row-holiday td,
@@ -969,6 +991,9 @@ col.col-4 { width: 22% !important; }
   .salary-block { background: #1f2328; border-color: #33383f; }
   .salary-block-title { color: #94a3b8; border-bottom-color: #2d333b; }
   .salary-label { color: #cbd5e1; }
+  .salary-value-text { color: #f1f5f9; }
+  .salary-value-text.green-text { color: #4ade80; }
+  .salary-value-text.red-text { color: #f87171; }
   .salary-input-wrapper { background: #262b31; border-color: #3a4048; }
   .salary-input-wrapper input { color: #f1f5f9; }
   .salary-input-wrapper.primary-input { background: #1e293b; border-color: #3b82f6; }
@@ -1271,37 +1296,34 @@ col.col-4 { width: 22% !important; }
         <div class="salary-row">
           <span class="salary-label">Aylık Net Maaş</span>
           <div class="salary-input-wrapper primary-input">
-            <input id="salary" type="text" value="0" aria-label="Aylık maaş" oninput="save();calc()">
+            <input 
+              id="salary" 
+              type="text" 
+              inputmode="numeric" 
+              pattern="[0-9]*" 
+              value="0" 
+              aria-label="Aylık maaş" 
+              onfocus="clearZeroOnFocus(this)" 
+              oninput="formatSalaryLive(this);save();calc()" 
+              onblur="restoreZeroOnBlur(this);save();calc()">
             <span class="salary-unit">₺</span>
           </div>
         </div>
         <div class="salary-row">
           <span class="salary-label">Normal Saat Ücreti</span>
-          <div class="salary-input-wrapper">
-            <input id="normalHour" type="text" readonly aria-label="Normal saat ücreti">
-            <span class="salary-unit">₺</span>
-          </div>
+          <span id="normalHour" class="salary-value-text">0,00 ₺</span>
         </div>
         <div class="salary-row">
           <span class="salary-label">Normal Dakika Ücreti</span>
-          <div class="salary-input-wrapper">
-            <input id="normalMin" type="text" readonly aria-label="Normal dakika ücreti">
-            <span class="salary-unit">₺</span>
-          </div>
+          <span id="normalMin" class="salary-value-text">0,00 ₺</span>
         </div>
         <div class="salary-row">
           <span class="salary-label">Mesai Saat Ücreti (%50)</span>
-          <div class="salary-input-wrapper">
-            <input id="overtimeHour" type="text" readonly aria-label="Mesai saat ücreti">
-            <span class="salary-unit">₺</span>
-          </div>
+          <span id="overtimeHour" class="salary-value-text">0,00 ₺</span>
         </div>
         <div class="salary-row">
           <span class="salary-label">Mesai Dakika Ücreti</span>
-          <div class="salary-input-wrapper">
-            <input id="overtimeMin" type="text" readonly aria-label="Mesai dakika ücreti">
-            <span class="salary-unit">₺</span>
-          </div>
+          <span id="overtimeMin" class="salary-value-text">0,00 ₺</span>
         </div>
       </div>
 
@@ -1309,31 +1331,42 @@ col.col-4 { width: 22% !important; }
         <div class="salary-block-title">Hakediş ve Kesintiler</div>
         <div class="salary-row">
           <span class="salary-label" style="font-weight: 800; color: #22C55E;">Alınan Mesai Ücreti</span>
-          <div class="salary-input-wrapper green-bg">
-            <input id="overtimePay" type="text" readonly aria-label="Toplam mesai ücreti">
-            <span class="salary-unit" style="color: #22C55E;">₺</span>
-          </div>
+          <span id="overtimePay" class="salary-value-text green-text">0,00 ₺</span>
         </div>
-        <div class="salary-row" style="margin-top: 12px;">
-          <span class="salary-label" style="color: #dc2626;">Kesinti Saati</span>
-          <div class="salary-input-wrapper red-bg">
-            <input id="deductionHours" type="text" inputmode="tel" pattern="[0-9]*" value="0" aria-label="Kesinti Saati" oninput="save();calc()" onblur="ensureNumber(this)">
-            <span class="salary-unit" style="color: #dc2626;">Sa</span>
-          </div>
-        </div>
-        <div class="salary-row">
-          <span class="salary-label" style="color: #dc2626;">Kesinti Dakikası</span>
-          <div class="salary-input-wrapper red-bg">
-            <input id="deductionMinutes" type="text" inputmode="tel" pattern="[0-9]*" value="0" aria-label="Kesinti Dakikası" oninput="save();calc()" onblur="ensureNumber(this)">
-            <span class="salary-unit" style="color: #dc2626;">Dk</span>
+        <div class="salary-row" style="margin-top: 10px;">
+          <span class="salary-label" style="color: #dc2626; font-weight: 700;">Kesinti Süresi</span>
+          <div class="deduction-inputs-group">
+            <div class="salary-input-wrapper red-bg deduction-compact">
+              <input 
+                id="deductionHours" 
+                type="text" 
+                inputmode="numeric" 
+                pattern="[0-9]*" 
+                value="0" 
+                aria-label="Kesinti Saati" 
+                onfocus="clearZeroOnFocus(this)" 
+                oninput="this.value=this.value.replace(/\D/g,'');save();calc()" 
+                onblur="restoreZeroOnBlur(this);save();calc()">
+              <span class="salary-unit" style="color: #dc2626;">Sa</span>
+            </div>
+            <div class="salary-input-wrapper red-bg deduction-compact">
+              <input 
+                id="deductionMinutes" 
+                type="text" 
+                inputmode="numeric" 
+                pattern="[0-9]*" 
+                value="0" 
+                aria-label="Kesinti Dakikası" 
+                onfocus="clearZeroOnFocus(this)" 
+                oninput="this.value=this.value.replace(/\D/g,'');save();calc()" 
+                onblur="restoreZeroOnBlur(this);save();calc()">
+              <span class="salary-unit" style="color: #dc2626;">Dk</span>
+            </div>
           </div>
         </div>
         <div class="salary-row">
           <span class="salary-label" style="font-weight: 800; color: #dc2626;">Yapılan Toplam Kesinti</span>
-          <div class="salary-input-wrapper red-bg">
-            <input id="deduction" type="text" readonly aria-label="Yapılan toplam kesinti ücreti">
-            <span class="salary-unit" style="color: #dc2626;">₺</span>
-          </div>
+          <span id="deduction" class="salary-value-text red-text">0,00 ₺</span>
         </div>
       </div>
     </div>
@@ -1341,7 +1374,7 @@ col.col-4 { width: 22% !important; }
     <div class="net-pay-card">
       <div class="net-pay-title">TOPLAM HAK EDİLEN NET MAAŞ</div>
       <div class="net-pay-value-wrap">
-        <input id="netPay" type="text" readonly aria-label="Toplam hak edilen net ücret">
+        <span id="netPay" class="net-pay-value">0,00 ₺</span>
       </div>
     </div>
   </div>
@@ -1675,7 +1708,10 @@ function applyRestoredText() {
   const salaryMatch = raw.match(/MAAŞ:\s*([\d,.]+)/i);
   if (salaryMatch && salaryMatch[1]) {
     const salElem = document.getElementById('salary');
-    if (salElem) salElem.value = salaryMatch[1].trim();
+    if (salElem) {
+      const num = salaryMatch[1].replace(/\D/g, '');
+      salElem.value = num ? Number(num).toLocaleString('tr-TR') : '0';
+    }
   }
 
   const year = parseInt(document.getElementById('selectYear').value);
@@ -2159,7 +2195,7 @@ function buildTables() {
             id="b${extraId}" 
             type="text" 
             inputmode="tel" 
-            pattern="[0-9]*"
+            pattern="[0-9]*" 
             placeholder="0"
             style="width:50px; text-align:center; border:1px solid #cbd5e1; border-radius:4px; background:transparent; color:inherit; padding:3px; font-weight:bold; font-size:12.5px;" 
             oninput="this.value=this.value.replace(/\\D/g,'');save();calc()">
@@ -2483,12 +2519,42 @@ function autoZero(i) {
   calc();
 }
 
-function ensureNumber(input) {
+/* MAAŞ VE KESİNTİLER İÇİN YARDIMCI FORMAT FONKSİYONLARI */
+function clearZeroOnFocus(input) {
+  if (input.value.trim() === '0') {
+    input.value = '';
+  }
+}
+
+function restoreZeroOnBlur(input) {
   if (input.value.trim() === '') {
     input.value = '0';
-    save();
-    calc();
   }
+}
+
+function ensureNumber(input) {
+  restoreZeroOnBlur(input);
+  save();
+  calc();
+}
+
+function formatSalaryLive(input) {
+  const cursor = input.selectionStart;
+  const oldLen = input.value.length;
+  let raw = input.value.replace(/\D/g, '');
+  if (!raw) {
+    input.value = '';
+    return;
+  }
+  if (raw.length > 12) raw = raw.slice(0, 12);
+  const formatted = Number(raw).toLocaleString('tr-TR');
+  input.value = formatted;
+  const newLen = formatted.length;
+  const diff = newLen - oldLen;
+  const newCursor = Math.max(0, (cursor || 0) + diff);
+  try {
+    input.setSelectionRange(newCursor, newCursor);
+  } catch(e) {}
 }
 
 function money(x) {
@@ -2497,17 +2563,24 @@ function money(x) {
     : '0,00';
 }
 
+function setTextOrVal(id, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (el.tagName === 'INPUT') el.value = text;
+  else el.textContent = text;
+}
+
 function calc() {
-  const salaryClean = String(document.getElementById('salary').value || '0').replace(/[^0-9,.]/g, '').replace(',', '.');
-  const salary = Number(salaryClean) || 0;
+  const salaryRaw = String(document.getElementById('salary')?.value || '0').replace(/\D/g, '');
+  const salary = Number(salaryRaw) || 0;
 
   const normalMin = salary / 225 / 60;
   const normalHour = salary / 225;
 
-  document.getElementById('normalMin').value = money(normalMin) + ' ₺';
-  document.getElementById('normalHour').value = money(normalHour) + ' ₺';
-  document.getElementById('overtimeMin').value = money(normalMin * 1.5) + ' ₺';
-  document.getElementById('overtimeHour').value = money(normalHour * 1.5) + ' ₺';
+  setTextOrVal('normalMin', money(normalMin) + ' ₺');
+  setTextOrVal('normalHour', money(normalHour) + ' ₺');
+  setTextOrVal('overtimeMin', money(normalMin * 1.5) + ' ₺');
+  setTextOrVal('overtimeHour', money(normalHour * 1.5) + ' ₺');
 
   let totalMin = 0;
   let mins1_5 = 0;
@@ -2739,9 +2812,9 @@ function calc() {
   document.getElementById('cardGenelHours').textContent = `${formatHoursMinutes(totalMin)} (${totalMin} Dk)`;
   document.getElementById('cardGenelPay').textContent = `${money(grossOvertimePay)} ₺`;
 
-  document.getElementById('overtimePay').value = `${money(netOvertimePay)} ₺`;
-  document.getElementById('deduction').value = `${money(totalDeductionMoney)} ₺`;
-  document.getElementById('netPay').value = `${money(netPayVal)} ₺`;
+  setTextOrVal('overtimePay', `${money(netOvertimePay)} ₺`);
+  setTextOrVal('deduction', `${money(totalDeductionMoney)} ₺`);
+  setTextOrVal('netPay', `${money(netPayVal)} ₺`);
 }
 
 let toastTimer = null;
@@ -2779,8 +2852,13 @@ function restore() {
       if (e) {
         if (e.tagName === 'SELECT' && id.startsWith('type')) {
           e.value = is2XType(v) ? '2X (%100)' : '1.5X (%50)';
-        } else {
-          e.value = v;
+        } else if (e.tagName === 'INPUT') {
+          if (id === 'salary') {
+            const num = String(v || '').replace(/\D/g, '');
+            e.value = num ? Number(num).toLocaleString('tr-TR') : '0';
+          } else {
+            e.value = v;
+          }
         }
       }
     });
