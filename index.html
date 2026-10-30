@@ -1325,7 +1325,7 @@ col.col-4 { width: 22% !important; }
       <div class="salary-block">
         <div class="salary-block-title">Hakediş ve Kesintiler</div>
         <div class="salary-row">
-          <span class="salary-label" style="font-weight: 800; color: #22C55E;">Alınan Mesai Ücreti</span>
+          <span class="salary-label" style="font-weight: 800; color: #22C55E;">Tabloya Göre Mesai (Kesinti Öncesi)</span>
           <span id="overtimePay" class="salary-value-text green-text">0,00 ₺</span>
         </div>
         <div class="salary-row" style="margin-top: 10px;">
@@ -1367,7 +1367,7 @@ col.col-4 { width: 22% !important; }
     </div>
 
     <div class="net-pay-card">
-      <div class="net-pay-title">TOPLAM HAK EDİLEN NET MAAŞ</div>
+      <div class="net-pay-title">NET MESAİ ÜCRETİ</div>
       <div class="net-pay-value-wrap">
         <span id="netPay" class="net-pay-value">0,00 ₺</span>
       </div>
@@ -1434,7 +1434,7 @@ col.col-4 { width: 22% !important; }
 
 <script>
 /* SÜRÜM KODU: HTML'de her değişiklikte bunu artır (örn: 2026.10.02-b) */
-const APP_VERSION = '2026.10.30-a';
+const APP_VERSION = '2026.10.30-b';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -2801,7 +2801,7 @@ function calc() {
 
   const totalDeductionMoney = cutFrom1_5_Val + cutFrom2_0_Val + cutFromSalaryVal;
   const netOvertimePay = ((mins1_5 - cut1_5) * normalMin * 1.5) + ((mins2_0 - cut2_0) * normalMin * 2.0);
-  const netPayVal = (salary + grossOvertimePay) - totalDeductionMoney;
+  // Net mesai yalnızca çizelgedeki fazla mesailerden yapılan kesintileri içerir.
 
   document.getElementById('card15Hours').textContent = `${formatHoursMinutes(mins1_5)} (${mins1_5} Dk)`;
   document.getElementById('card15Pay').textContent = `${money(pay1_5)} ₺`;
@@ -2810,9 +2810,9 @@ function calc() {
   document.getElementById('card20Pay').textContent = `${money(pay2_0)} ₺`;
 
 
-  setTextOrVal('overtimePay', `${money(netOvertimePay)} ₺`);
+  setTextOrVal('overtimePay', `${money(grossOvertimePay)} ₺`);
   setTextOrVal('deduction', `${money(totalDeductionMoney)} ₺`);
-  setTextOrVal('netPay', `${money(netPayVal)} ₺`);
+  setTextOrVal('netPay', `${money(netOvertimePay)} ₺`);
 }
 
 let toastTimer = null;
