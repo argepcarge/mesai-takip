@@ -1434,7 +1434,7 @@ col.col-4 { width: 22% !important; }
 
 <script>
 /* SÜRÜM KODU: HTML'de her değişiklikte bunu artır (örn: 2026.10.02-b) */
-const APP_VERSION = '2026.10.30-b';
+const APP_VERSION = '2026.10.30-c';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -2159,7 +2159,7 @@ function buildTables() {
       <td id="shiftRange${i}" data-label="MESAİ ARALIĞI">-</td>
       <td id="bText${i}" data-label="MOLA(DK)">0</td>
       <td data-label="MESAİ TİPİ">
-        <select id="type${i}" title="1.5X: %50 zamlı | 2X: %100 zamlı" onchange="onTypeChange(${i});save();calc()">
+        <select id="type${i}" title="1.5X: %50 zamlı | 2X: %100 zamlı" onchange="onTypeChange(${i})">
           <option value="1.5X (%50)">1.5X (%50)</option>
           <option value="2X (%100)" ${isHoliday ? 'selected' : ''}>2X (%100)</option>
         </select>
