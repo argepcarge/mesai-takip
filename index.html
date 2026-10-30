@@ -430,7 +430,7 @@ table#tableSheet2 tr.row-today.row-holiday td {
 /* HESAP SEKRESİ (SHEET 2) STİLLERİ */
 .sheet2-summary-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-bottom: 16px;
 }
@@ -1256,11 +1256,6 @@ col.col-4 { width: 22% !important; }
       <div class="summary-card-hours" id="card20Hours">00:00 Sa (0 Dk)</div>
       <div class="summary-card-pay" id="card20Pay">0,00 ₺</div>
     </div>
-    <div class="summary-card total-card">
-      <div class="summary-card-title">GENEL MESAİ TOPLAMI</div>
-      <div class="summary-card-hours" id="cardGenelHours">00:00 Sa (0 Dk)</div>
-      <div class="summary-card-pay" id="cardGenelPay">0,00 ₺</div>
-    </div>
   </div>
 
   <div class="table-scroll">
@@ -1439,7 +1434,7 @@ col.col-4 { width: 22% !important; }
 
 <script>
 /* SÜRÜM KODU: HTML'de her değişiklikte bunu artır (örn: 2026.10.02-b) */
-const APP_VERSION = '2026.10.02-f';
+const APP_VERSION = '2026.10.30-a';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -2814,8 +2809,6 @@ function calc() {
   document.getElementById('card20Hours').textContent = `${formatHoursMinutes(mins2_0)} (${mins2_0} Dk)`;
   document.getElementById('card20Pay').textContent = `${money(pay2_0)} ₺`;
 
-  document.getElementById('cardGenelHours').textContent = `${formatHoursMinutes(totalMin)} (${totalMin} Dk)`;
-  document.getElementById('cardGenelPay').textContent = `${money(grossOvertimePay)} ₺`;
 
   setTextOrVal('overtimePay', `${money(netOvertimePay)} ₺`);
   setTextOrVal('deduction', `${money(totalDeductionMoney)} ₺`);
