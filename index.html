@@ -1590,12 +1590,12 @@ col.col-4 { width: 22% !important; }
     <div class="summary-card pufa-card">
       <div class="summary-card-title">1.5X (%50) TOPLAMI</div>
       <div class="summary-card-hours" id="card15Hours">00:00 Sa (0 Dk)</div>
-      <div class="summary-card-pay" id="card15Pay">0,00 ₺</div>
+      <div class="summary-card-pay" id="card15Pay">0 ₺</div>
     </div>
     <div class="summary-card servis-card">
       <div class="summary-card-title">2X (%100) TOPLAMI</div>
       <div class="summary-card-hours" id="card20Hours">00:00 Sa (0 Dk)</div>
-      <div class="summary-card-pay" id="card20Pay">0,00 ₺</div>
+      <div class="summary-card-pay" id="card20Pay">0 ₺</div>
     </div>
   </div>
 
@@ -1647,15 +1647,15 @@ col.col-4 { width: 22% !important; }
         </div>
         <div class="salary-row">
           <span class="salary-label rate-label-normal">Normal Ücret</span>
-          <span id="normalHour" class="salary-value-text rate-hour-value">0,00 ₺</span>
+          <span id="normalHour" class="salary-value-text rate-hour-value">0 ₺</span>
         </div>
         <div class="salary-row">
           <span class="salary-label rate-label-15">1.5X Mesai (%50)</span>
-          <span id="overtimeHour" class="salary-value-text rate-hour-value">0,00 ₺</span>
+          <span id="overtimeHour" class="salary-value-text rate-hour-value">0 ₺</span>
         </div>
         <div class="salary-row">
           <span class="salary-label rate-label-20">2X Mesai (%100)</span>
-          <span id="doubleHour" class="salary-value-text rate-hour-value">0,00 ₺</span>
+          <span id="doubleHour" class="salary-value-text rate-hour-value">0 ₺</span>
         </div>
         <!-- Hesaplama kodunun kullandığı dakika değerleri görünmez tutulur. -->
         <span id="normalMin" hidden></span>
@@ -1667,7 +1667,7 @@ col.col-4 { width: 22% !important; }
         <div class="salary-block-title">Hakediş ve Kesintiler</div>
         <div class="salary-row">
           <span class="salary-label" style="font-weight: 800; color: #22C55E;">Tabloya Göre Mesai (Kesinti Öncesi)</span>
-          <span id="overtimePay" class="salary-value-text green-text">0,00 ₺</span>
+          <span id="overtimePay" class="salary-value-text green-text">0 ₺</span>
         </div>
         <div class="salary-row" style="margin-top: 10px;">
           <span class="salary-label" style="color: #dc2626; font-weight: 700;">Kesinti Süresi</span>
@@ -1702,7 +1702,7 @@ col.col-4 { width: 22% !important; }
         </div>
         <div class="salary-row">
           <span class="salary-label" style="font-weight: 800; color: #dc2626;">Yapılan Toplam Kesinti</span>
-          <span id="deduction" class="salary-value-text red-text">0,00 ₺</span>
+          <span id="deduction" class="salary-value-text red-text">0 ₺</span>
         </div>
       </div>
     </div>
@@ -1710,7 +1710,7 @@ col.col-4 { width: 22% !important; }
     <div class="net-pay-card">
       <div class="net-pay-title">NET MESAİ ÜCRETİ</div>
       <div class="net-pay-value-wrap">
-        <span id="netPay" class="net-pay-value">0,00 ₺</span>
+        <span id="netPay" class="net-pay-value">0 ₺</span>
       </div>
     </div>
   </div>
@@ -1791,7 +1791,7 @@ function toggleUnitRate(button) {
   });
 }
 
-const APP_VERSION = '2026.11.02-beta.12';
+const APP_VERSION = '2026.11.02-beta.13';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -2980,8 +2980,8 @@ function formatSalaryLive(input) {
 
 function money(x) {
   return isFinite(x)
-    ? x.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    : '0,00';
+    ? x.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+    : '0';
 }
 
 function setTextOrVal(id, text) {
