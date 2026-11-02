@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="app-version" content="2026.11.02-beta.15">
+<meta name="html-revision" content="1">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
 <script src="./jspdf.umd.min.js"></script>
@@ -299,24 +300,12 @@
 </div>
 
 <div id="appVersion" class="app-version" style="text-align:center;font-size:11px;color:#64748b;margin:14px 0 24px;">
-  <span id="appVersionMain" style="display:block;"></span>
-  <span id="htmlVersion" style="display:block;margin-top:3px;">HTML: 2026.11.02-html.2</span>
-  <span id="jsVersion" style="display:block;margin-top:3px;">JS: sürüm okunamadı</span>
+  REV: yükleniyor...
 </div>
 
 <div id="saveToast" class="save-toast">Kaydedildi ✓</div>
 
 <script src="./main.js" defer></script>
-<script>
-  // JS sürümünü main.js dosyasından oku; sürüm tanımlı değilse uyarıyı koru.
-  window.addEventListener('load', function () {
-    const versionElement = document.getElementById('jsVersion');
-    if (versionElement && typeof JS_VERSION !== 'undefined') {
-      versionElement.textContent = 'JS: ' + JS_VERSION;
-    }
-  });
-</script>
-
 
 </body>
 </html>

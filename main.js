@@ -16,7 +16,7 @@ function toggleUnitRate(button) {
 }
 
 const APP_VERSION = '2026.11.02-beta.15';
-const JS_VERSION = '2026.11.02-js.2';
+const JS_REV = 1;
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -1561,14 +1561,13 @@ window.addEventListener('load', () => {
   calc();
   preloadPdfFonts();
 
-  const verEl = document.getElementById('appVersionMain');
-  if (verEl) {
-    verEl.textContent = 'Sürüm ' + APP_VERSION;
-  }
-
-  const jsVerEl = document.getElementById('jsVersion');
-  if (jsVerEl) {
-    jsVerEl.textContent = 'JS: ' + JS_VERSION;
+  // HTML, JS ve CSS revizyonlarını ilgili dosyalardan oku ve tek satır göster.
+  const htmlRev = document.querySelector('meta[name="html-revision"]')?.content || '?';
+  const cssRev = getComputedStyle(document.documentElement)
+    .getPropertyValue('--css-rev').trim() || '?';
+  const revisionElement = document.getElementById('appVersion');
+  if (revisionElement) {
+    revisionElement.textContent = `V1.0.JS${JS_REV}.HTML${htmlRev}.CSS${cssRev}`;
   }
 
   setTimeout(checkNewVersion, 3000);
@@ -1580,8 +1579,6 @@ window.addEventListener('load', () => {
 
 
   
-
-
 /* YENİ SÜRÜM KONTROLÜ: service worker arkada yeni index.html'i indirirse uyarı gösterir */
 async function checkNewVersion() {
   try {

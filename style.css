@@ -1250,9 +1250,5 @@ col.col-4 { width: 22% !important; }
 }
 
 
-/* Ekranin altinda CSS surumunu goster */
-#appVersion::after {
-  content: "CSS: 2026.11.02-css.2";
-  display: block;
-  margin-top: 3px;
-}
+/* CSS revizyonu: Her CSS degisikliginde bu sayiyi artir. */
+:root { --css-rev: 1; }
