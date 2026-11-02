@@ -16,7 +16,7 @@ function toggleUnitRate(button) {
 }
 
 const APP_VERSION = '2026.11.02-beta.15';
-const JS_REV = 5;
+const JS_REV = 6;
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -750,7 +750,7 @@ function buildTables() {
             pattern="[0-9]*"
             aria-label="${dateFormatted} mesai saatleri" 
             onfocus="lastFocusedDay=${i}"
-            oninput="formatTimeLive(this);onDirectTimeChange(${i});save();calc()" 
+            oninput="formatTimeLive(this);onDirectTimeChange(${i});scheduleSaveCalc()" 
             onblur="autoZero(${i})">
           <div id="multiDisplay${i}" class="multi-shift-box hidden" onclick="openShiftModal(${i})" title="Çoklu mesaiyi düzenlemek için tıklayın"></div>
           <button 
@@ -771,7 +771,7 @@ function buildTables() {
           maxlength="4" 
           aria-label="${dateFormatted} mola dakika" 
           onfocus="lastFocusedDay=${i}"
-          oninput="this.value=this.value.replace(/\\D/g,'');save();calc()" 
+          oninput="this.value=this.value.replace(/\\D/g,'');scheduleSaveCalc()" 
           onblur="autoZero(${i})">
       </td>
       <td>
@@ -779,7 +779,7 @@ function buildTables() {
           id="meal${i}" 
           aria-label="${dateFormatted} yol-yemek" 
           onfocus="lastFocusedDay=${i}"
-          oninput="save();calc()" 
+          oninput="scheduleSaveCalc()" 
           onblur="autoZero(${i})">
       </td>
     `;
@@ -830,7 +830,7 @@ function buildTables() {
       <td data-label="MESAİ ARALIĞI">-</td>
       <td data-label="MOLA(DK)">0</td>
       <td data-label="MESAİ TİPİ">
-        <select id="type${extraId}" title="1.5X: %50 zamlı | 2X: %100 zamlı" onchange="save();calc()">
+        <select id="type${extraId}" title="1.5X: %50 zamlı | 2X: %100 zamlı" onchange="scheduleSaveCalc()">
           <option value="1.5X (%50)">1.5X (%50)</option>
           <option value="2X (%100)">2X (%100)</option>
         </select>
@@ -844,7 +844,7 @@ function buildTables() {
             pattern="[0-9]*" 
             placeholder="0"
             style="width:50px; text-align:center; border:1px solid #cbd5e1; border-radius:4px; background:transparent; color:inherit; padding:3px; font-weight:bold; font-size:12.5px;" 
-            oninput="this.value=this.value.replace(/\\D/g,'');save();calc()">
+            oninput="this.value=this.value.replace(/\\D/g,'');scheduleSaveCalc()">
           <span style="font-size:11px;font-weight:700;">Dk</span>
           <span id="duration${extraId}" style="font-size:11px;opacity:0.8;"></span>
         </div>
@@ -1122,6 +1122,7 @@ function getShiftMinutes(timeStr) {
 }
 
 function updateMonthDays() {
+  flushPendingSaveCalc();
   buildTables();
   restore();
   calc();
@@ -1161,8 +1162,7 @@ function formatTimeLive(input) {
 }
 
 function autoZero(i) {
-  save();
-  calc();
+  flushPendingSaveCalc();
 }
 
 /* MAAŞ VE KESİNTİLER İÇİN YARDIMCI FORMAT FONKSİYONLARI */
@@ -1361,10 +1361,10 @@ function calc() {
       const z = parseTime((parts[1] || '').trim());
       let mins = 0;
 
- if (a !== null && z !== null) {
-  const duration = getShiftMinutes(timeVal);
-  mins = Math.max(0, duration - br);
-}
+      if (a !== null && z !== null) {
+        const duration = getShiftMinutes(timeVal);
+        mins = Math.max(0, duration - br);
+      }
 
       const hasOvertime = mins > 0;
       if (rowSheet2) rowSheet2.classList.toggle('hidden-row', !hasOvertime);
@@ -1482,7 +1482,32 @@ function showSavedToast(customMsg) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 1200);
 }
 
+// Kullanıcı yazmayı bıraktıktan 300 ms sonra bir kez kaydet ve hesapla.
+let pendingSaveCalcTimer = null;
+function scheduleSaveCalc() {
+  clearTimeout(pendingSaveCalcTimer);
+  pendingSaveCalcTimer = setTimeout(flushPendingSaveCalc, 300);
+}
+
+function flushPendingSaveCalc() {
+  if (pendingSaveCalcTimer === null) return;
+  clearTimeout(pendingSaveCalcTimer);
+  pendingSaveCalcTimer = null;
+  save();
+  calc();
+}
+
+// Alan değiştirme, arka plana geçme veya sayfadan çıkmada bekleyen veriyi sakla.
+document.addEventListener('focusout', flushPendingSaveCalc);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') flushPendingSaveCalc();
+});
+window.addEventListener('pagehide', flushPendingSaveCalc);
+
 function save() {
+  clearTimeout(pendingSaveCalcTimer);
+  pendingSaveCalcTimer = null;
+  rememberSalary();
   const nameEl = document.getElementById('name');
   if (nameEl) localStorage.setItem(PROFILE_NAME_KEY, nameEl.value);
 

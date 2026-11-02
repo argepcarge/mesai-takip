@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="html-revision" content="4">
+<meta name="html-revision" content="5">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
 <script src="./libs/jspdf.umd.min.js"></script>
@@ -93,7 +93,7 @@
           <input 
             id="name" 
             aria-label="Adı Soyadı" 
-            oninput="syncName();save()"
+            oninput="syncName();scheduleSaveCalc()"
           >
         </td>
       </tr>
@@ -169,8 +169,8 @@
               value="0" 
               aria-label="Aylık maaş" 
               onfocus="clearZeroOnFocus(this)" 
-              oninput="formatSalaryLive(this);rememberSalary();save();calc()" 
-              onblur="restoreZeroOnBlur(this);rememberSalary();save();calc()">
+              oninput="formatSalaryLive(this);scheduleSaveCalc()" 
+              onblur="restoreZeroOnBlur(this);scheduleSaveCalc();flushPendingSaveCalc()">
             <span class="salary-unit">₺</span>
           </div>
         </div>
@@ -210,8 +210,8 @@
                 value="0" 
                 aria-label="Kesinti Saati" 
                 onfocus="clearZeroOnFocus(this)" 
-                oninput="this.value=this.value.replace(/\D/g,'');save();calc()" 
-                onblur="restoreZeroOnBlur(this);save();calc()">
+                oninput="this.value=this.value.replace(/\D/g,'');scheduleSaveCalc()" 
+                onblur="restoreZeroOnBlur(this);scheduleSaveCalc();flushPendingSaveCalc()">
               <span class="salary-unit" style="color: #dc2626;">Sa</span>
             </div>
             <div class="salary-input-wrapper red-bg deduction-compact">
@@ -223,8 +223,8 @@
                 value="0" 
                 aria-label="Kesinti Dakikası" 
                 onfocus="clearZeroOnFocus(this)" 
-                oninput="this.value=this.value.replace(/\D/g,'');save();calc()" 
-                onblur="restoreZeroOnBlur(this);save();calc()">
+                oninput="this.value=this.value.replace(/\D/g,'');scheduleSaveCalc()" 
+                onblur="restoreZeroOnBlur(this);scheduleSaveCalc();flushPendingSaveCalc()">
               <span class="salary-unit" style="color: #dc2626;">Dk</span>
             </div>
           </div>

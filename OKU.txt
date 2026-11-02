@@ -1,0 +1,14 @@
+MESAI TAKIP - 300 ms GECIKMELI KAYIT VE HESAPLAMA
+Dosyalar: main.js (JS6), index.html (HTML5)
+
+- Yazarken tek tek save/calc yapilmaz; son giristen 300ms sonra kaydet, ardindan hesapla.
+- Inputtan cikma, uygulama arka plana gecme veya sayfadan cikmada bekleyen kayit tamamlanir.
+- Maas profil kaydi ayni kayit anina tasindi.
+- Daha once dogrulanan mola hatasi duzeltmesi dahil.
+- style.css ve sw.js degismez.
+
+UYARI: Bu iki dosya kullanicinin daha once yukledigi repo ZIP'indeki kaynaklar esas alinarak hazirlandi.
+ZIP main.js JS4 idi; bu dosya JS6 olurken eski mola duzeltmesi tekrar uygulandi.
+Eger GitHub'da ZIP'ten sonra baska degisiklikler yapildiysa, bu dosyalar onlari kapsamayabilir.
+Github'da guncel main.js/index.html ile karsilastirarak commit edin.
+Kullanici mesai kayitlarini korumak icin uygulama verilerini temizlemeyin.
