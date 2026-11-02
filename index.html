@@ -1467,6 +1467,19 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 .overtime-edit-btn { display:none !important; }
 }
 
+
+/* Beta.12 — Ücret satırları Hakediş ve Kesintiler ile aynı düzeni kullanır. */
+.rate-label-normal { color: #475569; }
+.rate-label-15 { color: #2563eb; }
+.rate-label-20 { color: #b45309; }
+.rate-hour-value { color: #16a34a; }
+@media (prefers-color-scheme: dark) {
+  .rate-label-normal { color: #d1d5db; }
+  .rate-label-15 { color: #93c5fd; }
+  .rate-label-20 { color: #fcd34d; }
+  .rate-hour-value { color: #4ade80; }
+}
+
 </style>
 </head>
 
@@ -1632,33 +1645,22 @@ col.col-4 { width: 22% !important; }
             <span class="salary-unit">₺</span>
           </div>
         </div>
-        <div class="unit-rate-group rate-normal">
-          <button type="button" class="unit-rate-toggle" aria-expanded="false" onclick="toggleUnitRate(this)">
-            <span class="unit-rate-title">NORMAL ÜCRET</span><span class="unit-rate-chevron" aria-hidden="true">⌄</span>
-          </button>
-          <div class="unit-rate-details" hidden>
-            <div class="salary-row"><span class="salary-label">Saatlik</span><span id="normalHour" class="salary-value-text">0,00 ₺</span></div>
-          <div class="salary-row"><span class="salary-label">Dakikalık</span><span id="normalMin" class="salary-value-text">0,00 ₺</span></div>
-          </div>
+        <div class="salary-row">
+          <span class="salary-label rate-label-normal">Normal Ücret</span>
+          <span id="normalHour" class="salary-value-text rate-hour-value">0,00 ₺</span>
         </div>
-        <div class="unit-rate-group rate-15">
-          <button type="button" class="unit-rate-toggle" aria-expanded="false" onclick="toggleUnitRate(this)">
-            <span class="unit-rate-title">1.5X MESAİ (%50)</span><span class="unit-rate-chevron" aria-hidden="true">⌄</span>
-          </button>
-          <div class="unit-rate-details" hidden>
-            <div class="salary-row"><span class="salary-label">Saatlik</span><span id="overtimeHour" class="salary-value-text">0,00 ₺</span></div>
-          <div class="salary-row"><span class="salary-label">Dakikalık</span><span id="overtimeMin" class="salary-value-text">0,00 ₺</span></div>
-          </div>
+        <div class="salary-row">
+          <span class="salary-label rate-label-15">1.5X Mesai (%50)</span>
+          <span id="overtimeHour" class="salary-value-text rate-hour-value">0,00 ₺</span>
         </div>
-        <div class="unit-rate-group rate-20">
-          <button type="button" class="unit-rate-toggle" aria-expanded="false" onclick="toggleUnitRate(this)">
-            <span class="unit-rate-title">2X MESAİ (%100)</span><span class="unit-rate-chevron" aria-hidden="true">⌄</span>
-          </button>
-          <div class="unit-rate-details" hidden>
-            <div class="salary-row"><span class="salary-label">Saatlik</span><span id="doubleHour" class="salary-value-text">0,00 ₺</span></div>
-          <div class="salary-row"><span class="salary-label">Dakikalık</span><span id="doubleMin" class="salary-value-text">0,00 ₺</span></div>
-          </div>
+        <div class="salary-row">
+          <span class="salary-label rate-label-20">2X Mesai (%100)</span>
+          <span id="doubleHour" class="salary-value-text rate-hour-value">0,00 ₺</span>
         </div>
+        <!-- Hesaplama kodunun kullandığı dakika değerleri görünmez tutulur. -->
+        <span id="normalMin" hidden></span>
+        <span id="overtimeMin" hidden></span>
+        <span id="doubleMin" hidden></span>
       </div>
 
       <div class="salary-block">
@@ -1789,7 +1791,7 @@ function toggleUnitRate(button) {
   });
 }
 
-const APP_VERSION = '2026.11.02-beta.11';
+const APP_VERSION = '2026.11.02-beta.12';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
