@@ -1,3 +1,4 @@
+/* CSS SURUMU: 2026.11.02-css.2 | Temizlik: Asama 2 */
 /* FAZLA MESAİ ÇİZELGESİ | CSS: Beta.16 / Aşama 2 temizliği
    İşlevsel tasarım kuralları korunarak tekrarlı mesai tipi seçicileri birleştirildi. */
 *{box-sizing:border-box}
@@ -1246,4 +1247,12 @@ col.col-4 { width: 22% !important; }
   .rate-label-15 { color: #93c5fd; }
   .rate-label-20 { color: #fcd34d; }
   .rate-hour-value { color: #4ade80; }
+}
+
+
+/* Ekranin altinda CSS surumunu goster */
+#appVersion::after {
+  content: "CSS: 2026.11.02-css.2";
+  display: block;
+  margin-top: 3px;
 }
