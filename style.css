@@ -1129,52 +1129,8 @@ col.col-4 { width: 22% !important; }
   }
 }
 
-/* Beta.2: Hesap sekmesiyle uyumlu, çizgili birim ücret grupları */
+/* Ücret bölümü tek sütun düzeni (korundu). */
 .salary-grid { grid-template-columns: 1fr; }
-.unit-rate-group {
-  position: relative;
-  padding: 8px 0 8px 15px;
-  margin-top: 12px;
-  border-left: 4px solid #9ca3af;
-  border-bottom: 1px solid #e2e8f0;
-}
-.unit-rate-group:last-child { border-bottom: 0; padding-bottom: 0; }
-.unit-rate-title {
-  margin-bottom: 10px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .2px;
-  color: #475569;
-}
-.unit-rate-group .salary-row { margin-bottom: 7px; }
-.unit-rate-group .salary-row:last-child { margin-bottom: 0; }
-.unit-rate-group.rate-15 { border-left-color: #3b82f6; }
-.unit-rate-group.rate-15 .unit-rate-title { color: #2563eb; }
-.unit-rate-group.rate-20 { border-left-color: #f59e0b; }
-.unit-rate-group.rate-20 .unit-rate-title { color: #b45309; }
-@media (prefers-color-scheme: dark) {
-  .unit-rate-group { border-bottom-color: #3a4048; }
-  .unit-rate-group .unit-rate-title { color: #d1d5db; }
-  .unit-rate-group.rate-15 .unit-rate-title { color: #93c5fd; }
-  .unit-rate-group.rate-20 .unit-rate-title { color: #fcd34d; }
-}
-
-
-/* Beta.3: Birim ücret grupları açılır-kapanır; başlangıçta kapalı. */
-.unit-rate-group { padding: 0 0 0 12px; }
-.unit-rate-toggle {
-  display: flex; align-items: center; justify-content: space-between;
-  width: 100%; padding: 12px 4px; border: 0; border-radius: 0;
-  background: transparent; color: inherit; font: inherit; text-align: left;
-  cursor: pointer;
-}
-.unit-rate-toggle .unit-rate-title { margin-bottom: 0; }
-.unit-rate-chevron { font-size: 19px; line-height: 1; color: #94a3b8; transition: transform .15s ease; }
-.unit-rate-toggle[aria-expanded="true"] .unit-rate-chevron { transform: rotate(180deg); }
-.unit-rate-toggle:focus-visible { outline: 2px solid #3b82f6; outline-offset: -2px; }
-.unit-rate-details { padding: 0 4px 10px; }
-.unit-rate-details[hidden] { display: none !important; }
-
 
 /* Beta.4: Mobil Hesap kartlarında mesai tipine göre üst şerit. */
 @media screen and (max-width: 700px) {
@@ -1210,12 +1166,6 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tbody tr.overtime-20,
   #tableSheet2 tbody tr.overtime-mixed { border-right-color: #33383f !important; }
 }
-/* Hesap sekmesiyle tutarlı yeşil parasal değerler. */
-.unit-rate-details .salary-value-text { color: #16a34a; }
-@media (prefers-color-scheme: dark) {
-  .unit-rate-details .salary-value-text { color: #4ade80; }
-}
-
 /* Beta.5: Hesap kartının tarih başlığı da mesai türünü takip eder. */
 @media screen and (max-width: 700px) {
   #tableSheet2 tbody tr.overtime-15 td.cell-header,
@@ -1468,3 +1418,5 @@ col.col-4 { width: 22% !important; }
   .rate-label-20 { color: #fcd34d; }
   .rate-hour-value { color: #4ade80; }
 }
+/* GECICI GUNCELLEME TESTI - test sonrasi kaldirilacak */
+.tabs { border-bottom: 5px solid red !important; }
