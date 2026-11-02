@@ -1415,6 +1415,58 @@ col.col-4 { width: 22% !important; }
   .overtime-chevron { color:#e5e7eb !important; }
 }
 
+
+/* Beta.10 — Tarihin yanında mesai türü; Hesap gün adı sade ve sabit. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr:not(.extra-row) .overtime-date-line {
+    display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  }
+  #tableSheet2 tbody tr:not(.extra-row) .overtime-type-badges {
+    display:inline-flex !important; align-items:center; gap:4px;
+  }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr:not(.extra-row).row-holiday > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr:not(.extra-row).weekend > td.cell-header .sub-day-name {
+    color:#cbd5e1 !important;
+  }
+}
+@media screen and (max-width:700px) and (prefers-color-scheme:light) {
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr:not(.extra-row).row-holiday > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr:not(.extra-row).weekend > td.cell-header .sub-day-name {
+    color:#cbd5e1 !important;
+  }
+}
+@media screen and (min-width:701px) {
+  #tableSheet2 .overtime-type-badges { display:none !important; }
+}
+
+
+/* Beta.11: Hesap kartı başlığında ortada BUGÜN ve sağda düzenleme kalemi. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header { position:relative; }
+  #tableSheet2 .overtime-today-label {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    background:#166534; color:#dcfce7; border:1px solid #22c55e;
+    border-radius:5px; padding:3px 7px; font-size:10px; line-height:1.3;
+    font-weight:700; letter-spacing:.02em; pointer-events:none; white-space:nowrap;
+  }
+  #tableSheet2 .overtime-header-right { display:flex; align-items:center; gap:5px !important; }
+  #tableSheet2 .overtime-edit-btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:30px; min-height:32px; padding:4px;
+    border:0; border-radius:6px; background:transparent;
+    color:#fcd34d; font-size:19px; font-weight:700;
+    cursor:pointer; line-height:1;
+  }
+  #tableSheet2 .overtime-edit-btn:focus-visible { outline:2px solid #fcd34d; outline-offset:1px; }
+  #tableSheet2 .overtime-chevron { min-width:18px; text-align:center; }
+}
+@media screen and (min-width:701px) {
+  #tableSheet2 .overtime-today-label,
+  #tableSheet2 .overtime-edit-btn { display:none !important; }
+}
+
 </style>
 </head>
 
@@ -1737,7 +1789,7 @@ function toggleUnitRate(button) {
   });
 }
 
-const APP_VERSION = '2026.11.02-beta.9';
+const APP_VERSION = '2026.11.02-beta.11';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -2516,10 +2568,11 @@ function buildTables() {
       <td class="cell-header" id="d${i}" data-label="" role="button" tabindex="0" aria-expanded="false" aria-label="${dateFormatted} mesai ayrıntılarını aç" onclick="toggleOvertimeCard(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleOvertimeCard(${i})}">
         <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
           <div class="cell-date-wrap">
-            <span class="main-date">${dateFormatted}</span>
-            ${subDayHtml}
+            <div class="overtime-date-line"><span class="main-date">${dateFormatted}</span><span id="typeBadges${i}" class="overtime-type-badges"></span></div>
+            <span class="sub-day-name">${weekdayFull}</span>
           </div>
-          <span class="overtime-header-right"><span id="typeBadges${i}" class="overtime-type-badges"></span><span class="overtime-chevron" aria-hidden="true">⌄</span></span>
+          ${isToday ? '<span class="overtime-today-label">BUGÜN</span>' : ''}
+          <span class="overtime-header-right"><button type="button" class="overtime-edit-btn" title="Mesaiyi düzenle" aria-label="${dateFormatted} mesaisini düzenle" onclick="event.stopPropagation();openShiftModal(${i})" onkeydown="event.stopPropagation()">✎</button><span class="overtime-chevron" aria-hidden="true">⌄</span></span>
         </div>
       </td>
       <td id="shiftRange${i}" data-label="MESAİ ARALIĞI">-</td>
