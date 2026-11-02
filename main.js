@@ -1592,3 +1592,9 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Hata:', err));
   });
 }
+// GECICI JS GUNCELLEME TESTI
+console.log("JS GUNCELLEME TESTI BASARILI");
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.style.outline = "5px solid lime";
+});
