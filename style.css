@@ -1,4 +1,4 @@
-*{box-sizing:border-box} 
+*{box-sizing:border-box}
 html, body {
   touch-action: manipulation;
 }
@@ -8,16 +8,14 @@ body{font-family:'Carlito',Arial,sans-serif;background:#f4f6f8;margin:0;color:#0
 .header-date-selectors{display:flex;gap:12px;align-items:center}
 .date-select-item{display:flex;align-items:center;gap:6px}
 .header-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 input[type=number] {
   -moz-appearance: textfield;
 }
-
 .salary-dashboard {
   max-width: 750px;
   margin: 0 auto;
@@ -25,17 +23,14 @@ input[type=number] {
   flex-direction: column;
   gap: 16px;
 }
-
 .salary-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-
 @media (max-width: 600px) {
   .salary-grid { grid-template-columns: 1fr; }
 }
-
 .salary-block {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -43,7 +38,6 @@ input[type=number] {
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
-
 .salary-block-title {
   font-size: 13px;
   font-weight: 800;
@@ -54,7 +48,6 @@ input[type=number] {
   border-bottom: 2px solid #f1f5f9;
   padding-bottom: 6px;
 }
-
 .salary-row {
   display: flex;
   justify-content: space-between;
@@ -62,13 +55,11 @@ input[type=number] {
   margin-bottom: 10px;
 }
 .salary-row:last-child { margin-bottom: 0; }
-
 .salary-label {
   font-size: 12.5px;
   font-weight: 600;
   color: #334155;
 }
-
 .salary-value-text {
   font-size: 13px;
   font-weight: 800;
@@ -83,13 +74,11 @@ input[type=number] {
   color: #dc2626;
   font-size: 14.5px;
 }
-
 .deduction-inputs-group {
   display: flex;
   align-items: center;
   gap: 6px;
 }
-
 .salary-input-wrapper {
   display: flex;
   align-items: center;
@@ -103,12 +92,10 @@ input[type=number] {
   width: 70px;
   padding: 4px 6px;
 }
-
 .salary-input-wrapper.primary-input {
   background: #eff6ff;
   border: 2px solid #3b82f6;
 }
-
 .salary-input-wrapper input {
   width: 100%;
   border: none;
@@ -119,20 +106,16 @@ input[type=number] {
   color: #0f172a;
   outline: none;
 }
-
 .salary-unit {
   font-size: 11px;
   font-weight: 700;
   color: #64748b;
   margin-left: 4px;
 }
-
 .salary-input-wrapper.green-bg { background: #f0fdf4; border-color: #86efac; }
 .salary-input-wrapper.green-bg input { color: #22C55E; font-weight: 800; }
-
 .salary-input-wrapper.red-bg { background: #fef2f2; border-color: #fca5a5; }
 .salary-input-wrapper.red-bg input { color: #dc2626; font-weight: 800; }
-
 .net-pay-card {
   background: linear-gradient(135deg, #22C55E, #15803d);
   color: #ffffff;
@@ -143,7 +126,6 @@ input[type=number] {
   align-items: center;
   box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
 }
-
 .net-pay-title { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; }
 .net-pay-value-wrap { display: flex; align-items: center; gap: 4px; }
 .net-pay-value {
@@ -153,7 +135,6 @@ input[type=number] {
   color: #ffffff;
   white-space: nowrap;
 }
-
 .header-controls label{font-weight:700;font-size:13px;color:#333}
 .header-controls select{padding:6px 10px;border:1px solid #ccc;border-radius:4px;background:#fff;font-size:13px;cursor:pointer}
 .btn{background:#0066cc;color:#fff;border:0;padding:7px 11px;border-radius:4px;cursor:pointer;font-size:12.5px;font-weight:700;transition:background .15s ease, box-shadow .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:4px}
@@ -167,11 +148,9 @@ input[type=number] {
 .btn-success:hover{background:#047857}
 .btn-danger{background:#dc2626}
 .btn-danger:hover{background:#b91c1c}
-
 .tabs{display:flex;gap:4px;margin-bottom:0}
 .tab{border:1px solid #aaa;background:#ddd;padding:8px 14px;border-radius:6px 6px 0 0;cursor:pointer;font-weight:700;font-size:12.5px;transition:background .15s ease}
 .tab.active{background:#fff;border-bottom-color:#fff}
-
 .sheet{
   background:#fff;
   border:1px solid #aaa;
@@ -180,7 +159,6 @@ input[type=number] {
   box-shadow:0 2px 8px #0001;
   overflow-x:hidden !important;
 }
-
 /* ŞABLON BUTONLARI ÇUBUĞU */
 .quick-templates-bar {
   display: flex;
@@ -215,7 +193,6 @@ input[type=number] {
   color: #fff;
   border-color: #1d4ed8;
 }
-
 table#tableSheet1 {
   border-collapse: collapse !important;
   width: 100% !important;
@@ -223,7 +200,6 @@ table#tableSheet1 {
   table-layout: fixed !important;
   border: 2px solid #000 !important;
 }
-
 table#tableSheet1 td, table#tableSheet1 th {
   border: 1.5px solid #000 !important;
   padding: 2px 4px !important;
@@ -233,15 +209,12 @@ table#tableSheet1 td, table#tableSheet1 th {
   font-weight: bold !important;
   color: #000;
 }
-
 table#tableSheet1 tr.row-holiday td {
   height: 32px !important;
 }
-
 table#tableSheet1 tr.row-multi-active td {
   height: 42px !important;
 }
-
 #tableSheet1 .title {
   font-size: 13.5px !important;
   font-weight: 800 !important;
@@ -252,20 +225,17 @@ table#tableSheet1 tr.row-multi-active td {
   letter-spacing: 0.3px;
   white-space: nowrap;
 }
-
 #tableSheet1 .label {
   font-weight: 800 !important;
   background: #fff;
   text-align: center !important;
   font-size: 13px !important;
 }
-
 #tableSheet1 th {
   text-align: center !important;
   font-size: 12px !important;
   background: #fff;
 }
-
 #tableSheet1 input {
   width: 100%;
   height: 100%;
@@ -279,13 +249,11 @@ table#tableSheet1 tr.row-multi-active td {
   text-align: center !important;
   box-sizing: border-box;
 }
-
 /* TARİH VE GÜN ADI SOLA DAYALI */
 #tableSheet1 td.cell-date-td {
   text-align: left !important;
   padding-left: 8px !important;
 }
-
 .cell-date-wrap {
   display: flex;
   flex-direction: column;
@@ -294,14 +262,12 @@ table#tableSheet1 tr.row-multi-active td {
   line-height: 1.15;
   gap: 1px;
 }
-
 .main-date {
   font-size: 12.5px !important;
   font-weight: bold !important;
   color: inherit;
   white-space: nowrap;
 }
-
 .sub-day-name {
   font-size: 8px !important;
   font-weight: 700 !important;
@@ -311,11 +277,9 @@ table#tableSheet1 tr.row-multi-active td {
   white-space: nowrap;
   line-height: 1.05;
 }
-
 .sub-day-name.weekend-day {
   color: #d97706;
 }
-
 .sub-holiday-name {
   font-size: 7px !important;
   font-weight: 700 !important;
@@ -326,25 +290,21 @@ table#tableSheet1 tr.row-multi-active td {
   line-height: 1.05;
   opacity: 0.95;
 }
-
 /* BUGÜN VURGUSU */
 table#tableSheet1 tr.row-today td,
 table#tableSheet2 tr.row-today td {
   background-color: rgba(59, 130, 246, 0.08) !important;
 }
-
 /* RESMİ TATİL VURGUSU (MOR / İNDİGO) */
 table#tableSheet1 tr.row-holiday td,
 table#tableSheet2 tr.row-holiday td {
   background-color: rgba(124, 58, 237, 0.12) !important;
 }
-
 /* HEM BUGÜN HEM TATİL İSE */
 table#tableSheet1 tr.row-today.row-holiday td,
 table#tableSheet2 tr.row-today.row-holiday td {
   background-color: rgba(59, 130, 246, 0.13) !important;
 }
-
 .time-cell-wrap {
   display: flex;
   align-items: center;
@@ -352,12 +312,10 @@ table#tableSheet2 tr.row-today.row-holiday td {
   width: 100%;
   height: 100%;
 }
-
 .time-cell-wrap input {
   flex: 1 1 auto;
   min-width: 0;
 }
-
 .multi-shift-box {
   flex: 1 1 auto;
   display: flex;
@@ -369,7 +327,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
   line-height: 1.25;
   gap: 1px;
 }
-
 .multi-shift-line {
   font-family: inherit;
   font-size: 12.5px !important;
@@ -378,7 +335,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
   white-space: nowrap;
   text-align: center;
 }
-
 .btn-shift-modal {
   background: #f1f5f9;
   color: #475569;
@@ -405,17 +361,14 @@ table#tableSheet2 tr.row-today.row-holiday td {
   border-color: #60a5fa;
   font-size: 10px;
 }
-
 #tableSheet1 input:focus {
   outline: 1px solid #0066cc !important;
   background: rgba(0, 102, 204, 0.08) !important;
 }
-
 #tableSheet1 input.invalid {
   outline: 2px solid #d9534f !important;
   background: #fdecea !important;
 }
-
 /* HESAP SEKRESİ (SHEET 2) STİLLERİ */
 .sheet2-summary-cards {
   display: grid;
@@ -423,7 +376,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
   gap: 12px;
   margin-bottom: 16px;
 }
-
 .summary-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -434,7 +386,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
 .summary-card.pufa-card { border-left: 4px solid #3b82f6; }
 .summary-card.servis-card { border-left: 4px solid #f59e0b; }
 .summary-card.total-card { border-left: 4px solid #22c55e; background: #f0fdf4; }
-
 .summary-card-title {
   font-size: 11px;
   font-weight: 800;
@@ -444,7 +395,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
   margin-bottom: 4px;
 }
 .summary-card.total-card .summary-card-title { color: #15803d; }
-
 .summary-card-hours {
   font-size: 15px;
   font-weight: 800;
@@ -456,14 +406,10 @@ table#tableSheet2 tr.row-today.row-holiday td {
   color: #059669;
   margin-top: 3px;
 }
-
 #tableSheet2 td, #tableSheet2 th {
   font-weight: bold !important;
   text-align: center !important;
   font-size: 12.5px;
-}
-#tableSheet2 th {
-  text-align: center !important;
 }
 #tableSheet2 th:first-child,
 #tableSheet2 td:first-child {
@@ -481,7 +427,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
 #tableSheet2 select {
   direction: ltr;
 }
-
 #tableSheet2 .cell-header {
   font-weight: normal !important;
   display: flex;
@@ -489,7 +434,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
   align-items: flex-start;
   line-height: 1.2;
 }
-
 .clickable-date {
   cursor: pointer;
   transition: background .15s ease;
@@ -505,7 +449,6 @@ table#tableSheet2 tr.row-today.row-holiday td {
 .clickable-date:hover .edit-icon-hint {
   opacity: 1;
 }
-
 .duration-cell-wrap {
   display: inline-flex;
   flex-direction: column;
@@ -531,19 +474,15 @@ table#tableSheet2 tr.row-today.row-holiday td {
   font-weight: normal;
   white-space: nowrap;
 }
-
 #tableSheet2 { border-collapse: collapse; width: 100%; table-layout: fixed; }
 #tableSheet2 td, #tableSheet2 th { border: 1px solid #777; padding: 6px; overflow: hidden; text-overflow: ellipsis; }
 #tableSheet2 select { max-width: 100%; }
-
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 #tableSheet2 { min-width: 600px; }
-
-.center{text-align:center !important} 
+.center{text-align:center !important}
 .right{text-align:right !important}
 .hidden{display:none !important}
 .hidden-row { display: none !important; }
-
 .save-toast{
   position: fixed;
   right: 18px;
@@ -565,12 +504,10 @@ table#tableSheet2 tr.row-today.row-holiday td {
   opacity: 1;
   transform: translateY(0);
 }
-
 col.col-1 { width: 22.5% !important; }
 col.col-2 { width: 37.5% !important; }
 col.col-3 { width: 18% !important; }
 col.col-4 { width: 22% !important; }
-
 /* MODAL STİLLERİ */
 .modal-overlay {
   position: fixed;
@@ -702,13 +639,10 @@ col.col-4 { width: 22% !important; }
   display: flex;
   gap: 8px;
 }
-
 @media (max-width: 700px) {
   body{font-size:12px}
   .wrap{margin:6px auto;padding:0 6px}
-
   .header-controls{padding:8px 10px;gap:8px;flex-direction:column;align-items:stretch}
-  
   .header-date-selectors{
     width: 100%;
     display: flex;
@@ -730,7 +664,6 @@ col.col-4 { width: 22% !important; }
     font-size: 14px;
     padding: 7px 6px;
   }
-
   .header-actions{
     margin-left:0;
     width:100%;
@@ -743,30 +676,23 @@ col.col-4 { width: 22% !important; }
     padding:8px 4px;
     font-size:12px;
   }
-
   .tabs{flex-wrap:nowrap}
   .tab{flex:1 1 0;text-align:center;padding:8px 4px;font-size:11.5px}
-
   .sheet{padding:6px 4px}
-
   table#tableSheet1 td, table#tableSheet1 th{padding:1px 2px !important;height:29px}
   table#tableSheet1 tr.row-holiday td{height:31px !important}
   table#tableSheet1 tr.row-multi-active td{height:40px !important}
   #tableSheet1 .title{font-size:11px !important;line-height:1.2 !important;white-space:normal}
   #tableSheet1 th{font-size:9.5px !important}
   #tableSheet1 .label{font-size:11px !important}
-
   .main-date, #tableSheet1 input, .multi-shift-line{font-size:11px !important}
   .sub-day-name{font-size:7.5px !important}
   .sub-holiday-name{font-size:6.2px !important;letter-spacing:-0.2px !important}
-
   .save-toast{left:12px;right:12px;bottom:12px;text-align:center}
-
   .sheet2-summary-cards {
     grid-template-columns: 1fr;
     gap: 8px;
   }
-
   .table-scroll{overflow-x:visible}
   #tableSheet2{min-width:0;border:none;border-spacing:0 0}
   #tableSheet2 thead{display:none}
@@ -778,24 +704,19 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tr.row-holiday{border-right:4px solid #7c3aed !important}
   #tableSheet2 tr.extra-row{border-right:4px solid #6c757d}
   #tableSheet2 tr.row-today{border-right:4px solid #2563eb !important}
-  
   #tableSheet2 td{display:flex;justify-content:space-between;align-items:center;gap:8px;border:none;border-bottom:1px solid #eee;padding:7px 10px;font-size:13px;text-align:right;font-weight:bold !important}
   #tableSheet2 tr td:last-child{border-bottom:none}
   #tableSheet2 td::before{content:attr(data-label);font-weight:700;color:#555;font-size:11px;text-align:left;white-space:nowrap}
   #tableSheet2 td[data-label=""]::before{content:none}
-  
   #tableSheet2 td[data-label="ÜCRET"] {
     font-weight: 800 !important;
     font-size: 14px !important;
   }
-
   #tableSheet2 select{font-size:14px;width:auto;text-align:right;font-weight:bold !important}
-
   .duration-cell-wrap {
     align-items: flex-end !important;
     text-align: right !important;
   }
-
   .modal-content {
     width: 98%;
   }
@@ -827,11 +748,9 @@ col.col-4 { width: 22% !important; }
     font-size: 14px;
   }
 }
-
 /* DARK MODE */
 @media (prefers-color-scheme: dark) {
   body{background:#15181c;color:#e7e9ec}
-
   .header-controls, .sheet{
     background:#1f2328;
     border-color:#33383f;
@@ -839,10 +758,8 @@ col.col-4 { width: 22% !important; }
   }
   .header-controls label{color:#d7dadd}
   .header-controls select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
-
   .tab{background:#262b31;border-color:#3a4048;color:#c7cbd0}
   .tab.active{background:#1f2328;color:#fff;border-bottom-color:#1f2328}
-
   .quick-templates-label { color: #94a3b8; }
   .btn-template {
     background: #1e293b;
@@ -853,7 +770,6 @@ col.col-4 { width: 22% !important; }
     background: #2563eb;
     color: #fff;
   }
-
   table#tableSheet1 {
     border-color: #4a515a !important;
     background: #1a1d21 !important;
@@ -881,26 +797,21 @@ col.col-4 { width: 22% !important; }
     color: #fca5a5 !important;
     outline: 2px solid #ef4444 !important;
   }
-
   .sub-day-name { color: #94a3b8; }
   .sub-day-name.weekend-day { color: #f59e0b; }
   .sub-holiday-name { color: #c084fc; }
-
   table#tableSheet1 tr.row-today td,
-  table#tableSheet2 tr.row-today td { 
-    background-color: rgba(59, 130, 246, 0.15) !important; 
+  table#tableSheet2 tr.row-today td {
+    background-color: rgba(59, 130, 246, 0.15) !important;
   }
-
   table#tableSheet1 tr.row-holiday td,
   table#tableSheet2 tr.row-holiday td {
-    background-color: rgba(124, 58, 237, 0.20) !important; 
+    background-color: rgba(124, 58, 237, 0.20) !important;
   }
-
   table#tableSheet1 tr.row-today.row-holiday td,
   table#tableSheet2 tr.row-today.row-holiday td {
     background-color: rgba(59, 130, 246, 0.20) !important;
   }
-
   .btn-shift-modal {
     background: #2d333b;
     color: #c7cbd0;
@@ -915,7 +826,6 @@ col.col-4 { width: 22% !important; }
     color: #93c5fd;
     border-color: #3b82f6;
   }
-
   .modal-content {
     background: #1f2328;
     color: #e7e9ec;
@@ -947,7 +857,6 @@ col.col-4 { width: 22% !important; }
     border-color: #991b1b;
   }
   .btn-shift-del:hover { background: #5f1111; }
-
   .summary-card {
     background: #1f2328;
     border-color: #33383f;
@@ -959,13 +868,10 @@ col.col-4 { width: 22% !important; }
   .summary-card.total-card .summary-card-title { color: #86efac; }
   .summary-card-hours { color: #e7e9ec; }
   .summary-card-pay { color: #4ade80; }
-
   .sub-split-text { color: #94a3b8; }
-
   .clickable-date:hover {
     background: #2563eb !important;
   }
-
   #tableSheet2 { background:#1f2328; }
   #tableSheet2 td, #tableSheet2 th {
     border-color:#3a4048;
@@ -976,7 +882,6 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tr.weekend{background:#2a2417}
   #tableSheet2 tr.extra-row{background:#20242a}
   #tableSheet2 select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
-
   .salary-block { background: #1f2328; border-color: #33383f; }
   .salary-block-title { color: #94a3b8; border-bottom-color: #2d333b; }
   .salary-label { color: #cbd5e1; }
@@ -990,77 +895,63 @@ col.col-4 { width: 22% !important; }
   .salary-input-wrapper.green-bg input { color: #4ade80; }
   .salary-input-wrapper.red-bg { background: #450a0a; border-color: #991b1b; }
   .salary-input-wrapper.red-bg input { color: #f87171; }
-
   .btn-secondary{background:#3a4048}
   .btn-secondary:hover{background:#454c55}
 }
-
 @media (prefers-color-scheme: dark) and (max-width: 700px) {
   #tableSheet2 tr {
     background: #1f2328 !important;
     border-color: #33383f !important;
     box-shadow: 0 2px 6px rgba(0,0,0,.4) !important;
   }
-
   #tableSheet2 tbody tr:nth-child(even):not(.weekend) {
     background: #22262c !important;
   }
-
   #tableSheet2 tr.weekend {
     background: #2a2417 !important;
   }
-
   #tableSheet2 tr.extra-row {
     background: #20242a !important;
   }
-
   #tableSheet2 td {
     border-bottom-color: #2d333b !important;
   }
-
   #tableSheet2 td::before {
     color: #94a3b8 !important;
   }
-
   #tableSheet2 td.cell-header{
     background:#182620 !important;
     color:#e7e9ec !important;
     border-bottom-color:#2c4438 !important;
   }
-
   #tableSheet2 tr.row-today td.cell-header,
   table#tableSheet2 tr.row-today td.cell-header {
     background:#1a2f4c !important;
     color:#e7e9ec !important;
     border-bottom-color:#2563eb !important;
   }
-
   #tableSheet2 tr.weekend td.cell-header{
     background:#332705 !important;
     color:#ffdd6a !important;
     border-bottom-color:#4d3c08 !important;
   }
-
   #tableSheet2 tr.row-holiday td.cell-header,
   table#tableSheet2 tr.row-holiday td.cell-header {
     background:#2e1065 !important;
     color:#e9d5ff !important;
     border-bottom-color:#581c87 !important;
   }
-
   #tableSheet2 tr.extra-row td.cell-header{
     background:#22262c !important;
     color:#d6dae0 !important;
     border-bottom-color:#3a4048 !important;
   }
 }
-
 @media print {
   @page {
     size: A4 portrait;
     margin: 6mm 8mm !important;
   }
-
   html, body {
     width: 100% !important;
     height: 100% !important;
@@ -1072,42 +963,35 @@ col.col-4 { width: 22% !important; }
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-
   .wrap {
     max-width: 100% !important;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
   }
-
   .header-controls, .tabs, .btn, .save-toast, .app-version, .quick-templates-bar, .btn-shift-modal, .modal-overlay, .sub-day-name, .sub-holiday-name, #sheet2, #sheet4 {
     display: none !important;
   }
-
   table#tableSheet1 tr.row-today td,
   table#tableSheet1 tr.row-holiday td,
   .row-today, .row-today td,
   .row-holiday, .row-holiday td {
     background: #fff !important;
   }
-
   #tableSheet1 td.cell-date-td {
     text-align: center !important;
     padding-left: 2px !important;
   }
-
   #sheet1 {
     display: block !important;
     padding: 0 !important;
     border: none !important;
     box-shadow: none !important;
   }
-
   table#tableSheet1 {
     width: 100% !important;
     border: 1.5px solid #000 !important;
   }
-
   table#tableSheet1 td, table#tableSheet1 th {
     border: 1px solid #000 !important;
     padding: 0 2px !important;
@@ -1117,21 +1001,17 @@ col.col-4 { width: 22% !important; }
     color: #000 !important;
     background: #fff !important;
   }
-
   #tableSheet1 .title {
     font-size: 11pt !important;
     color: #000 !important;
     background: #fff !important;
   }
-
   #tableSheet1 input#name {
     font-size: 10pt !important;
   }
 }
-
 /* Ücret bölümü tek sütun düzeni (korundu). */
 .salary-grid { grid-template-columns: 1fr; }
-
 /* Beta.4: Mobil Hesap kartlarında mesai tipine göre üst şerit. */
 @media screen and (max-width: 700px) {
   #tableSheet2 tbody tr.overtime-15,
@@ -1207,8 +1087,6 @@ col.col-4 { width: 22% !important; }
     border-bottom-color: #64748b !important;
   }
 }
-
-
 /* Beta.6: Gövde sabit nötr, yalnız tarih/gün başlığı mesai tipine göre renkli. */
 @media screen and (max-width:700px) {
   #tableSheet2 tbody tr.overtime-15,
@@ -1229,8 +1107,6 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tbody tr.overtime-20 > td.cell-header { background:#352817 !important; color:#e7e9ec !important; border-bottom-color:#f59e0b !important; }
   #tableSheet2 tbody tr.overtime-mixed > td.cell-header { background:linear-gradient(90deg,#172b48 0 50%,#352817 50% 100%) !important; color:#e7e9ec !important; border-bottom-color:#64748b !important; }
 }
-
-
 /* Beta.7: Tarih ve gün adlarının metin rengi tüm mesai türlerinde sabit. */
 @media screen and (max-width:700px) {
   #tableSheet2 tbody tr.overtime-15 > td.cell-header .main-date,
@@ -1256,8 +1132,6 @@ col.col-4 { width: 22% !important; }
     color: #cbd5e1 !important;
   }
 }
-
-
 /* Beta.8 — Hesap kartları: bağımsız açılır detaylar, ücret her zaman altta. */
 @media screen and (max-width:700px) {
   #tableSheet2 tbody tr:not(.extra-row) > td.cell-header {
@@ -1303,13 +1177,10 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name { color:#475569 !important; }
   .overtime-chevron { color:#475569; }
 }
-
-
 /* Beta.9 — Başlık mesai tipine göre renklensin, 1.5X/2X kutucukları kalksın. */
 @media screen and (max-width:700px) {
   .overtime-type-badges { display:none !important; }
   .overtime-header-right { gap:0 !important; }
-
   /* Kart gövdesi sabit gri kalsın */
   #tableSheet2 tbody tr.overtime-15,
   #tableSheet2 tbody tr.overtime-20,
@@ -1323,7 +1194,6 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tbody tr:not(.extra-row) > td:not(.cell-header) {
     background:transparent !important;
   }
-
   /* Başlık mesai tipine göre renklensin */
   #tableSheet2 tbody tr.overtime-15 > td.cell-header {
     background:#17395d !important;
@@ -1337,7 +1207,6 @@ col.col-4 { width: 22% !important; }
     background:linear-gradient(90deg,#17395d 0 50%,#493116 50% 100%) !important;
     border-bottom-color:#94a3b8 !important;
   }
-
   /* Tarih ve gün yazıları sabit renk */
   #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .main-date,
   #tableSheet2 tbody tr.overtime-15 > td.cell-header .main-date,
@@ -1353,8 +1222,6 @@ col.col-4 { width: 22% !important; }
   }
   .overtime-chevron { color:#e5e7eb !important; }
 }
-
-
 /* Beta.10 — Tarihin yanında mesai türü; Hesap gün adı sade ve sabit. */
 @media screen and (max-width:700px) {
   #tableSheet2 tbody tr:not(.extra-row) .overtime-date-line {
@@ -1379,8 +1246,6 @@ col.col-4 { width: 22% !important; }
 @media screen and (min-width:701px) {
   #tableSheet2 .overtime-type-badges { display:none !important; }
 }
-
-
 /* Beta.11: Hesap kartı başlığında ortada BUGÜN ve sağda düzenleme kalemi. */
 @media screen and (max-width:700px) {
   #tableSheet2 tbody tr:not(.extra-row) > td.cell-header { position:relative; }
@@ -1405,8 +1270,6 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 .overtime-today-label,
   #tableSheet2 .overtime-edit-btn { display:none !important; }
 }
-
-
 /* Beta.12 — Ücret satırları Hakediş ve Kesintiler ile aynı düzeni kullanır. */
 .rate-label-normal { color: #475569; }
 .rate-label-15 { color: #2563eb; }
