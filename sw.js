@@ -1,12 +1,10 @@
 
-// Ana PWA ve test PWA birbirinin önbelleğini etkilemez.
 const CACHE_PREFIX =
   'mesai-pwa:' +
   encodeURIComponent(new URL(self.registration.scope).pathname) +
   ':';
 
-// Beta.16: CSS güncelleme sistemi
-const CACHE_NAME = CACHE_PREFIX + 'beta16-css-v1';
+const CACHE_NAME = CACHE_PREFIX + 'beta16-css-js-v1';
 const INDEX = './index.html';
 
 const assets = [
@@ -23,7 +21,7 @@ const assets = [
   './Carlito-Bold.ttf'
 ];
 
-// Service Worker kurulumu
+// Kurulum: Dosyalari onbellege al
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -36,7 +34,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// Eski önbellekleri temizle
+// Aktivasyon: Yalnizca bu PWA'ya ait eski cache'leri temizle
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
@@ -54,7 +52,6 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Sayfa isteği mi?
 function isPage(req) {
   if (req.mode === 'navigate') return true;
 
@@ -64,7 +61,7 @@ function isPage(req) {
          path.endsWith('/index.html');
 }
 
-// HTML: Önce internet, sonra önbellek
+// HTML: Once internet, sonra onbellek
 function pageNetworkFirst(event) {
   const req = event.request;
 
@@ -108,9 +105,9 @@ function pageNetworkFirst(event) {
   })();
 }
 
-// CSS: İnternet varsa güncel dosyayı al.
-// İnternet yoksa önbellekteki CSS'i kullan.
-async function cssNetworkFirst(req) {
+// CSS ve JS: Internet varsa guncel surumu kontrol et
+// Internet yoksa onbellekteki kopyayi kullan
+async function assetNetworkFirst(req) {
   const cache = await caches.open(CACHE_NAME);
 
   try {
@@ -137,7 +134,7 @@ async function cssNetworkFirst(req) {
   }
 }
 
-// Diğer dosyalar: Önce önbellek
+// Diger dosyalar: Once onbellek
 async function assetCacheFirst(req) {
   const cache = await caches.open(CACHE_NAME);
 
@@ -160,7 +157,7 @@ async function assetCacheFirst(req) {
   }
 }
 
-// İstekleri yönlendir
+// Gelen istekleri yonlendir
 self.addEventListener('fetch', event => {
   const req = event.request;
 
@@ -170,13 +167,19 @@ self.addEventListener('fetch', event => {
 
   if (url.origin !== self.location.origin) return;
 
+  const cssPath =
+    new URL('./style.css', self.registration.scope).pathname;
+
+  const jsPath =
+    new URL('./main.js', self.registration.scope).pathname;
+
   if (isPage(req)) {
     event.respondWith(pageNetworkFirst(event));
   } else if (
-    url.pathname ===
-    new URL('./style.css', self.registration.scope).pathname
+    url.pathname === cssPath ||
+    url.pathname === jsPath
   ) {
-    event.respondWith(cssNetworkFirst(req));
+    event.respondWith(assetNetworkFirst(req));
   } else {
     event.respondWith(assetCacheFirst(req));
   }
