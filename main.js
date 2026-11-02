@@ -16,7 +16,7 @@ function toggleUnitRate(button) {
 }
 
 const APP_VERSION = '2026.11.02-beta.15';
-const JS_REV = 3;
+const JS_REV = 4;
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -139,13 +139,13 @@ function preloadPdfFonts() {
   if (fontPreloadPromise) return fontPreloadPromise;
 
   fontPreloadPromise = Promise.all([
-    fetch('./Carlito-Regular.ttf')
+    fetch('./fonts/Carlito-Regular.ttf')
       .then(r => {
         if (!r.ok) throw new Error('Carlito-Regular.ttf bulunamadı.');
         return r.arrayBuffer();
       })
       .then(buf => arrayBufferToBase64(buf)),
-    fetch('./Carlito-Bold.ttf')
+    fetch('./fonts/Carlito-Bold.ttf')
       .then(r => {
         if (!r.ok) throw new Error('Carlito-Bold.ttf bulunamadı.');
         return r.arrayBuffer();
