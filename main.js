@@ -1580,12 +1580,7 @@ window.addEventListener('load', () => {
 
 
   
-  const verEl = document.getElementById('appVersion');
-  if (verEl) verEl.textContent = 'Sürüm ' + APP_VERSION;
-  const jsVerEl = document.getElementById('jsVersion');
-if (jsVerEl) jsVerEl.textContent = 'JS: ' + JS_VERSION;
-  setTimeout(checkNewVersion, 3000);
-});
+
 
 /* YENİ SÜRÜM KONTROLÜ: service worker arkada yeni index.html'i indirirse uyarı gösterir */
 async function checkNewVersion() {
