@@ -1482,11 +1482,11 @@ function showSavedToast(customMsg) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 1200);
 }
 
-// Kullanıcı yazmayı bıraktıktan 300 ms sonra bir kez kaydet ve hesapla.
+// Kullanıcı yazmayı bıraktıktan 1000 ms sonra bir kez kaydet ve hesapla.
 let pendingSaveCalcTimer = null;
 function scheduleSaveCalc() {
   clearTimeout(pendingSaveCalcTimer);
-  pendingSaveCalcTimer = setTimeout(flushPendingSaveCalc, 300);
+  pendingSaveCalcTimer = setTimeout(flushPendingSaveCalc, 1000);
 }
 
 function flushPendingSaveCalc() {
