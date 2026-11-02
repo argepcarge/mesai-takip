@@ -16,7 +16,7 @@ function toggleUnitRate(button) {
 }
 
 const APP_VERSION = '2026.11.02-beta.15';
-const JS_REV = 4;
+const JS_REV = 5;
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -1361,15 +1361,10 @@ function calc() {
       const z = parseTime((parts[1] || '').trim());
       let mins = 0;
 
-      if (a !== null && z !== null) {
-        if (a === 0 && z === 0) {
-          mins = 24 * 60 - br;
-        } else {
-          mins = z - a - br;
-          if (mins < 0) mins += 24 * 60;
-        }
-        if (mins < 0) mins = 0;
-      }
+ if (a !== null && z !== null) {
+  const duration = getShiftMinutes(timeVal);
+  mins = Math.max(0, duration - br);
+}
 
       const hasOvertime = mins > 0;
       if (rowSheet2) rowSheet2.classList.toggle('hidden-row', !hasOvertime);
