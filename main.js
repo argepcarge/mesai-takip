@@ -16,6 +16,7 @@ function toggleUnitRate(button) {
 }
 
 const APP_VERSION = '2026.11.02-beta.15';
+const JS_VERSION = '2026.11.02-js.1';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -1562,6 +1563,8 @@ window.addEventListener('load', () => {
 
   const verEl = document.getElementById('appVersion');
   if (verEl) verEl.textContent = 'Sürüm ' + APP_VERSION;
+  const jsVerEl = document.getElementById('jsVersion');
+if (jsVerEl) jsVerEl.textContent = 'JS: ' + JS_VERSION;
   setTimeout(checkNewVersion, 3000);
 });
 
