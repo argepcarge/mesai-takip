@@ -16,7 +16,7 @@ function toggleUnitRate(button) {
 }
 
 const APP_VERSION = '2026.11.02-beta.15';
-const JS_REV = 2;
+const JS_REV = 3;
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -1570,7 +1570,6 @@ window.addEventListener('load', () => {
     revisionElement.textContent = `V1.0.JS${JS_REV}.HTML${htmlRev}.CSS${cssRev}`;
   }
 
-  setTimeout(checkNewVersion, 3000);
 });
 
 
@@ -1579,78 +1578,6 @@ window.addEventListener('load', () => {
 
 
   
-/* YENİ SÜRÜM KONTROLÜ: service worker arkada yeni index.html'i indirirse uyarı gösterir */
-
-async function checkNewVersion() {
-  try {
-    const [htmlRes, jsRes, cssRes] = await Promise.all([
-      fetch('./index.html?revcheck=' + Date.now(), { cache: 'no-store' }),
-      fetch('./main.js?revcheck=' + Date.now(), { cache: 'no-store' }),
-      fetch('./style.css?revcheck=' + Date.now(), { cache: 'no-store' })
-    ]);
-
-    if (!htmlRes.ok || !jsRes.ok || !cssRes.ok) return;
-
-    const [html, js, css] = await Promise.all([
-      htmlRes.text(),
-      jsRes.text(),
-      cssRes.text()
-    ]);
-
-    const htmlMatch = html.match(/<meta\s+name=["']html-revision["']\s+content=["'](\d+)["']/i);
-    const jsMatch = js.match(/const\s+JS_REV\s*=\s*(\d+)/);
-    const cssMatch = css.match(/--css-rev\s*:\s*(\d+)/);
-
-    if (!htmlMatch || !jsMatch || !cssMatch) return;
-
-    const newHtml = Number(htmlMatch[1]);
-    const newJs = Number(jsMatch[1]);
-    const newCss = Number(cssMatch[1]);
-
-    const currentHtml = Number(
-      document.querySelector('meta[name="html-revision"]')?.content
-    );
-
-    const currentJs = JS_REV;
-
-    const currentCss = Number(
-      getComputedStyle(document.documentElement)
-        .getPropertyValue('--css-rev').trim()
-    );
-
-    if (
-      newHtml === currentHtml &&
-      newJs === currentJs &&
-      newCss === currentCss
-    ) return;
-
-    const container = document.getElementById('appVersion');
-    if (!container || document.getElementById('revisionUpdateNotice')) return;
-
-    const notice = document.createElement('div');
-    notice.id = 'revisionUpdateNotice';
-    notice.textContent =
-      `Yeni sürüm hazır (V1.0.JS${newJs}.HTML${newHtml}.CSS${newCss}) — `;
-
-    const link = document.createElement('a');
-    link.href = '#';
-    link.textContent = 'Yenile';
-    link.style.cssText = 'color:#2563eb;font-weight:700;';
-
-    link.onclick = e => {
-      e.preventDefault();
-      location.reload();
-    };
-
-    notice.appendChild(link);
-    container.appendChild(notice);
-
-  } catch (e) {
-    console.warn('Revizyon kontrolü başarısız:', e);
-  }
-}
-
-
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Hata:', err));
