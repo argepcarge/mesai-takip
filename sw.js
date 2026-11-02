@@ -17,8 +17,8 @@ const assets = [
   './icon-512.png',
   './jspdf.umd.min.js',
   './jspdf.plugin.autotable.min.js',
-  './Carlito-Regular.ttf',
-  './Carlito-Bold.ttf'
+  './fonts/Carlito-Regular.ttf',
+  './fonts/Carlito-Bold.ttf'
 ];
 
 // Kurulum: Dosyalari onbellege al
