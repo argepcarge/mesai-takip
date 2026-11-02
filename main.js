@@ -1216,6 +1216,30 @@ function setTextOrVal(id, text) {
   else el.textContent = text;
 }
 
+// Hesaplama sırasında değişmeyen HTML bölümlerini yeniden oluşturma.
+function setHTMLIfChanged(element, html) {
+  if (element && element.innerHTML !== html) element.innerHTML = html;
+}
+
+// Mesai tipi listesini yalnızca normal/karma mod değiştiğinde yeniden kur.
+function updateOvertimeTypeSelect(select, mode, selectedType) {
+  if (!select) return;
+  const mixed = mode === 'mixed';
+  const validNormal = select.options.length === 2 &&
+    select.options[0].value === '1.5X (%50)' &&
+    select.options[1].value === '2X (%100)';
+  const validMixed = select.options.length === 1 &&
+    select.options[0].textContent === '1.5 & 2X';
+
+  if (mixed && !validMixed) {
+    select.innerHTML = '<option selected>1.5 & 2X</option>';
+  } else if (!mixed && !validNormal) {
+    select.innerHTML = '<option value="1.5X (%50)">1.5X (%50)</option><option value="2X (%100)">2X (%100)</option>';
+  }
+  if (select.disabled !== mixed) select.disabled = mixed;
+  if (!mixed && selectedType && select.value !== selectedType) select.value = selectedType;
+}
+
 function calc() {
   const salaryRaw = String(document.getElementById('salary')?.value || '0').replace(/\D/g, '');
   const salary = Number(salaryRaw) || 0;
@@ -1253,10 +1277,11 @@ function calc() {
       if (kind) rowSheet2.classList.add('overtime-' + kind);
       const badges = document.getElementById('typeBadges' + i);
       if (badges) {
-        badges.innerHTML = kind === 'mixed'
+        const badgeHTML = kind === 'mixed'
           ? '<span class="overtime-badge badge-15">1.5X</span><span class="overtime-badge badge-20">2X</span>'
           : kind === '20' ? '<span class="overtime-badge badge-20">2X</span>'
           : kind === '15' ? '<span class="overtime-badge badge-15">1.5X</span>' : '';
+        setHTMLIfChanged(badges, badgeHTML);
       }
     };
 
@@ -1278,7 +1303,7 @@ function calc() {
       });
 
       if (rangeElem) {
-        rangeElem.innerHTML = sList.map(s => s.time).join('<br>');
+        setHTMLIfChanged(rangeElem, sList.map(s => s.time).join('<br>'));
       }
 
       let cut1_5 = Math.min(raw1_5, br);
@@ -1291,22 +1316,9 @@ function calc() {
       setOvertimeCardType(dayNetMins <= 0 ? null : net1_5 > 0 && net2_0 > 0 ? 'mixed' : net2_0 > 0 ? '20' : '15');
 
       if (raw1_5 > 0 && raw2_0 > 0) {
-        if (typeElem) {
-          typeElem.disabled = true;
-          typeElem.innerHTML = '<option selected>1.5 & 2X</option>';
-        }
-      } else if (raw2_0 > 0) {
-        if (typeElem) {
-          typeElem.disabled = false;
-          typeElem.innerHTML = '<option value="1.5X (%50)">1.5X (%50)</option><option value="2X (%100)" selected>2X (%100)</option>';
-          typeElem.value = '2X (%100)';
-        }
+        updateOvertimeTypeSelect(typeElem, 'mixed');
       } else {
-        if (typeElem) {
-          typeElem.disabled = false;
-          typeElem.innerHTML = '<option value="1.5X (%50)" selected>1.5X (%50)</option><option value="2X (%100)">2X (%100)</option>';
-          typeElem.value = '1.5X (%50)';
-        }
+        updateOvertimeTypeSelect(typeElem, 'normal', raw2_0 > 0 ? '2X (%100)' : '1.5X (%50)');
       }
 
       if (rowSheet2) rowSheet2.classList.toggle('hidden-row', dayNetMins <= 0);
@@ -1327,9 +1339,9 @@ function calc() {
             durHtml += `<div class="sub-split-text">1.5X: ${formatCardDuration(net1_5)} + 2X: ${formatCardDuration(net2_0)}</div>`;
           }
           durHtml += `</div>`;
-          durationElem.innerHTML = durHtml;
+          setHTMLIfChanged(durationElem, durHtml);
         } else {
-          durationElem.innerHTML = '';
+          setHTMLIfChanged(durationElem, '');
         }
       }
 
@@ -1345,12 +1357,8 @@ function calc() {
 
     } else {
       if (typeElem) {
-        typeElem.disabled = false;
-        if (typeElem.options.length !== 2 || !typeElem.options[0].value.includes('1.5')) {
-          const curVal = typeElem.value;
-          typeElem.innerHTML = '<option value="1.5X (%50)">1.5X (%50)</option><option value="2X (%100)">2X (%100)</option>';
-          typeElem.value = is2XType(curVal) ? '2X (%100)' : '1.5X (%50)';
-        }
+        const curVal = typeElem.value;
+        updateOvertimeTypeSelect(typeElem, 'normal', is2XType(curVal) ? '2X (%100)' : '1.5X (%50)');
       }
 
       let timeVal = (timeElem?.value || '').trim();
@@ -1383,9 +1391,9 @@ function calc() {
       const pay = mins * normalMin * mult;
 
       if (durationElem) {
-        durationElem.innerHTML = mins 
-          ? `<div class="duration-cell-wrap"><div class="main-duration-line"><span>${formatCardDuration(mins)} (${mins} dk)</span></div></div>` 
-          : '';
+        setHTMLIfChanged(durationElem, mins
+          ? `<div class="duration-cell-wrap"><div class="main-duration-line"><span>${formatCardDuration(mins)} (${mins} dk)</span></div></div>`
+          : '');
       }
       if (payElem) {
         payElem.textContent = pay ? `${money(pay)} ₺` : '';
