@@ -1364,6 +1364,57 @@ col.col-4 { width: 22% !important; }
   #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name { color:#475569 !important; }
   .overtime-chevron { color:#475569; }
 }
+
+
+/* Beta.9 — Başlık mesai tipine göre renklensin, 1.5X/2X kutucukları kalksın. */
+@media screen and (max-width:700px) {
+  .overtime-type-badges { display:none !important; }
+  .overtime-header-right { gap:0 !important; }
+
+  /* Kart gövdesi sabit gri kalsın */
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed,
+  #tableSheet2 tbody tr:not(.extra-row) {
+    background:#202428 !important;
+  }
+  #tableSheet2 tbody tr.overtime-15 > td:not(.cell-header),
+  #tableSheet2 tbody tr.overtime-20 > td:not(.cell-header),
+  #tableSheet2 tbody tr.overtime-mixed > td:not(.cell-header),
+  #tableSheet2 tbody tr:not(.extra-row) > td:not(.cell-header) {
+    background:transparent !important;
+  }
+
+  /* Başlık mesai tipine göre renklensin */
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header {
+    background:#17395d !important;
+    border-bottom-color:#3b82f6 !important;
+  }
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header {
+    background:#493116 !important;
+    border-bottom-color:#f59e0b !important;
+  }
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header {
+    background:linear-gradient(90deg,#17395d 0 50%,#493116 50% 100%) !important;
+    border-bottom-color:#94a3b8 !important;
+  }
+
+  /* Tarih ve gün yazıları sabit renk */
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .main-date {
+    color:#ffffff !important;
+  }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .sub-day-name {
+    color:#cbd5e1 !important;
+  }
+  .overtime-chevron { color:#e5e7eb !important; }
+}
+
 </style>
 </head>
 
@@ -1686,7 +1737,7 @@ function toggleUnitRate(button) {
   });
 }
 
-const APP_VERSION = '2026.11.02-beta.8';
+const APP_VERSION = '2026.11.02-beta.9';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
