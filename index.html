@@ -1299,8 +1299,8 @@ col.col-4 { width: 22% !important; }
               value="0" 
               aria-label="Aylık maaş" 
               onfocus="clearZeroOnFocus(this)" 
-              oninput="formatSalaryLive(this);save();calc()" 
-              onblur="restoreZeroOnBlur(this);save();calc()">
+              oninput="formatSalaryLive(this);rememberSalary();save();calc()" 
+              onblur="restoreZeroOnBlur(this);rememberSalary();save();calc()">
             <span class="salary-unit">₺</span>
           </div>
         </div>
@@ -1434,7 +1434,7 @@ col.col-4 { width: 22% !important; }
 
 <script>
 /* SÜRÜM KODU: HTML'de her değişiklikte bunu artır (örn: 2026.10.02-b) */
-const APP_VERSION = '2026.10.30-c';
+const APP_VERSION = '2026.11.02-beta.1';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -1711,6 +1711,7 @@ function applyRestoredText() {
     if (salElem) {
       const num = salaryMatch[1].replace(/\D/g, '');
       salElem.value = num ? Number(num).toLocaleString('tr-TR') : '0';
+      rememberSalary();
     }
   }
 
@@ -2025,6 +2026,44 @@ function getStorageKey() {
   const year = document.getElementById('selectYear').value;
   const month = document.getElementById('selectMonth').value;
   return `fazlaMesaiCizelgesi_${year}_${month}`;
+}
+
+/* Ortak personel adı ve yeni aylara taşınacak son girilen maaş.
+   Eski ayların maaşları kendi aylık kayıtlarında korunur. */
+const PROFILE_NAME_KEY = 'fazlaMesaiCizelgesi_profileName';
+const LAST_SALARY_KEY = 'fazlaMesaiCizelgesi_lastSalary';
+
+function formatStoredSalary(value) {
+  const digits = String(value ?? '').replace(/\D/g, '');
+  return digits ? Number(digits).toLocaleString('tr-TR') : '0';
+}
+
+/* Eski sürümün aylık kayıtlarından ilk açılış için bilgi devral. */
+function findLegacyProfileValue(field) {
+  let result = null;
+  let latestPeriod = -1;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const match = /^fazlaMesaiCizelgesi_(\d{4})_(\d{1,2})$/.exec(key || '');
+    if (!match) continue;
+    try {
+      const data = JSON.parse(localStorage.getItem(key) || '{}');
+      const value = data && data[field];
+      if (typeof value !== 'string' || !value.trim()) continue;
+      if (field === 'salary' && Number(value.replace(/\D/g, '')) <= 0) continue;
+      const period = Number(match[1]) * 12 + Number(match[2]);
+      if (period > latestPeriod) {
+        latestPeriod = period;
+        result = value;
+      }
+    } catch (e) { /* Eski bozuk kayıtlar atlanır. */ }
+  }
+  return result;
+}
+
+function rememberSalary() {
+  const salaryEl = document.getElementById('salary');
+  if (salaryEl) localStorage.setItem(LAST_SALARY_KEY, salaryEl.value || '0');
 }
 
 let currentDaysCount = 31;
@@ -2827,6 +2866,9 @@ function showSavedToast(customMsg) {
 }
 
 function save() {
+  const nameEl = document.getElementById('name');
+  if (nameEl) localStorage.setItem(PROFILE_NAME_KEY, nameEl.value);
+
   const o = {};
   document.querySelectorAll('input,select').forEach(e => {
     if (e.id && e.id !== 'selectYear' && e.id !== 'selectMonth') {
@@ -2840,23 +2882,46 @@ function save() {
 }
 
 function restore() {
+  // Bu alanlar tabloyla yeniden oluşturulmaz. Yeni ayda eski ayın kesintisi kalmamalı.
+  const deductionHoursEl = document.getElementById('deductionHours');
+  const deductionMinutesEl = document.getElementById('deductionMinutes');
+  if (deductionHoursEl) deductionHoursEl.value = '0';
+  if (deductionMinutesEl) deductionMinutesEl.value = '0';
+
   try {
     const o = JSON.parse(localStorage.getItem(getStorageKey()) || '{}');
     dayShiftsData = o['__shiftsData'] || {};
 
+    // Personel adı tüm aylar için tek bir kayıttan okunur.
+    const nameEl = document.getElementById('name');
+    let sharedName = localStorage.getItem(PROFILE_NAME_KEY);
+    if (sharedName === null) {
+      sharedName = (typeof o.name === 'string' && o.name.trim())
+        ? o.name : findLegacyProfileValue('name');
+      if (sharedName !== null) localStorage.setItem(PROFILE_NAME_KEY, sharedName);
+    }
+    if (nameEl) nameEl.value = sharedName ?? '';
+
+    // Yeni ay önceki girilen maaşı devralır, kayıtlı ay ise kendi maaşını kullanır.
+    let lastSalary = localStorage.getItem(LAST_SALARY_KEY);
+    if (lastSalary === null) {
+      lastSalary = findLegacyProfileValue('salary') ?? '0';
+      localStorage.setItem(LAST_SALARY_KEY, lastSalary);
+    }
+    const salaryEl = document.getElementById('salary');
+    if (salaryEl) {
+      salaryEl.value = formatStoredSalary(Object.prototype.hasOwnProperty.call(o, 'salary')
+        ? o.salary : lastSalary);
+    }
+
     Object.entries(o).forEach(([id,v]) => {
-      if (id === '__shiftsData') return;
+      if (id === '__shiftsData' || id === 'name' || id === 'salary') return;
       const e = document.getElementById(id);
       if (e) {
         if (e.tagName === 'SELECT' && id.startsWith('type')) {
           e.value = is2XType(v) ? '2X (%100)' : '1.5X (%50)';
         } else if (e.tagName === 'INPUT') {
-          if (id === 'salary') {
-            const num = String(v || '').replace(/\D/g, '');
-            e.value = num ? Number(num).toLocaleString('tr-TR') : '0';
-          } else {
-            e.value = v;
-          }
+          e.value = v;
         }
       }
     });
