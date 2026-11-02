@@ -4,7 +4,7 @@ const CACHE_PREFIX =
   encodeURIComponent(new URL(self.registration.scope).pathname) +
   ':';
 
-const CACHE_NAME = CACHE_PREFIX + 'beta16-css-js-v2';
+const CACHE_NAME = CACHE_PREFIX + 'beta16-css-js-v3';
 const INDEX = './index.html';
 
 const assets = [
@@ -15,8 +15,8 @@ const assets = [
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  './jspdf.umd.min.js',
-  './jspdf.plugin.autotable.min.js',
+  './libs/jspdf.umd.min.js',
+  './libs/jspdf.plugin.autotable.min.js',
   './fonts/Carlito-Regular.ttf',
   './fonts/Carlito-Bold.ttf'
 ];
