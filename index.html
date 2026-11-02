@@ -1186,6 +1186,89 @@ col.col-4 { width: 22% !important; }
 .unit-rate-details { padding: 0 4px 10px; }
 .unit-rate-details[hidden] { display: none !important; }
 
+
+/* Beta.4: Mobil Hesap kartlarında mesai tipine göre üst şerit. */
+@media screen and (max-width: 700px) {
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed {
+    border-top: 5px solid #3b82f6;
+    border-right: 1.5px solid #ccc;
+  }
+  #tableSheet2 tbody tr.overtime-20 { border-top-color: #f59e0b; }
+  #tableSheet2 tbody tr.overtime-mixed {
+    border-top: 5px solid transparent;
+    border-image: linear-gradient(to right, #3b82f6 0 50%, #f59e0b 50% 100%) 1 0 0 0;
+  }
+  /* Gradient border-image, border-radius'ı kesebildiğinden şeridi pseudo-element ile çiz. */
+  #tableSheet2 tbody tr.overtime-mixed { border-image: none; border-top-color: transparent; position: relative; }
+  #tableSheet2 tbody tr.overtime-mixed::before {
+    content: ''; position: absolute; top: -5px; left: 0; right: 0;
+    height: 5px; background: linear-gradient(to right, #3b82f6 50%, #f59e0b 50%);
+  }
+  #tableSheet2 tbody tr.overtime-15.weekend,
+  #tableSheet2 tbody tr.overtime-20.weekend,
+  #tableSheet2 tbody tr.overtime-mixed.weekend,
+  #tableSheet2 tbody tr.overtime-15.row-holiday,
+  #tableSheet2 tbody tr.overtime-20.row-holiday,
+  #tableSheet2 tbody tr.overtime-mixed.row-holiday,
+  #tableSheet2 tbody tr.overtime-15.row-today,
+  #tableSheet2 tbody tr.overtime-20.row-today,
+  #tableSheet2 tbody tr.overtime-mixed.row-today { border-right: 1.5px solid #ccc !important; }
+}
+@media (prefers-color-scheme: dark) and (max-width: 700px) {
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed { border-right-color: #33383f !important; }
+}
+/* Hesap sekmesiyle tutarlı yeşil parasal değerler. */
+.unit-rate-details .salary-value-text { color: #16a34a; }
+@media (prefers-color-scheme: dark) {
+  .unit-rate-details .salary-value-text { color: #4ade80; }
+}
+
+/* Beta.5: Hesap kartının tarih başlığı da mesai türünü takip eder. */
+@media screen and (max-width: 700px) {
+  #tableSheet2 tbody tr.overtime-15 td.cell-header,
+  #tableSheet2 tbody tr.overtime-15.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-15.row-today td.cell-header {
+    background: #eaf2ff !important;
+    border-bottom-color: #93c5fd !important;
+  }
+  #tableSheet2 tbody tr.overtime-20 td.cell-header,
+  #tableSheet2 tbody tr.overtime-20.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-20.row-today td.cell-header {
+    background: #fff4df !important;
+    border-bottom-color: #f59e0b !important;
+  }
+  #tableSheet2 tbody tr.overtime-mixed td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed.row-today td.cell-header {
+    background: #f1f5f9 !important;
+    border-bottom-color: #94a3b8 !important;
+  }
+}
+@media screen and (max-width: 700px) and (prefers-color-scheme: dark) {
+  #tableSheet2 tbody tr.overtime-15 td.cell-header,
+  #tableSheet2 tbody tr.overtime-15.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-15.row-today td.cell-header {
+    background: #172b48 !important;
+    border-bottom-color: #3b82f6 !important;
+  }
+  #tableSheet2 tbody tr.overtime-20 td.cell-header,
+  #tableSheet2 tbody tr.overtime-20.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-20.row-today td.cell-header {
+    background: #352817 !important;
+    border-bottom-color: #f59e0b !important;
+  }
+  #tableSheet2 tbody tr.overtime-mixed td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed.row-today td.cell-header {
+    background: #272b33 !important;
+    border-bottom-color: #64748b !important;
+  }
+}
+
 </style>
 </head>
 
@@ -1508,7 +1591,7 @@ function toggleUnitRate(button) {
   });
 }
 
-const APP_VERSION = '2026.11.02-beta.3';
+const APP_VERSION = '2026.11.02-beta.5';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -2719,6 +2802,11 @@ function calc() {
     let typeElem = document.getElementById('type' + i);
     let durationElem = document.getElementById('duration' + i);
     let payElem = document.getElementById('pay' + i);
+    const setOvertimeCardType = (kind) => {
+      if (!rowSheet2) return;
+      rowSheet2.classList.remove('overtime-15', 'overtime-20', 'overtime-mixed');
+      if (kind) rowSheet2.classList.add('overtime-' + kind);
+    };
 
     let br = Number(breakElem ? breakElem.value : 0) || 0;
     if (bText) bText.textContent = br > 0 ? br : '0';
@@ -2748,6 +2836,7 @@ function calc() {
       let net1_5 = raw1_5 - cut1_5;
       let net2_0 = raw2_0 - cut2_0;
       let dayNetMins = net1_5 + net2_0;
+      setOvertimeCardType(dayNetMins <= 0 ? null : net1_5 > 0 && net2_0 > 0 ? 'mixed' : net2_0 > 0 ? '20' : '15');
 
       if (raw1_5 > 0 && raw2_0 > 0) {
         if (typeElem) {
@@ -2844,6 +2933,7 @@ function calc() {
       const type = typeElem ? typeElem.value : '1.5X (%50)';
       const mult = is2XType(type) ? 2 : 1.5;
 
+      setOvertimeCardType(mins <= 0 ? null : mult === 2 ? '20' : '15');
       const pay = mins * normalMin * mult;
 
       if (durationElem) {
