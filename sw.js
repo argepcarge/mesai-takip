@@ -4,7 +4,7 @@ const CACHE_PREFIX =
   encodeURIComponent(new URL(self.registration.scope).pathname) +
   ':';
 
-const CACHE_NAME = CACHE_PREFIX + 'beta16-css-js-v3';
+const CACHE_NAME = CACHE_PREFIX + 'beta16-css-js-v4';
 const INDEX = './index.html';
 
 const assets = [
