@@ -1,4 +1,6 @@
-const CACHE_NAME = 'mesai-pwa-beta14-v1';
+// GitHub Pages alt dizinine özel önbellek adı: ana PWA ve test PWA birbirini etkilemez.
+const CACHE_PREFIX = 'mesai-pwa:' + encodeURIComponent(new URL(self.registration.scope).pathname) + ':';
+const CACHE_NAME = CACHE_PREFIX + 'beta15-v1';
 const INDEX = './index.html';
 
 const assets = [
@@ -27,7 +29,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
       .then(keys => Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+        keys.filter(k => k.startsWith(CACHE_PREFIX) && k !== CACHE_NAME).map(k => caches.delete(k))
       ))
       .then(() => self.clients.claim())
   );
