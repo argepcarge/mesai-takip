@@ -1269,6 +1269,101 @@ col.col-4 { width: 22% !important; }
   }
 }
 
+
+/* Beta.6: Gövde sabit nötr, yalnız tarih/gün başlığı mesai tipine göre renkli. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed { background:#f3f4f6 !important; }
+  #tableSheet2 tbody tr.overtime-15 > td:not(.cell-header),
+  #tableSheet2 tbody tr.overtime-20 > td:not(.cell-header),
+  #tableSheet2 tbody tr.overtime-mixed > td:not(.cell-header) { background:transparent !important; }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header { background:#eaf2ff !important; border-bottom-color:#3b82f6 !important; }
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header { background:#fff4df !important; border-bottom-color:#f59e0b !important; }
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header { background:linear-gradient(90deg,#eaf2ff 0 50%,#fff4df 50% 100%) !important; border-bottom-color:#94a3b8 !important; }
+}
+@media screen and (max-width:700px) and (prefers-color-scheme:dark) {
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed { background:#202428 !important; }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header { background:#172b48 !important; color:#e7e9ec !important; border-bottom-color:#3b82f6 !important; }
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header { background:#352817 !important; color:#e7e9ec !important; border-bottom-color:#f59e0b !important; }
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header { background:linear-gradient(90deg,#172b48 0 50%,#352817 50% 100%) !important; color:#e7e9ec !important; border-bottom-color:#64748b !important; }
+}
+
+
+/* Beta.7: Tarih ve gün adlarının metin rengi tüm mesai türlerinde sabit. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .main-date {
+    color: #202428 !important;
+  }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .sub-day-name {
+    color: #475569 !important;
+  }
+}
+@media screen and (max-width:700px) and (prefers-color-scheme:dark) {
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .main-date {
+    color: #ffffff !important;
+  }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .sub-day-name {
+    color: #cbd5e1 !important;
+  }
+}
+
+
+/* Beta.8 — Hesap kartları: bağımsız açılır detaylar, ücret her zaman altta. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header {
+    cursor:pointer !important;
+    background:#292e36 !important;
+    border-bottom:1px solid #414a55 !important;
+    padding:12px !important;
+    display:block !important;
+  }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header::before { display:none !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header > div { align-items:center !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .main-date { color:#fff !important; font-size:14px !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name { color:#cbd5e1 !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="MESAİ TİPİ"] { display:none !important; }
+  #tableSheet2 tbody tr:not(.extra-row):not(.overtime-expanded) > td[data-label="MESAİ ARALIĞI"],
+  #tableSheet2 tbody tr:not(.extra-row):not(.overtime-expanded) > td[data-label="MOLA(DK)"],
+  #tableSheet2 tbody tr:not(.extra-row):not(.overtime-expanded) > td[data-label="TOPLAM SÜRE"] { display:none !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="ÜCRET"] { display:flex !important; padding:12px !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="MOLA(DK)"]::before { content:'MOLA' !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="TOPLAM SÜRE"] .main-duration-line { flex-wrap:wrap; justify-content:flex-end; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="TOPLAM SÜRE"] .sub-split-text { font-size:10px; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header:focus-visible { outline:2px solid #60a5fa; outline-offset:-3px; }
+  .overtime-header-right { display:flex; align-items:center; gap:8px; }
+  .overtime-type-badges { display:flex; align-items:center; gap:4px; }
+  .overtime-badge { display:inline-flex; padding:4px 8px; border-radius:5px; font-size:11px; font-weight:800; white-space:nowrap; }
+  .overtime-badge.badge-15 { color:#bfdbfe; background:#17395d; border:1px solid #3b82f6; }
+  .overtime-badge.badge-20 { color:#fde68a; background:#493116; border:1px solid #f59e0b; }
+  .overtime-chevron { display:inline-block; font-size:19px; line-height:1; color:#cbd5e1; transition:transform .15s; }
+  #tableSheet2 tbody tr.overtime-expanded .overtime-chevron { transform:rotate(180deg); }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header { background:#292e36 !important; border-bottom-color:#414a55 !important; }
+}
+@media screen and (min-width:701px) {
+  .overtime-header-right { display:none; }
+}
+@media screen and (max-width:700px) and (prefers-color-scheme:light) {
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header,
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header { background:#e9edf2 !important; border-bottom-color:#cbd5e1 !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .main-date { color:#172033 !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name { color:#475569 !important; }
+  .overtime-chevron { color:#475569; }
+}
 </style>
 </head>
 
@@ -1591,7 +1686,7 @@ function toggleUnitRate(button) {
   });
 }
 
-const APP_VERSION = '2026.11.02-beta.5';
+const APP_VERSION = '2026.11.02-beta.8';
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -2232,6 +2327,25 @@ function formatHoursMinutes(totalMins) {
   return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ' Sa';
 }
 
+function formatCardDuration(totalMins) {
+  const mins = Math.max(0, Math.trunc(totalMins || 0));
+  const hours = Math.floor(mins / 60);
+  const rest = mins % 60;
+  return (hours ? `${hours} saat` : '') + (rest ? `${hours ? ' ' : ''}${rest} dk` : '') || '0 dk';
+}
+
+function toggleOvertimeCard(day) {
+  if (!window.matchMedia('(max-width: 700px)').matches) return;
+  const row = document.getElementById('rowSheet2_' + day);
+  const header = document.getElementById('d' + day);
+  if (!row || row.classList.contains('hidden-row')) return;
+  const open = row.classList.toggle('overtime-expanded');
+  if (header) {
+    header.setAttribute('aria-expanded', String(open));
+    header.setAttribute('aria-label', `${day}. gün mesai ayrıntılarını ${open ? 'kapat' : 'aç'}`);
+  }
+}
+
 function formatSummaryDuration(totalMins) {
   const mins = Math.max(0, Math.trunc(totalMins || 0));
   return `${Math.floor(mins / 60)} saat ${mins % 60} dk (${mins} dk)`;
@@ -2348,13 +2462,13 @@ function buildTables() {
     if (isToday) tr2.classList.add('row-today');
 
     tr2.innerHTML = `
-      <td class="cell-header clickable-date" id="d${i}" data-label="TARİH" onclick="openShiftModal(${i})" title="Bu günü düzenlemek için tıklayın">
+      <td class="cell-header" id="d${i}" data-label="" role="button" tabindex="0" aria-expanded="false" aria-label="${dateFormatted} mesai ayrıntılarını aç" onclick="toggleOvertimeCard(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleOvertimeCard(${i})}">
         <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
           <div class="cell-date-wrap">
             <span class="main-date">${dateFormatted}</span>
             ${subDayHtml}
           </div>
-          <span class="edit-icon-hint" title="Düzenle">✏️</span>
+          <span class="overtime-header-right"><span id="typeBadges${i}" class="overtime-type-badges"></span><span class="overtime-chevron" aria-hidden="true">⌄</span></span>
         </div>
       </td>
       <td id="shiftRange${i}" data-label="MESAİ ARALIĞI">-</td>
@@ -2806,10 +2920,17 @@ function calc() {
       if (!rowSheet2) return;
       rowSheet2.classList.remove('overtime-15', 'overtime-20', 'overtime-mixed');
       if (kind) rowSheet2.classList.add('overtime-' + kind);
+      const badges = document.getElementById('typeBadges' + i);
+      if (badges) {
+        badges.innerHTML = kind === 'mixed'
+          ? '<span class="overtime-badge badge-15">1.5X</span><span class="overtime-badge badge-20">2X</span>'
+          : kind === '20' ? '<span class="overtime-badge badge-20">2X</span>'
+          : kind === '15' ? '<span class="overtime-badge badge-15">1.5X</span>' : '';
+      }
     };
 
     let br = Number(breakElem ? breakElem.value : 0) || 0;
-    if (bText) bText.textContent = br > 0 ? br : '0';
+    if (bText) bText.textContent = `${br} dk`;
 
     const sList = dayShiftsData[i];
 
@@ -2869,11 +2990,10 @@ function calc() {
           let durHtml = `
             <div class="duration-cell-wrap">
               <div class="main-duration-line">
-                <span>${formatHoursMinutes(dayNetMins)}</span>
-                <span class="dur-mins">(${dayNetMins} Dk)</span>
+                <span>${formatCardDuration(dayNetMins)} (${dayNetMins} dk)</span>
               </div>`;
           if (net1_5 > 0 && net2_0 > 0) {
-            durHtml += `<div class="sub-split-text">(1.5X: ${formatHoursMinutes(net1_5)} + 2X: ${formatHoursMinutes(net2_0)})</div>`;
+            durHtml += `<div class="sub-split-text">1.5X: ${formatCardDuration(net1_5)} + 2X: ${formatCardDuration(net2_0)}</div>`;
           }
           durHtml += `</div>`;
           durationElem.innerHTML = durHtml;
@@ -2938,7 +3058,7 @@ function calc() {
 
       if (durationElem) {
         durationElem.innerHTML = mins 
-          ? `<div class="duration-cell-wrap"><div class="main-duration-line"><span>${formatHoursMinutes(mins)}</span><span class="dur-mins">(${mins} Dk)</span></div></div>` 
+          ? `<div class="duration-cell-wrap"><div class="main-duration-line"><span>${formatCardDuration(mins)} (${mins} dk)</span></div></div>` 
           : '';
       }
       if (payElem) {
