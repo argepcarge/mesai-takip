@@ -1,0 +1,1470 @@
+*{box-sizing:border-box} 
+html, body {
+  touch-action: manipulation;
+}
+body{font-family:'Carlito',Arial,sans-serif;background:#f4f6f8;margin:0;color:#000;font-size:13px;transition:background .2s ease,color .2s ease}
+.wrap{max-width:1100px;margin:16px auto;padding:0 12px}
+.header-controls{background:#fff;border:1px solid #aaa;border-radius:6px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px #0001}
+.header-date-selectors{display:flex;gap:12px;align-items:center}
+.date-select-item{display:flex;align-items:center;gap:6px}
+.header-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.salary-dashboard {
+  max-width: 750px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.salary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .salary-grid { grid-template-columns: 1fr; }
+}
+
+.salary-block {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.salary-block-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 6px;
+}
+
+.salary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.salary-row:last-child { margin-bottom: 0; }
+
+.salary-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.salary-value-text {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  text-align: right;
+}
+.salary-value-text.green-text {
+  color: #16a34a;
+  font-size: 14.5px;
+}
+.salary-value-text.red-text {
+  color: #dc2626;
+  font-size: 14.5px;
+}
+
+.deduction-inputs-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.salary-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 4px 8px;
+  width: 140px;
+}
+.salary-input-wrapper.deduction-compact {
+  width: 70px;
+  padding: 4px 6px;
+}
+
+.salary-input-wrapper.primary-input {
+  background: #eff6ff;
+  border: 2px solid #3b82f6;
+}
+
+.salary-input-wrapper input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+  color: #0f172a;
+  outline: none;
+}
+
+.salary-unit {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  margin-left: 4px;
+}
+
+.salary-input-wrapper.green-bg { background: #f0fdf4; border-color: #86efac; }
+.salary-input-wrapper.green-bg input { color: #22C55E; font-weight: 800; }
+
+.salary-input-wrapper.red-bg { background: #fef2f2; border-color: #fca5a5; }
+.salary-input-wrapper.red-bg input { color: #dc2626; font-weight: 800; }
+
+.net-pay-card {
+  background: linear-gradient(135deg, #22C55E, #15803d);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+.net-pay-title { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; }
+.net-pay-value-wrap { display: flex; align-items: center; gap: 4px; }
+.net-pay-value {
+  font-size: 22px;
+  font-weight: 900;
+  text-align: right;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.header-controls label{font-weight:700;font-size:13px;color:#333}
+.header-controls select{padding:6px 10px;border:1px solid #ccc;border-radius:4px;background:#fff;font-size:13px;cursor:pointer}
+.btn{background:#0066cc;color:#fff;border:0;padding:7px 11px;border-radius:4px;cursor:pointer;font-size:12.5px;font-weight:700;transition:background .15s ease, box-shadow .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.btn:hover{background:#0052a3}
+.btn-sm{padding:4px 8px;font-size:12px}
+.btn-secondary{background:#475569}
+.btn-secondary:hover{background:#334155}
+.btn-primary{background:#2563eb}
+.btn-primary:hover{background:#1d4ed8}
+.btn-success{background:#059669}
+.btn-success:hover{background:#047857}
+.btn-danger{background:#dc2626}
+.btn-danger:hover{background:#b91c1c}
+
+.tabs{display:flex;gap:4px;margin-bottom:0}
+.tab{border:1px solid #aaa;background:#ddd;padding:8px 14px;border-radius:6px 6px 0 0;cursor:pointer;font-weight:700;font-size:12.5px;transition:background .15s ease}
+.tab.active{background:#fff;border-bottom-color:#fff}
+
+.sheet{
+  background:#fff;
+  border:1px solid #aaa;
+  border-radius:0 6px 6px 6px;
+  padding:10px;
+  box-shadow:0 2px 8px #0001;
+  overflow-x:hidden !important;
+}
+
+/* ŞABLON BUTONLARI ÇUBUĞU */
+.quick-templates-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  padding-bottom: 3px;
+  -webkit-overflow-scrolling: touch;
+}
+.quick-templates-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #475569;
+  white-space: nowrap;
+  padding: 0 2px;
+}
+.btn-template {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  padding: 4px 9px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s ease;
+}
+.btn-template:hover, .btn-template:active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #1d4ed8;
+}
+
+table#tableSheet1 {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+  border: 2px solid #000 !important;
+}
+
+table#tableSheet1 td, table#tableSheet1 th {
+  border: 1.5px solid #000 !important;
+  padding: 2px 4px !important;
+  height: 29px;
+  vertical-align: middle;
+  text-align: center !important;
+  font-weight: bold !important;
+  color: #000;
+}
+
+table#tableSheet1 tr.row-holiday td {
+  height: 32px !important;
+}
+
+table#tableSheet1 tr.row-multi-active td {
+  height: 42px !important;
+}
+
+#tableSheet1 .title {
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  line-height: 1.25 !important;
+  padding: 6px 4px !important;
+  background: #fff;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+#tableSheet1 .label {
+  font-weight: 800 !important;
+  background: #fff;
+  text-align: center !important;
+  font-size: 13px !important;
+}
+
+#tableSheet1 th {
+  text-align: center !important;
+  font-size: 12px !important;
+  background: #fff;
+}
+
+#tableSheet1 input {
+  width: 100%;
+  height: 100%;
+  border: 0 !important;
+  outline: none !important;
+  background: transparent !important;
+  padding: 0 4px;
+  font-size: 12.5px !important;
+  font-weight: bold !important;
+  color: inherit;
+  text-align: center !important;
+  box-sizing: border-box;
+}
+
+/* TARİH VE GÜN ADI SOLA DAYALI */
+#tableSheet1 td.cell-date-td {
+  text-align: left !important;
+  padding-left: 8px !important;
+}
+
+.cell-date-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important;
+  justify-content: center;
+  line-height: 1.15;
+  gap: 1px;
+}
+
+.main-date {
+  font-size: 12.5px !important;
+  font-weight: bold !important;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.sub-day-name {
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: #64748b;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  line-height: 1.05;
+}
+
+.sub-day-name.weekend-day {
+  color: #d97706;
+}
+
+.sub-holiday-name {
+  font-size: 7px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: #7c3aed;
+  letter-spacing: 0 !important;
+  white-space: nowrap;
+  line-height: 1.05;
+  opacity: 0.95;
+}
+
+/* BUGÜN VURGUSU */
+table#tableSheet1 tr.row-today td,
+table#tableSheet2 tr.row-today td {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* RESMİ TATİL VURGUSU (MOR / İNDİGO) */
+table#tableSheet1 tr.row-holiday td,
+table#tableSheet2 tr.row-holiday td {
+  background-color: rgba(124, 58, 237, 0.12) !important;
+}
+
+/* HEM BUGÜN HEM TATİL İSE */
+table#tableSheet1 tr.row-today.row-holiday td,
+table#tableSheet2 tr.row-today.row-holiday td {
+  background-color: rgba(59, 130, 246, 0.13) !important;
+}
+
+.time-cell-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.time-cell-wrap input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.multi-shift-box {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 1px 0;
+  line-height: 1.25;
+  gap: 1px;
+}
+
+.multi-shift-line {
+  font-family: inherit;
+  font-size: 12.5px !important;
+  font-weight: bold !important;
+  color: inherit;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.btn-shift-modal {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 0 4px;
+  height: 19px;
+  line-height: 17px;
+  cursor: pointer;
+  margin-right: 2px;
+  transition: all .15s ease;
+  flex-shrink: 0;
+}
+.btn-shift-modal:hover {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #2563eb;
+}
+.btn-shift-modal.has-multi {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #60a5fa;
+  font-size: 10px;
+}
+
+#tableSheet1 input:focus {
+  outline: 1px solid #0066cc !important;
+  background: rgba(0, 102, 204, 0.08) !important;
+}
+
+#tableSheet1 input.invalid {
+  outline: 2px solid #d9534f !important;
+  background: #fdecea !important;
+}
+
+/* HESAP SEKRESİ (SHEET 2) STİLLERİ */
+.sheet2-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+.summary-card.pufa-card { border-left: 4px solid #3b82f6; }
+.summary-card.servis-card { border-left: 4px solid #f59e0b; }
+.summary-card.total-card { border-left: 4px solid #22c55e; background: #f0fdf4; }
+
+.summary-card-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.summary-card.total-card .summary-card-title { color: #15803d; }
+
+.summary-card-hours {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+}
+.summary-card-pay {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #059669;
+  margin-top: 3px;
+}
+
+#tableSheet2 td, #tableSheet2 th {
+  font-weight: bold !important;
+  text-align: center !important;
+  font-size: 12.5px;
+}
+#tableSheet2 th {
+  text-align: center !important;
+}
+#tableSheet2 th:first-child,
+#tableSheet2 td:first-child {
+  text-align: left !important;
+}
+#tableSheet2 td.cell-header {
+  text-align: left !important;
+  justify-content: flex-start !important;
+  padding-left: 8px !important;
+}
+#tableSheet2 th:last-child,
+#tableSheet2 td:last-child {
+  text-align: right !important;
+}
+#tableSheet2 select {
+  direction: ltr;
+}
+
+#tableSheet2 .cell-header {
+  font-weight: normal !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.clickable-date {
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.clickable-date:hover {
+  background: #bfdbfe !important;
+}
+.edit-icon-hint {
+  font-size: 11px;
+  opacity: 0.45;
+  margin-left: 6px;
+}
+.clickable-date:hover .edit-icon-hint {
+  opacity: 1;
+}
+
+.duration-cell-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.25;
+}
+.main-duration-line {
+  white-space: nowrap;
+  font-weight: bold;
+}
+.dur-mins {
+  font-size: 11px;
+  font-weight: normal;
+  opacity: 0.8;
+  margin-left: 2px;
+  white-space: nowrap;
+}
+.sub-split-text {
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 3px;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+#tableSheet2 { border-collapse: collapse; width: 100%; table-layout: fixed; }
+#tableSheet2 td, #tableSheet2 th { border: 1px solid #777; padding: 6px; overflow: hidden; text-overflow: ellipsis; }
+#tableSheet2 select { max-width: 100%; }
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#tableSheet2 { min-width: 600px; }
+
+.center{text-align:center !important} 
+.right{text-align:right !important}
+.hidden{display:none !important}
+.hidden-row { display: none !important; }
+
+.save-toast{
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  background: #22C55E;
+  color: #fff;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 999;
+}
+.save-toast.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+col.col-1 { width: 22.5% !important; }
+col.col-2 { width: 37.5% !important; }
+col.col-3 { width: 18% !important; }
+col.col-4 { width: 22% !important; }
+
+/* MODAL STİLLERİ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  backdrop-filter: blur(2px);
+}
+.modal-content {
+  background: #fff;
+  border-radius: 10px;
+  width: 96%;
+  max-width: 520px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalFadeIn .2s ease;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+.modal-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1e293b;
+}
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  font-weight: bold;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1;
+}
+.modal-close:hover { color: #dc2626; }
+.modal-body {
+  padding: 16px 18px;
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: hidden !important;
+}
+.shift-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  background: #f8fafc;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.shift-row-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #475569;
+  width: 50px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.shift-row input {
+  flex: 1 1 auto;
+  min-width: 0 !important;
+  padding: 6px 6px;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 4px;
+  font-size: 12.5px;
+  font-weight: bold;
+  text-align: center;
+  background: #fff !important;
+}
+.shift-row select {
+  flex: 0 0 120px !important;
+  width: 120px !important;
+  padding: 6px 4px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-shift-del {
+  flex: 0 0 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0;
+  cursor: pointer;
+  line-height: 1;
+  transition: background .15s ease;
+}
+.btn-shift-del:hover { background: #fecaca; }
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+.modal-footer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 700px) {
+  body{font-size:12px}
+  .wrap{margin:6px auto;padding:0 6px}
+
+  .header-controls{padding:8px 10px;gap:8px;flex-direction:column;align-items:stretch}
+  
+  .header-date-selectors{
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+  .date-select-item{
+    flex: 1 1 50%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3px;
+  }
+  .date-select-item label{
+    font-size: 11.5px;
+  }
+  .date-select-item select{
+    width: 100%;
+    font-size: 14px;
+    padding: 7px 6px;
+  }
+
+  .header-actions{
+    margin-left:0;
+    width:100%;
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .header-actions .btn{
+    width:100%;
+    padding:8px 4px;
+    font-size:12px;
+  }
+
+  .tabs{flex-wrap:nowrap}
+  .tab{flex:1 1 0;text-align:center;padding:8px 4px;font-size:11.5px}
+
+  .sheet{padding:6px 4px}
+
+  table#tableSheet1 td, table#tableSheet1 th{padding:1px 2px !important;height:29px}
+  table#tableSheet1 tr.row-holiday td{height:31px !important}
+  table#tableSheet1 tr.row-multi-active td{height:40px !important}
+  #tableSheet1 .title{font-size:11px !important;line-height:1.2 !important;white-space:normal}
+  #tableSheet1 th{font-size:9.5px !important}
+  #tableSheet1 .label{font-size:11px !important}
+
+  .main-date, #tableSheet1 input, .multi-shift-line{font-size:11px !important}
+  .sub-day-name{font-size:7.5px !important}
+  .sub-holiday-name{font-size:6.2px !important;letter-spacing:-0.2px !important}
+
+  .save-toast{left:12px;right:12px;bottom:12px;text-align:center}
+
+  .sheet2-summary-cards {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .table-scroll{overflow-x:visible}
+  #tableSheet2{min-width:0;border:none;border-spacing:0 0}
+  #tableSheet2 thead{display:none}
+  #tableSheet2, #tableSheet2 tbody, #tableSheet2 tr{display:block;width:100%}
+  #tableSheet2 tr{border:1.5px solid #ccc;border-right:4px solid #22C55E;border-radius:8px;margin-bottom:14px;padding:0;background:#fff;box-shadow:0 2px 6px #0002;overflow:hidden}
+  #tableSheet2 tr.hidden-row { display: none !important; }
+  #tableSheet2 tbody tr:nth-child(even):not(.weekend){background:#f7f9fb}
+  #tableSheet2 tr.weekend{border-right:4px solid #e0a020}
+  #tableSheet2 tr.row-holiday{border-right:4px solid #7c3aed !important}
+  #tableSheet2 tr.extra-row{border-right:4px solid #6c757d}
+  #tableSheet2 tr.row-today{border-right:4px solid #2563eb !important}
+  
+  #tableSheet2 td{display:flex;justify-content:space-between;align-items:center;gap:8px;border:none;border-bottom:1px solid #eee;padding:7px 10px;font-size:13px;text-align:right;font-weight:bold !important}
+  #tableSheet2 tr td:last-child{border-bottom:none}
+  #tableSheet2 td::before{content:attr(data-label);font-weight:700;color:#555;font-size:11px;text-align:left;white-space:nowrap}
+  #tableSheet2 td[data-label=""]::before{content:none}
+  
+  #tableSheet2 td[data-label="ÜCRET"] {
+    font-weight: 800 !important;
+    font-size: 14px !important;
+  }
+
+  #tableSheet2 select{font-size:14px;width:auto;text-align:right;font-weight:bold !important}
+
+  .duration-cell-wrap {
+    align-items: flex-end !important;
+    text-align: right !important;
+  }
+
+  .modal-content {
+    width: 98%;
+  }
+  .modal-body {
+    padding: 12px 10px;
+  }
+  .shift-row {
+    gap: 6px;
+    padding: 6px 8px;
+  }
+  .shift-row-label {
+    width: 44px;
+    font-size: 10px;
+  }
+  .shift-row input {
+    font-size: 12px;
+    padding: 5px 2px;
+  }
+  .shift-row select {
+    flex: 0 0 105px !important;
+    width: 105px !important;
+    font-size: 11px;
+    padding: 5px 2px;
+  }
+  .btn-shift-del {
+    flex: 0 0 25px !important;
+    width: 25px !important;
+    height: 25px !important;
+    font-size: 14px;
+  }
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  body{background:#15181c;color:#e7e9ec}
+
+  .header-controls, .sheet{
+    background:#1f2328;
+    border-color:#33383f;
+    box-shadow:0 2px 8px rgba(0,0,0,.35);
+  }
+  .header-controls label{color:#d7dadd}
+  .header-controls select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
+
+  .tab{background:#262b31;border-color:#3a4048;color:#c7cbd0}
+  .tab.active{background:#1f2328;color:#fff;border-bottom-color:#1f2328}
+
+  .quick-templates-label { color: #94a3b8; }
+  .btn-template {
+    background: #1e293b;
+    color: #93c5fd;
+    border-color: #3b82f6;
+  }
+  .btn-template:hover, .btn-template:active {
+    background: #2563eb;
+    color: #fff;
+  }
+
+  table#tableSheet1 {
+    border-color: #4a515a !important;
+    background: #1a1d21 !important;
+  }
+  table#tableSheet1 td, table#tableSheet1 th {
+    border-color: #3a4048 !important;
+    color: #e7e9ec !important;
+    background: #1a1d21 !important;
+  }
+  #tableSheet1 .title, #tableSheet1 .label, #tableSheet1 th {
+    background: #21262d !important;
+    color: #e7e9ec !important;
+  }
+  #tableSheet1 input {
+    color: #ffffff !important;
+    background: transparent !important;
+    border: 0 !important;
+  }
+  #tableSheet1 input:focus {
+    background: #262c35 !important;
+    outline: 1px solid #388bfd !important;
+  }
+  #tableSheet1 input.invalid {
+    background: #450a0a !important;
+    color: #fca5a5 !important;
+    outline: 2px solid #ef4444 !important;
+  }
+
+  .sub-day-name { color: #94a3b8; }
+  .sub-day-name.weekend-day { color: #f59e0b; }
+  .sub-holiday-name { color: #c084fc; }
+
+  table#tableSheet1 tr.row-today td,
+  table#tableSheet2 tr.row-today td { 
+    background-color: rgba(59, 130, 246, 0.15) !important; 
+  }
+
+  table#tableSheet1 tr.row-holiday td,
+  table#tableSheet2 tr.row-holiday td {
+    background-color: rgba(124, 58, 237, 0.20) !important; 
+  }
+
+  table#tableSheet1 tr.row-today.row-holiday td,
+  table#tableSheet2 tr.row-today.row-holiday td {
+    background-color: rgba(59, 130, 246, 0.20) !important;
+  }
+
+  .btn-shift-modal {
+    background: #2d333b;
+    color: #c7cbd0;
+    border-color: #444c56;
+  }
+  .btn-shift-modal:hover {
+    background: #388bfd;
+    color: #fff;
+  }
+  .btn-shift-modal.has-multi {
+    background: #1e3a5f;
+    color: #93c5fd;
+    border-color: #3b82f6;
+  }
+
+  .modal-content {
+    background: #1f2328;
+    color: #e7e9ec;
+  }
+  .modal-header, .modal-footer {
+    background: #181b1f;
+    border-color: #33383f;
+  }
+  .modal-header h3 { color: #e7e9ec; }
+  .modal-desc { color: #94a3b8; }
+  .shift-row {
+    background: #262b31;
+    border-color: #3a4048;
+  }
+  .shift-row-label { color: #cbd5e1; }
+  .shift-row input {
+    background: #1f2328 !important;
+    color: #e7e9ec;
+    border-color: #3a4048 !important;
+  }
+  .shift-row select {
+    background: #1f2328;
+    color: #e7e9ec;
+    border-color: #3a4048;
+  }
+  .btn-shift-del {
+    background: #450a0a;
+    color: #fca5a5;
+    border-color: #991b1b;
+  }
+  .btn-shift-del:hover { background: #5f1111; }
+
+  .summary-card {
+    background: #1f2328;
+    border-color: #33383f;
+  }
+  .summary-card.total-card {
+    background: #052e16;
+    border-left-color: #22c55e;
+  }
+  .summary-card.total-card .summary-card-title { color: #86efac; }
+  .summary-card-hours { color: #e7e9ec; }
+  .summary-card-pay { color: #4ade80; }
+
+  .sub-split-text { color: #94a3b8; }
+
+  .clickable-date:hover {
+    background: #2563eb !important;
+  }
+
+  #tableSheet2 { background:#1f2328; }
+  #tableSheet2 td, #tableSheet2 th {
+    border-color:#3a4048;
+    color:#e7e9ec;
+    background:#1f2328;
+  }
+  #tableSheet2 tbody tr:nth-child(even){background:#22262c}
+  #tableSheet2 tr.weekend{background:#2a2417}
+  #tableSheet2 tr.extra-row{background:#20242a}
+  #tableSheet2 select{background:#262b31;color:#e7e9ec;border-color:#3a4048}
+
+  .salary-block { background: #1f2328; border-color: #33383f; }
+  .salary-block-title { color: #94a3b8; border-bottom-color: #2d333b; }
+  .salary-label { color: #cbd5e1; }
+  .salary-value-text { color: #f1f5f9; }
+  .salary-value-text.green-text { color: #4ade80; }
+  .salary-value-text.red-text { color: #f87171; }
+  .salary-input-wrapper { background: #262b31; border-color: #3a4048; }
+  .salary-input-wrapper input { color: #f1f5f9; }
+  .salary-input-wrapper.primary-input { background: #1e293b; border-color: #3b82f6; }
+  .salary-input-wrapper.green-bg { background: #052e16; border-color: #166534; }
+  .salary-input-wrapper.green-bg input { color: #4ade80; }
+  .salary-input-wrapper.red-bg { background: #450a0a; border-color: #991b1b; }
+  .salary-input-wrapper.red-bg input { color: #f87171; }
+
+  .btn-secondary{background:#3a4048}
+  .btn-secondary:hover{background:#454c55}
+}
+
+@media (prefers-color-scheme: dark) and (max-width: 700px) {
+  #tableSheet2 tr {
+    background: #1f2328 !important;
+    border-color: #33383f !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,.4) !important;
+  }
+
+  #tableSheet2 tbody tr:nth-child(even):not(.weekend) {
+    background: #22262c !important;
+  }
+
+  #tableSheet2 tr.weekend {
+    background: #2a2417 !important;
+  }
+
+  #tableSheet2 tr.extra-row {
+    background: #20242a !important;
+  }
+
+  #tableSheet2 td {
+    border-bottom-color: #2d333b !important;
+  }
+
+  #tableSheet2 td::before {
+    color: #94a3b8 !important;
+  }
+
+  #tableSheet2 td.cell-header{
+    background:#182620 !important;
+    color:#e7e9ec !important;
+    border-bottom-color:#2c4438 !important;
+  }
+
+  #tableSheet2 tr.row-today td.cell-header,
+  table#tableSheet2 tr.row-today td.cell-header {
+    background:#1a2f4c !important;
+    color:#e7e9ec !important;
+    border-bottom-color:#2563eb !important;
+  }
+
+  #tableSheet2 tr.weekend td.cell-header{
+    background:#332705 !important;
+    color:#ffdd6a !important;
+    border-bottom-color:#4d3c08 !important;
+  }
+
+  #tableSheet2 tr.row-holiday td.cell-header,
+  table#tableSheet2 tr.row-holiday td.cell-header {
+    background:#2e1065 !important;
+    color:#e9d5ff !important;
+    border-bottom-color:#581c87 !important;
+  }
+
+  #tableSheet2 tr.extra-row td.cell-header{
+    background:#22262c !important;
+    color:#d6dae0 !important;
+    border-bottom-color:#3a4048 !important;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 6mm 8mm !important;
+  }
+
+  html, body {
+    width: 100% !important;
+    height: 100% !important;
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .header-controls, .tabs, .btn, .save-toast, .app-version, .quick-templates-bar, .btn-shift-modal, .modal-overlay, .sub-day-name, .sub-holiday-name, #sheet2, #sheet4 {
+    display: none !important;
+  }
+
+  table#tableSheet1 tr.row-today td,
+  table#tableSheet1 tr.row-holiday td,
+  .row-today, .row-today td,
+  .row-holiday, .row-holiday td {
+    background: #fff !important;
+  }
+
+  #tableSheet1 td.cell-date-td {
+    text-align: center !important;
+    padding-left: 2px !important;
+  }
+
+  #sheet1 {
+    display: block !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  table#tableSheet1 {
+    width: 100% !important;
+    border: 1.5px solid #000 !important;
+  }
+
+  table#tableSheet1 td, table#tableSheet1 th {
+    border: 1px solid #000 !important;
+    padding: 0 2px !important;
+    height: 25px !important;
+    font-size: 10pt !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  #tableSheet1 .title {
+    font-size: 11pt !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  #tableSheet1 input#name {
+    font-size: 10pt !important;
+  }
+}
+
+/* Beta.2: Hesap sekmesiyle uyumlu, çizgili birim ücret grupları */
+.salary-grid { grid-template-columns: 1fr; }
+.unit-rate-group {
+  position: relative;
+  padding: 8px 0 8px 15px;
+  margin-top: 12px;
+  border-left: 4px solid #9ca3af;
+  border-bottom: 1px solid #e2e8f0;
+}
+.unit-rate-group:last-child { border-bottom: 0; padding-bottom: 0; }
+.unit-rate-title {
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: #475569;
+}
+.unit-rate-group .salary-row { margin-bottom: 7px; }
+.unit-rate-group .salary-row:last-child { margin-bottom: 0; }
+.unit-rate-group.rate-15 { border-left-color: #3b82f6; }
+.unit-rate-group.rate-15 .unit-rate-title { color: #2563eb; }
+.unit-rate-group.rate-20 { border-left-color: #f59e0b; }
+.unit-rate-group.rate-20 .unit-rate-title { color: #b45309; }
+@media (prefers-color-scheme: dark) {
+  .unit-rate-group { border-bottom-color: #3a4048; }
+  .unit-rate-group .unit-rate-title { color: #d1d5db; }
+  .unit-rate-group.rate-15 .unit-rate-title { color: #93c5fd; }
+  .unit-rate-group.rate-20 .unit-rate-title { color: #fcd34d; }
+}
+
+
+/* Beta.3: Birim ücret grupları açılır-kapanır; başlangıçta kapalı. */
+.unit-rate-group { padding: 0 0 0 12px; }
+.unit-rate-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; padding: 12px 4px; border: 0; border-radius: 0;
+  background: transparent; color: inherit; font: inherit; text-align: left;
+  cursor: pointer;
+}
+.unit-rate-toggle .unit-rate-title { margin-bottom: 0; }
+.unit-rate-chevron { font-size: 19px; line-height: 1; color: #94a3b8; transition: transform .15s ease; }
+.unit-rate-toggle[aria-expanded="true"] .unit-rate-chevron { transform: rotate(180deg); }
+.unit-rate-toggle:focus-visible { outline: 2px solid #3b82f6; outline-offset: -2px; }
+.unit-rate-details { padding: 0 4px 10px; }
+.unit-rate-details[hidden] { display: none !important; }
+
+
+/* Beta.4: Mobil Hesap kartlarında mesai tipine göre üst şerit. */
+@media screen and (max-width: 700px) {
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed {
+    border-top: 5px solid #3b82f6;
+    border-right: 1.5px solid #ccc;
+  }
+  #tableSheet2 tbody tr.overtime-20 { border-top-color: #f59e0b; }
+  #tableSheet2 tbody tr.overtime-mixed {
+    border-top: 5px solid transparent;
+    border-image: linear-gradient(to right, #3b82f6 0 50%, #f59e0b 50% 100%) 1 0 0 0;
+  }
+  /* Gradient border-image, border-radius'ı kesebildiğinden şeridi pseudo-element ile çiz. */
+  #tableSheet2 tbody tr.overtime-mixed { border-image: none; border-top-color: transparent; position: relative; }
+  #tableSheet2 tbody tr.overtime-mixed::before {
+    content: ''; position: absolute; top: -5px; left: 0; right: 0;
+    height: 5px; background: linear-gradient(to right, #3b82f6 50%, #f59e0b 50%);
+  }
+  #tableSheet2 tbody tr.overtime-15.weekend,
+  #tableSheet2 tbody tr.overtime-20.weekend,
+  #tableSheet2 tbody tr.overtime-mixed.weekend,
+  #tableSheet2 tbody tr.overtime-15.row-holiday,
+  #tableSheet2 tbody tr.overtime-20.row-holiday,
+  #tableSheet2 tbody tr.overtime-mixed.row-holiday,
+  #tableSheet2 tbody tr.overtime-15.row-today,
+  #tableSheet2 tbody tr.overtime-20.row-today,
+  #tableSheet2 tbody tr.overtime-mixed.row-today { border-right: 1.5px solid #ccc !important; }
+}
+@media (prefers-color-scheme: dark) and (max-width: 700px) {
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed { border-right-color: #33383f !important; }
+}
+/* Hesap sekmesiyle tutarlı yeşil parasal değerler. */
+.unit-rate-details .salary-value-text { color: #16a34a; }
+@media (prefers-color-scheme: dark) {
+  .unit-rate-details .salary-value-text { color: #4ade80; }
+}
+
+/* Beta.5: Hesap kartının tarih başlığı da mesai türünü takip eder. */
+@media screen and (max-width: 700px) {
+  #tableSheet2 tbody tr.overtime-15 td.cell-header,
+  #tableSheet2 tbody tr.overtime-15.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-15.row-today td.cell-header {
+    background: #eaf2ff !important;
+    border-bottom-color: #93c5fd !important;
+  }
+  #tableSheet2 tbody tr.overtime-20 td.cell-header,
+  #tableSheet2 tbody tr.overtime-20.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-20.row-today td.cell-header {
+    background: #fff4df !important;
+    border-bottom-color: #f59e0b !important;
+  }
+  #tableSheet2 tbody tr.overtime-mixed td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed.row-today td.cell-header {
+    background: #f1f5f9 !important;
+    border-bottom-color: #94a3b8 !important;
+  }
+}
+@media screen and (max-width: 700px) and (prefers-color-scheme: dark) {
+  #tableSheet2 tbody tr.overtime-15 td.cell-header,
+  #tableSheet2 tbody tr.overtime-15.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-15.row-today td.cell-header {
+    background: #172b48 !important;
+    border-bottom-color: #3b82f6 !important;
+  }
+  #tableSheet2 tbody tr.overtime-20 td.cell-header,
+  #tableSheet2 tbody tr.overtime-20.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-20.row-today td.cell-header {
+    background: #352817 !important;
+    border-bottom-color: #f59e0b !important;
+  }
+  #tableSheet2 tbody tr.overtime-mixed td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed.row-holiday td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed.row-today td.cell-header {
+    background: #272b33 !important;
+    border-bottom-color: #64748b !important;
+  }
+}
+
+
+/* Beta.6: Gövde sabit nötr, yalnız tarih/gün başlığı mesai tipine göre renkli. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed { background:#f3f4f6 !important; }
+  #tableSheet2 tbody tr.overtime-15 > td:not(.cell-header),
+  #tableSheet2 tbody tr.overtime-20 > td:not(.cell-header),
+  #tableSheet2 tbody tr.overtime-mixed > td:not(.cell-header) { background:transparent !important; }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header { background:#eaf2ff !important; border-bottom-color:#3b82f6 !important; }
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header { background:#fff4df !important; border-bottom-color:#f59e0b !important; }
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header { background:linear-gradient(90deg,#eaf2ff 0 50%,#fff4df 50% 100%) !important; border-bottom-color:#94a3b8 !important; }
+}
+@media screen and (max-width:700px) and (prefers-color-scheme:dark) {
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed { background:#202428 !important; }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header { background:#172b48 !important; color:#e7e9ec !important; border-bottom-color:#3b82f6 !important; }
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header { background:#352817 !important; color:#e7e9ec !important; border-bottom-color:#f59e0b !important; }
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header { background:linear-gradient(90deg,#172b48 0 50%,#352817 50% 100%) !important; color:#e7e9ec !important; border-bottom-color:#64748b !important; }
+}
+
+
+/* Beta.7: Tarih ve gün adlarının metin rengi tüm mesai türlerinde sabit. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .main-date {
+    color: #202428 !important;
+  }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .sub-day-name {
+    color: #475569 !important;
+  }
+}
+@media screen and (max-width:700px) and (prefers-color-scheme:dark) {
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .main-date {
+    color: #ffffff !important;
+  }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .sub-day-name {
+    color: #cbd5e1 !important;
+  }
+}
+
+
+/* Beta.8 — Hesap kartları: bağımsız açılır detaylar, ücret her zaman altta. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header {
+    cursor:pointer !important;
+    background:#292e36 !important;
+    border-bottom:1px solid #414a55 !important;
+    padding:12px !important;
+    display:block !important;
+  }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header::before { display:none !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header > div { align-items:center !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .main-date { color:#fff !important; font-size:14px !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name { color:#cbd5e1 !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="MESAİ TİPİ"] { display:none !important; }
+  #tableSheet2 tbody tr:not(.extra-row):not(.overtime-expanded) > td[data-label="MESAİ ARALIĞI"],
+  #tableSheet2 tbody tr:not(.extra-row):not(.overtime-expanded) > td[data-label="MOLA(DK)"],
+  #tableSheet2 tbody tr:not(.extra-row):not(.overtime-expanded) > td[data-label="TOPLAM SÜRE"] { display:none !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="ÜCRET"] { display:flex !important; padding:12px !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="MOLA(DK)"]::before { content:'MOLA' !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="TOPLAM SÜRE"] .main-duration-line { flex-wrap:wrap; justify-content:flex-end; }
+  #tableSheet2 tbody tr:not(.extra-row) > td[data-label="TOPLAM SÜRE"] .sub-split-text { font-size:10px; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header:focus-visible { outline:2px solid #60a5fa; outline-offset:-3px; }
+  .overtime-header-right { display:flex; align-items:center; gap:8px; }
+  .overtime-type-badges { display:flex; align-items:center; gap:4px; }
+  .overtime-badge { display:inline-flex; padding:4px 8px; border-radius:5px; font-size:11px; font-weight:800; white-space:nowrap; }
+  .overtime-badge.badge-15 { color:#bfdbfe; background:#17395d; border:1px solid #3b82f6; }
+  .overtime-badge.badge-20 { color:#fde68a; background:#493116; border:1px solid #f59e0b; }
+  .overtime-chevron { display:inline-block; font-size:19px; line-height:1; color:#cbd5e1; transition:transform .15s; }
+  #tableSheet2 tbody tr.overtime-expanded .overtime-chevron { transform:rotate(180deg); }
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header { background:#292e36 !important; border-bottom-color:#414a55 !important; }
+}
+@media screen and (min-width:701px) {
+  .overtime-header-right { display:none; }
+}
+@media screen and (max-width:700px) and (prefers-color-scheme:light) {
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header,
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header { background:#e9edf2 !important; border-bottom-color:#cbd5e1 !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .main-date { color:#172033 !important; }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name { color:#475569 !important; }
+  .overtime-chevron { color:#475569; }
+}
+
+
+/* Beta.9 — Başlık mesai tipine göre renklensin, 1.5X/2X kutucukları kalksın. */
+@media screen and (max-width:700px) {
+  .overtime-type-badges { display:none !important; }
+  .overtime-header-right { gap:0 !important; }
+
+  /* Kart gövdesi sabit gri kalsın */
+  #tableSheet2 tbody tr.overtime-15,
+  #tableSheet2 tbody tr.overtime-20,
+  #tableSheet2 tbody tr.overtime-mixed,
+  #tableSheet2 tbody tr:not(.extra-row) {
+    background:#202428 !important;
+  }
+  #tableSheet2 tbody tr.overtime-15 > td:not(.cell-header),
+  #tableSheet2 tbody tr.overtime-20 > td:not(.cell-header),
+  #tableSheet2 tbody tr.overtime-mixed > td:not(.cell-header),
+  #tableSheet2 tbody tr:not(.extra-row) > td:not(.cell-header) {
+    background:transparent !important;
+  }
+
+  /* Başlık mesai tipine göre renklensin */
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header {
+    background:#17395d !important;
+    border-bottom-color:#3b82f6 !important;
+  }
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header {
+    background:#493116 !important;
+    border-bottom-color:#f59e0b !important;
+  }
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header {
+    background:linear-gradient(90deg,#17395d 0 50%,#493116 50% 100%) !important;
+    border-bottom-color:#94a3b8 !important;
+  }
+
+  /* Tarih ve gün yazıları sabit renk */
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .main-date,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .main-date {
+    color:#ffffff !important;
+  }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-15 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-20 > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr.overtime-mixed > td.cell-header .sub-day-name {
+    color:#cbd5e1 !important;
+  }
+  .overtime-chevron { color:#e5e7eb !important; }
+}
+
+
+/* Beta.10 — Tarihin yanında mesai türü; Hesap gün adı sade ve sabit. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr:not(.extra-row) .overtime-date-line {
+    display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  }
+  #tableSheet2 tbody tr:not(.extra-row) .overtime-type-badges {
+    display:inline-flex !important; align-items:center; gap:4px;
+  }
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr:not(.extra-row).row-holiday > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr:not(.extra-row).weekend > td.cell-header .sub-day-name {
+    color:#cbd5e1 !important;
+  }
+}
+@media screen and (max-width:700px) and (prefers-color-scheme:light) {
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr:not(.extra-row).row-holiday > td.cell-header .sub-day-name,
+  #tableSheet2 tbody tr:not(.extra-row).weekend > td.cell-header .sub-day-name {
+    color:#cbd5e1 !important;
+  }
+}
+@media screen and (min-width:701px) {
+  #tableSheet2 .overtime-type-badges { display:none !important; }
+}
+
+
+/* Beta.11: Hesap kartı başlığında ortada BUGÜN ve sağda düzenleme kalemi. */
+@media screen and (max-width:700px) {
+  #tableSheet2 tbody tr:not(.extra-row) > td.cell-header { position:relative; }
+  #tableSheet2 .overtime-today-label {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    background:#166534; color:#dcfce7; border:1px solid #22c55e;
+    border-radius:5px; padding:3px 7px; font-size:10px; line-height:1.3;
+    font-weight:700; letter-spacing:.02em; pointer-events:none; white-space:nowrap;
+  }
+  #tableSheet2 .overtime-header-right { display:flex; align-items:center; gap:5px !important; }
+  #tableSheet2 .overtime-edit-btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:30px; min-height:32px; padding:4px;
+    border:0; border-radius:6px; background:transparent;
+    color:#fcd34d; font-size:19px; font-weight:700;
+    cursor:pointer; line-height:1;
+  }
+  #tableSheet2 .overtime-edit-btn:focus-visible { outline:2px solid #fcd34d; outline-offset:1px; }
+  #tableSheet2 .overtime-chevron { min-width:18px; text-align:center; }
+}
+@media screen and (min-width:701px) {
+  #tableSheet2 .overtime-today-label,
+  #tableSheet2 .overtime-edit-btn { display:none !important; }
+}
+
+
+/* Beta.12 — Ücret satırları Hakediş ve Kesintiler ile aynı düzeni kullanır. */
+.rate-label-normal { color: #475569; }
+.rate-label-15 { color: #2563eb; }
+.rate-label-20 { color: #b45309; }
+.rate-hour-value { color: #16a34a; }
+@media (prefers-color-scheme: dark) {
+  .rate-label-normal { color: #d1d5db; }
+  .rate-label-15 { color: #93c5fd; }
+  .rate-label-20 { color: #fcd34d; }
+  .rate-hour-value { color: #4ade80; }
+}
