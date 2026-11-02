@@ -1,9 +1,11 @@
-const CACHE_NAME = 'mesai-pwa-v7';
+const CACHE_NAME = 'mesai-pwa-beta14-v1';
 const INDEX = './index.html';
 
 const assets = [
   './',
   './index.html',
+  './style.css',
+  './main.js',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
