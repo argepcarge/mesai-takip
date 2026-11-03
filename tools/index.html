@@ -6,24 +6,30 @@
 <meta name="theme-color" content="#f4f3ed" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.json">
-<title>Cep Atölyesi V0.3</title>
+<title>Cep Atölyesi V0.4</title>
 <style>
-:root{--bg:#f4f3ed;--card:#fff;--ink:#203d35;--line:#e2e5dc;--muted:#748179;--accent:#d9f36b;--warn:#a44c24}
-body.dark{--bg:#0b0b0d;--card:#18181b;--ink:#f1f1f2;--line:#343438;--muted:#a3a3aa;--warn:#ffc48d}
+:root{color-scheme:light;--bg:#f4f3ed;--card:#fff;--ink:#203d35;--line:#d6ded3;--muted:#596c62;--accent:#d9f36b;--warn:#a44c24;--field:#f8faf6;--field-border:#aabcb0;--focus:#517c32;--eyebrow:#536c56}
+body.dark{color-scheme:dark;--bg:#0b0b0d;--card:#18181b;--ink:#f1f1f2;--line:#414149;--muted:#b3b3bc;--warn:#ffc48d;--field:#242428;--field-border:#6a6a75;--focus:#d9f36b;--eyebrow:#bed1af}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html{touch-action:manipulation}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,sans-serif}
 button,input,select{font:inherit}button{cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #a9c858;outline-offset:3px}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 header{padding:28px 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
 .brand{font-size:21px;font-weight:800;letter-spacing:-.7px}.logo{background:var(--ink);color:var(--accent);padding:7px 10px;border-radius:12px;margin-right:8px}
 body.dark .logo{background:#242428}
 .wrap{max-width:1120px;margin:auto;padding:42px 24px}
 h1{font-size:clamp(32px,6vw,48px);letter-spacing:-2px;margin:6px 0 10px}p{line-height:1.6}
-.eyebrow{font-size:11px;letter-spacing:2px;font-weight:800;color:#75836e}.intro{margin-bottom:30px}
+.eyebrow{font-size:11px;letter-spacing:2px;font-weight:800;color:var(--eyebrow)}.intro{margin-bottom:30px}
 .layout{display:grid;grid-template-columns:310px 1fr;gap:24px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px;min-width:0}
-.search,input,select{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;background:var(--bg);color:var(--ink);min-width:0}
+.search,input,select{width:100%;border:1px solid var(--field-border);border-radius:12px;padding:13px;background:var(--field);color:var(--ink);min-width:0}
+input::placeholder{color:var(--muted);opacity:1}
+/* Tarayıcının kendi select oku yerine iki temada da belirgin bir ok. */
+select{appearance:none;-webkit-appearance:none;padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23203d35' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;background-size:19px 19px;cursor:pointer}
+body.dark select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d9f36b' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
+select option{color:var(--ink);background:var(--card)}
+select:hover,input:hover{border-color:var(--focus)}
 .search{margin-bottom:17px}
 nav button{width:100%;display:flex;align-items:center;text-align:left;gap:13px;border:0;background:transparent;border-radius:13px;padding:15px 12px;color:var(--ink);margin:4px 0}
 nav button.active{background:var(--ink);color:var(--bg)}
@@ -54,7 +60,7 @@ body.dark .result{background:#242428}
 .sv-values small{color:var(--muted);font-size:11px}.sv-values strong{display:block;font-size:21px;margin-top:5px;overflow-wrap:anywhere}
 .chart{width:100%;display:block;color:var(--ink);margin-top:8px}
 .chart text{fill:currentColor;font:11px system-ui,sans-serif}.chart path{fill:none}
-.chart .grid{stroke:var(--line)}.chart .axis{stroke:var(--muted)}.chart .line{stroke:#7ba34d;stroke-width:3}
+.chart .grid{stroke:var(--field-border)}.chart .axis{stroke:var(--muted)}.chart .line{stroke:#7ba34d;stroke-width:3}
 .chart .cross{stroke:var(--muted);stroke-dasharray:4 4}.chart .pt{fill:var(--accent);stroke:#203d35;stroke-width:3}
 .sv-pos{display:flex;justify-content:space-between;font-size:12px;margin-top:10px}
 #sv-slider{padding:0;border:0;min-height:44px;margin:0;accent-color:#6c943d;background:transparent}
@@ -105,7 +111,7 @@ nav{display:grid;grid-template-columns:1fr 1fr;gap:3px}nav button{padding:12px 8
 
 </section>
 </div>
-<footer><span>Cep Atölyesi • Her gün için küçük bir yardımcı</span><span>V0.3 • Hesaplamalar kaydedilmez.</span></footer>
+<footer><span>Cep Atölyesi • Her gün için küçük bir yardımcı</span><span>V0.4 • Hesaplamalar kaydedilmez.</span></footer>
 </main>
 <div id="toast" role="status"></div>
 <script>
