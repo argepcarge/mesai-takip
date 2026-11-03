@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#183c32">
+<link rel="manifest" href="manifest.json">
+<title>Cep Atölyesi</title>
+<style>
+:root{--bg:#f4f3ed;--card:#fff;--ink:#203d35;--line:#e2e5dc;--muted:#748179;--accent:#d9f36b;--warn:#a44c24}
+body.dark{--bg:#0b0b0d;--card:#18181b;--ink:#f1f1f2;--line:#343438;--muted:#a3a3aa;--warn:#ffc48d}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #a9c858;outline-offset:3px}
+header{padding:28px 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.brand{font-size:21px;font-weight:800;letter-spacing:-.7px}.logo{background:var(--ink);color:var(--accent);padding:7px 10px;border-radius:12px;margin-right:8px}
+body.dark .logo{background:#242428}
+.wrap{max-width:1120px;margin:auto;padding:42px 24px}
+h1{font-size:clamp(32px,6vw,48px);letter-spacing:-2px;margin:6px 0 10px}p{line-height:1.6}
+.eyebrow{font-size:11px;letter-spacing:2px;font-weight:800;color:#75836e}.intro{margin-bottom:30px}
+.layout{display:grid;grid-template-columns:310px 1fr;gap:24px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px;min-width:0}
+.search,input,select{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;background:var(--bg);color:var(--ink);min-width:0}
+.search{margin-bottom:17px}
+nav button{width:100%;display:flex;align-items:center;text-align:left;gap:13px;border:0;background:transparent;border-radius:13px;padding:15px 12px;color:var(--ink);margin:4px 0}
+nav button.active{background:var(--ink);color:var(--bg)}
+nav small{display:block;font-size:11px;opacity:.65;margin-top:3px}.ico{font-size:20px;width:24px}.star{margin-left:auto;font-size:18px}
+.tabs{display:flex;gap:6px;margin-bottom:13px}
+.tabs button{border:0;border-radius:20px;padding:7px 11px;background:var(--bg);color:var(--muted);font-size:12px}
+.tabs button.selected{background:var(--accent);color:#203d35}
+.head{display:flex;justify-content:space-between;gap:10px}.head>div{min-width:0}
+h2{font-size:26px;letter-spacing:-1px;margin:0 0 7px}.empty,.muted{color:var(--muted);font-size:13px}
+.fav{flex-shrink:0;border:1px solid var(--line);background:var(--card);border-radius:12px;width:44px;height:44px;font-size:23px;color:var(--ink)}
+.fields{display:flex;flex-direction:column;gap:18px;margin-top:25px}
+.field-group{margin:0;padding:16px;border:1px solid var(--line);border-radius:15px;min-width:0}
+.field-group legend{padding:0 7px;font-size:11px;font-weight:750;letter-spacing:.5px;color:var(--muted)}
+.field-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label{display:flex;flex-direction:column;font-size:12px;font-weight:650;line-height:1.5;min-width:0}
+label.wide{grid-column:1/-1}.field-label{flex:1;min-height:36px;display:flex;align-items:flex-end}.wide .field-label{min-height:0}
+label input,label select{font-size:16px;min-height:48px;margin-top:8px}
+.group-note{margin:13px 0 0;font-size:12px;line-height:1.65;color:var(--muted)}
+.result{background:var(--ink);color:#fff;border-radius:18px;padding:25px;margin-top:25px;min-height:148px}
+body.dark .result{background:#242428}
+.result small{color:#bed0b6;font-size:11px;text-transform:uppercase;letter-spacing:1.5px}
+.result-heading{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.live-tag{font-size:10px;color:#d6e0d6;white-space:nowrap}.live-tag:before{content:'●';color:var(--accent);margin-right:5px}
+.number{font-size:38px;font-weight:750;letter-spacing:-1px;margin:6px 0;color:var(--accent);overflow-wrap:anywhere}
+.detail{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px;line-height:1.5;font-size:13px;color:#d6e0d6}
+.detail span{background:#ffffff0e;border:1px solid #ffffff18;border-radius:9px;padding:7px 10px}
+.detail.error{color:#ffd9c2}
+.sv{margin-top:22px;padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--bg)}
+.sv h3{margin:0;font-size:16px}.sv p{font-size:12px;line-height:1.6;color:var(--muted);margin:7px 0 14px}
+.sv-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sv-values div{padding:12px;background:var(--card);border-radius:12px;min-width:0}
+.sv-values small{color:var(--muted);font-size:11px}.sv-values strong{display:block;font-size:21px;margin-top:5px;overflow-wrap:anywhere}
+.chart{width:100%;display:block;color:var(--ink);margin-top:8px}
+.chart text{fill:currentColor;font:11px system-ui,sans-serif}.chart path{fill:none}
+.chart .grid{stroke:var(--line)}.chart .axis{stroke:var(--muted)}.chart .line{stroke:#7ba34d;stroke-width:3}
+.chart .cross{stroke:var(--muted);stroke-dasharray:4 4}.chart .pt{fill:var(--accent);stroke:#203d35;stroke-width:3}
+.sv-pos{display:flex;justify-content:space-between;font-size:12px;margin-top:10px}
+#sv-slider{padding:0;border:0;min-height:44px;margin:0;accent-color:#6c943d;background:transparent}
+.stops{display:flex;gap:5px}
+.stops button{flex:1;min-height:42px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;font-size:12px}
+.stops button.active{background:var(--accent);color:#203d35;border-color:var(--accent)}
+.sv-state{font-size:12px;line-height:1.6;margin:12px 0 0;color:var(--muted)}.sv-state.warn{color:var(--warn)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.actions button,.theme{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 16px;color:var(--ink)}
+.theme{background:transparent;border-radius:25px;padding:10px 14px}
+.actions .primary{background:var(--accent);border-color:var(--accent);color:#203d35}
+button:disabled{opacity:.45;cursor:default}
+.formula-box{margin-top:20px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:12px}
+.formula-box summary{cursor:pointer;min-height:26px;font-weight:650}.formula-box p{line-height:1.7;margin:8px 0}
+.bottom{margin-top:24px}
+.history{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);padding:14px 0;font-size:13px}
+.history span{display:block;color:var(--muted);font-size:11px;line-height:1.6;margin-top:3px}.history strong{overflow-wrap:anywhere;text-align:right}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;margin-top:27px;font-size:11px;color:var(--muted)}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);border-radius:30px;padding:12px 20px;display:none;z-index:4}
+@media(max-width:720px){header{padding:20px}.wrap{padding:28px 16px}.layout{grid-template-columns:1fr;gap:16px}.panel{padding:20px;border-radius:20px}
+nav{display:grid;grid-template-columns:1fr 1fr;gap:3px}nav button{padding:12px 8px;font-size:12px;min-width:0}.star{display:none}
+.field-group{padding:12px}.field-row{gap:10px}label input{padding:11px 9px}label select{font-size:14px}.number{font-size:32px}.result{padding:20px}.chart text{font-size:16px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><span class="logo">⌘</span>Cep Atölyesi<span style="color:#91a082">.</span></div><button class="theme" id="theme" aria-label="Temayı değiştir">◐ Görünüm</button></header>
+<main class="wrap">
+<section class="intro"><div class="eyebrow">AZ DOKUNUŞ. NET SONUÇ.</div><h1>Küçük hesaplar,<br>büyük kolaylık.</h1><p class="muted" style="margin:0">Günlük hayattan atölyeye, ihtiyacın olan hesaplar tek yerde.</p></section>
+<div class="layout">
+<aside class="panel"><input class="search" id="search" placeholder="⌕  Bir araç ara…" aria-label="Araç ara"><div class="tabs"><button id="all" class="selected">Tüm araçlar</button><button id="favorites">☆ Favoriler</button></div><nav id="nav"></nav></aside>
+<section>
+<div class="panel">
+<div class="head"><div><div class="eyebrow" id="category" style="margin-bottom:10px"></div><h2 id="title"></h2><div class="empty" id="desc"></div></div><button id="fav" class="fav"></button></div>
+<div id="fields" class="fields"></div>
+<div class="result" aria-live="polite"><div class="result-heading"><small id="resultlabel">SONUÇ</small><span class="live-tag">Anında hesap</span></div><div class="number" id="number">—</div><div class="detail" id="detail"></div></div>
+<section id="sv" class="sv" hidden aria-labelledby="sv-title">
+<h3 id="sv-title">Ölçekleme noktasını hareket ettir</h3><p>Sürgüyü kaydır veya yüzde düğmesine bas; giriş değeri güncellenir.</p>
+<div class="sv-values"><div><small>Giriş / sinyal</small><strong id="sv-sig">—</strong></div><div><small>Çıkış / ölçüm</small><strong id="sv-mea">—</strong></div></div>
+<svg id="chart" class="chart" viewBox="0 0 480 245" role="img" aria-labelledby="ct cd"><title id="ct">Giriş ve çıkış arasındaki doğrusal ilişki</title><desc id="cd">Yatay eksen girişi, dikey eksen çıkış değerini gösterir.</desc>
+<path class="grid" d="M60 35H435M60 107.5H435M247.5 35V180M435 35V180"/><path class="axis" d="M60 30V180H440"/><path class="line" d="M60 180L435 35"/><path id="cross" class="cross" d=""/>
+<text x="60" y="18">Ölçüm değeri</text><text id="c-top" x="52" y="39" text-anchor="end"></text><text id="c-bot" x="52" y="184" text-anchor="end"></text><text id="c-left" x="60" y="202" text-anchor="middle"></text><text id="c-right" x="435" y="202" text-anchor="middle"></text><text id="c-xt" x="247" y="229" text-anchor="middle"></text>
+<circle id="pt" class="pt" cx="247.5" cy="107.5" r="8"/></svg>
+<div class="sv-pos"><label for="sv-slider" style="display:block">Sinyal konumu</label><strong id="sv-pct">—</strong></div>
+<input id="sv-slider" type="range" min="0" max="100" step="0.1" value="50">
+<div class="stops" id="stops"><button type="button" data-p="0">%0</button><button type="button" data-p="25">%25</button><button type="button" data-p="50">%50</button><button type="button" data-p="75">%75</button><button type="button" data-p="100">%100</button></div>
+<p id="sv-state" class="sv-state"></p>
+</section>
+<div class="actions"><button class="primary" id="save">＋ Kaydet</button><button id="copy">Sonucu kopyala</button></div>
+<details class="formula-box"><summary>Hesap nasıl yapılıyor? · Formül ve notlar</summary><p id="formula"></p></details>
+</div>
+<div class="panel bottom"><div class="head"><div><div class="eyebrow">ELİNİN ALTINDA</div><h3 style="margin:7px 0">Son hesapların</h3></div><button class="theme" id="clear">Temizle</button></div><div id="history"></div></div>
+</section>
+</div>
+<footer><span>Cep Atölyesi • Her gün için küçük bir yardımcı</span><span>Kayıtların bu tarayıcıda saklanır.</span></footer>
+</main>
+<div id="toast" role="status"></div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+
+/* ---------- Yardımcılar ---------- */
+// Türkçe giriş: "1.500" → 1500, "1.500,5" → 1500,5, "0.5" → 0,5, "-40" desteklenir.
+function num(s){s=String(s).trim().replace(/\s/g,'').replace('−','-');if(!s)return NaN;
+ if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');
+ else if(/^[+-]?\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
+ return /^[+-]?(\d+\.?\d*|\.\d+)$/.test(s)?Number(s):NaN}
+// En az 2 ondalık; küçük sayılarda anlamlı basamak korunur.
+function fmt(x){x=Number(x);if(!Number.isFinite(x))return '—';const a=Math.abs(x);
+ if(a!==0&&a<1e-9)return x.toExponential(3).replace('.',',');
+ const d=a===0||a>=1?2:Math.min(10,2-Math.floor(Math.log10(a)));
+ return x.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:d})}
+const read=(k,d,ok)=>{try{const x=JSON.parse(localStorage.getItem(k));return ok(x)?x:d}catch{return d}};
+const store=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{toast('Tarayıcı kaydetmeye izin vermiyor.')}};
+let tt;function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(tt);tt=setTimeout(()=>e.style.display='none',2200)}
+const pos=(...a)=>a.every(x=>x>0);
+
+/* ---------- Birimler ---------- */
+const UN={Uzunluk:{mm:.001,cm:.01,m:1,km:1000,'inç':.0254,ft:.3048},Kütle:{g:.001,kg:1,ton:1000,lb:.45359237},Sıcaklık:{'°C':0,'°F':0,K:0},
+Akım:{'µA':1e-6,mA:.001,A:1,kA:1000},Gerilim:{mV:.001,V:1,kV:1000},Güç:{mW:.001,W:1,kW:1000,MW:1e6},Alan:{'mm²':1e-6,'cm²':1e-4,'m²':1,'inç²':.00064516},
+Enerji:{mWh:.001,Wh:1,kWh:1000,MWh:1e6},Hacim:{mL:.001,L:1,'m³':1000,galon:3.785411784},Basınç:{bar:1e5,kPa:1e3,MPa:1e6,psi:6894.757293168},
+Hız:{'m/s':1,'km/sa':1/3.6,mph:.44704},Zaman:{ms:.001,s:1,dk:60,sa:3600},Tork:{'N·m':1,'N·cm':.01,'kgf·m':9.80665,'lbf·ft':1.3558179483314}};
+function convert(g,a,f,t){if(g==='Sıcaklık'){const c=f==='°C'?a:f==='°F'?(a-32)*5/9:a-273.15;if(c<-273.15000001)throw Error('Sıcaklık mutlak sıfırın altında olamaz.');return t==='°C'?c:t==='°F'?c*9/5+32:c+273.15}return a*UN[g][f]/UN[g][t]}
+
+/* ---------- Araçlar ----------
+ groups: [başlık, [[id, etiket, varsayılan | seçenekler | v=>seçenekler, varsayılanİndeks]], ipucu]
+ calc(v) saftır: v'deki sayılar (seçimlerde index, '$id' ile metin) → {main, det[], x?} */
+const ALL=['a','b','c','d','e'];
+const T=[
+{id:'signal',icon:'∿',title:'Analog sinyal ve ölçeklendirme',sub:'4–20 mA, 0–10 V ve serbest aralık',cat:'OTOMASYON ATÖLYESİ',desc:'4–20 mA / 0–10 V sinyalini ölçüme dönüştür veya giriş ve çıkış aralıklarını serbestçe ölçekle.',
+ rl:['Ölçüm karşılığı','Hesaplanan sinyal'],neg:ALL,
+ groups:[['Dönüşüm seçimi',[['kind','Aralık tipi',['4–20 mA','0–10 V','Serbest ölçeklendirme']],['mode','Dönüşüm',['Giriş → çıkış','Çıkış → giriş']]]],
+  ['Giriş aralığı (serbest mod)',[['d','Giriş minimum','0'],['e','Giriş maksimum','10000']],'Yalnızca serbest ölçeklendirmede kullanılır.'],
+  ['Çıkış / ölçüm aralığı',[['b','Çıkış / ölçüm minimum','0'],['c','Çıkış / ölçüm maksimum','500']],'Minimum solda, maksimum sağda.'],
+  ['Dönüştürülecek değer',[['a','Giriş değeri','12']]]],
+ hide:v=>v.kind===2?[]:['d','e'],
+ label:v=>({a:v.mode===1?'Çıkış / ölçüm değeri':['Sinyal (mA)','Sinyal (V)','Giriş değeri'][v.kind]}),
+ calc:v=>{const k=v.kind,rev=v.mode===1,lo=k===0?4:k===1?0:v.d,hi=k===0?20:k===1?10:v.e,u=k===0?'mA':k===1?'V':'',mn=v.b,mx=v.c;
+  if(!(hi>lo))throw Error('Giriş maksimumu minimumdan büyük olmalı.');if(!(mx>mn))throw Error('Çıkış maksimumu minimumdan büyük olmalı.');
+  const f=rev?(v.a-mn)/(mx-mn):(v.a-lo)/(hi-lo),sig=lo+f*(hi-lo),mea=mn+f*(mx-mn);
+  return{main:rev?fmt(sig)+(u?' '+u:''):fmt(mea),det:[...(f<0||f>1?['Aralık dışında; doğrusal uzatma uygulanır.']:[]),`Giriş: ${fmt(lo)}…${fmt(hi)}${u?' '+u:''}`,`Çıkış: ${fmt(mn)}…${fmt(mx)}`],x:{f,sig,mea,lo,hi,mn,mx,u,rev}}},
+ formula:'çıkış = çıkış min + (giriş − giriş min) × (çıkış max − çıkış min) / (giriş max − giriş min). Ters dönüşüm de mümkündür. Sınır dışı değerler kırpılmaz.'},
+{id:'heater',icon:'♨',title:'Isıtıcı güç ve akımı',sub:'Watt, amper ve ohm',cat:'ELEKTRİK ATÖLYESİ',desc:'Gerilimle birlikte güç, akım veya direnç gir; diğerlerini bul.',rl:'Isıtıcı akımı',
+ groups:[['Bilinen büyüklük',[['mode','Bilinen değer',['Güç (W)','Akım (A)','Direnç (Ω)']]]],['Isıtıcı değerleri',[['a','Gerilim (V)','230'],['b','Güç (W)','2000']]]],
+ label:v=>({b:['Güç (W)','Akım (A)','Direnç (Ω)'][v.mode]}),
+ calc:v=>{if(!pos(v.a,v.b))throw Error('Gerilim ve ikinci değer sıfırdan büyük olmalı.');const p=v.mode===0?v.b:v.mode===1?v.a*v.b:v.a*v.a/v.b;
+  return{main:fmt(p/v.a)+' A',det:[`Güç: ${fmt(p)} W`,`Direnç: ${fmt(v.a*v.a/p)} Ω`]}},
+ formula:'İdeal dirençli yük: P = V × I = V² / R. DC veya tek faz AC etkin gerilim içindir; üç faz bağlantıları kapsamaz.'},
+{id:'rpm',icon:'⚙',title:'Motor & redüktör',sub:'Motor → redüktör çıkışı',cat:'MEKANİK ATÖLYE',desc:'Motor gücü, devri ve redüktör oranını gir; çıkışta devir ve torkun nasıl değiştiğini gör.',rl:'Redüktör çıkış devri',
+ groups:[['Motor ve redüktör',[['a','Motor devri (RPM)','1400'],['b','Redüktör oranı (i)','30']]],['Motor gücü',[['c','Motor mil gücü (kW)','1,5']],'Etiketteki nominal kW genellikle mildeki mekanik gücü belirtir. Çıkış torku, kayıpsız (ideal) değerdir.']],
+ calc:v=>{if(!pos(v.a,v.b,v.c))throw Error('Motor devri, oran ve güç sıfırdan büyük olmalı.');const ti=9550*v.c/v.a,out=v.a/v.b;
+  return{main:fmt(out)+' RPM',det:[`Giriş torku: ${fmt(ti)} Nm`,`Çıkış torku (ideal): ${fmt(ti*v.b)} Nm`,`Çıkış: ${fmt(out/60)} RPS`,`Çıkış tur süresi: ${fmt(60/out)} s`]}},
+ formula:'Çıkış devri = motor RPM / oran. Giriş torku ≈ 9550 × kW / RPM. İdeal çıkış torku = giriş torku × oran. RPS = RPM / 60; tur süresi = 60 / RPM. Verim %100 varsayılır; gerçek tork daha düşüktür. Redüktörün katalog tork sınırına uyulmalıdır.'},
+{id:'circle',icon:'◯',title:'Çap, çevre ve alan',sub:'Daire ve dikdörtgen',cat:'ÖLÇÜ & GEOMETRİ',desc:'Şekli ve ölçüleri seç; alanı ve çevreyi birlikte gör.',rl:'Alan',
+ groups:[['Şekil ve birim',[['mode','Şekil ve bilinen',['Daire: çap','Daire: yarıçap','Daire: çevre','Dikdörtgen']],['unit','Uzunluk birimi',['mm','cm','m']]]],['Ölçüler',[['a','Çap','10'],['b','İkinci kenar','20']]]],
+ hide:v=>v.mode===3?[]:['b'],label:v=>({a:['Çap','Yarıçap','Çevre','Birinci kenar'][v.mode]}),
+ calc:v=>{const m=v.mode,u=v.$unit;if(!pos(v.a)||(m===3&&!pos(v.b)))throw Error('Kullanılan uzunluklar sıfırdan büyük olmalı.');
+  const d=m===0?v.a:m===1?2*v.a:v.a/Math.PI,area=m===3?v.a*v.b:Math.PI*d*d/4,per=m===3?2*(v.a+v.b):Math.PI*d;
+  return{main:fmt(area)+' '+u+'²',det:[`Çevre: ${fmt(per)} ${u}`,...(m===3?[]:[`Çap: ${fmt(d)} ${u}`])]}},
+ formula:'Daire: çevre = πd, alan = πd² / 4. Dikdörtgen: alan = a × b, çevre = 2(a + b).'},
+{id:'motion',icon:'➜',title:'Hız, mesafe ve süre',sub:'Bant hızı ve hareket hesabı',cat:'MEKANİK ATÖLYE',desc:'Sabit hızlı hareket için iki değerden üçüncüsünü hesapla.',rl:['Süre','Mesafe','Hız'],
+ groups:[['Hesap seçimi',[['mode','Hesaplanacak',['Süre','Mesafe','Hız']]]],['Bilinen değerler',[['a','Mesafe (m)','10'],['b','Hız (m/s)','0,5']]]],
+ label:v=>({a:['Mesafe (m)','Hız (m/s)','Mesafe (m)'][v.mode],b:['Hız (m/s)','Süre (s)','Süre (s)'][v.mode]}),
+ calc:v=>{if(v.a<0||!(v.b>0))throw Error('İlk değer negatif olamaz; ikinci değer sıfırdan büyük olmalı.');const r=v.mode===1?v.a*v.b:v.a/v.b;
+  return{main:fmt(r)+[' s',' m',' m/s'][v.mode],det:v.mode===2?[`${fmt(r*60)} m/dk`,`${fmt(r*3.6)} km/sa`]:v.mode===0?[`${fmt(r/60)} dakika`]:['Sabit hızlı hareket; ivmelenme dahil değildir.']}},
+ formula:'Mesafe = hız × süre. Giriş birimleri metre, saniye ve metre/saniyedir.'},
+{id:'percent',icon:'%',title:'Yüzde & indirim',sub:'Artış, indirim ve oran',cat:'GÜNLÜK HESAPLAR',desc:'Bir tutarın yüzdesini, indirimini veya artışını bul.',rl:['İndirimli tutar','Artırılmış tutar','Yüzde tutarı'],neg:['a','b'],
+ groups:[['İşlem seçimi',[['mode','İşlem',['İndirim uygula','Artış uygula','Yüzdesini bul']]]],['Tutar ve oran',[['a','Tutar','1000'],['b','Yüzde (%)','20']]]],
+ calc:v=>{const p=v.a*v.b/100;return{main:fmt(v.mode===0?v.a-p:v.mode===1?v.a+p:p),det:[`Yüzde tutarı: ${fmt(p)}`,`Başlangıç: ${fmt(v.a)}`]}},
+ formula:'Yüzde tutarı = tutar × yüzde / 100'},
+{id:'vat',icon:'₺',title:'KDV hesapla',sub:'Dahil veya hariç tutar',cat:'GÜNLÜK HESAPLAR',desc:'KDV oranını kendin belirle, tutarları birlikte gör.',rl:'KDV dahil toplam',neg:['a'],
+ groups:[['Tutarın türü',[['mode','Giriş tutarı',['KDV hariç','KDV dahil']]]],['Tutar ve KDV oranı',[['a','Tutar (₺)','1000'],['b','KDV oranı (%)','20']]]],
+ calc:v=>{if(v.b<0)throw Error('KDV oranı negatif olamaz.');const r=v.b/100,base=v.mode?v.a/(1+r):v.a;return{main:fmt(base*(1+r))+' ₺',det:[`KDV hariç: ${fmt(base)} ₺`,`KDV: ${fmt(base*r)} ₺`]}},
+ formula:'KDV dahil = KDV hariç × (1 + oran / 100). Oran kullanıcı tarafından belirlenir.'},
+{id:'unit',icon:'↔',title:'Birim dönüştür',sub:'Elektrik, uzunluk, sıcaklık ve teknik birimler',cat:'ÖLÇÜ & DÖNÜŞÜM',desc:'Birimi seç, karşılığını anında gör.',rl:'Dönüşüm sonucu',neg:['a'],
+ groups:[['Ölçü türü',[['group','Ölçü',Object.keys(UN)]]],['Birimler',[['from','Kaynak birim',v=>Object.keys(UN[v.$group]),0],['to','Hedef birim',v=>Object.keys(UN[v.$group]),1]]],['Dönüştürülecek değer',[['a','Değer','100']]]],
+ calc:v=>{const r=convert(v.$group,v.a,v.$from,v.$to);return{main:fmt(r)+' '+v.$to,det:[`${fmt(v.a)} ${v.$from} = ${fmt(r)} ${v.$to}`]}},
+ formula:'Dönüşümler standart birim katsayıları ile hesaplanır. Çok küçük sonuçlarda anlamlı basamaklar korunur.'},
+{id:'ohm',icon:'Ω',title:'Ohm kanunu',sub:'Volt, amper, ohm ve watt',cat:'ELEKTRİK ATÖLYESİ',desc:'Bildiğin iki büyüklüğü seç; gerilim, akım, direnç ve gücü birlikte gör.',rl:['Akım','Elektrik gücü','Gerilim','Akım','Gerilim','Gerilim'],
+ groups:[['Hesap seçimi',[['mode','Bilinen iki değer',['Gerilim + Direnç (V, Ω)','Gerilim + Akım (V, A)','Akım + Direnç (A, Ω)','Gerilim + Güç (V, W)','Akım + Güç (A, W)','Direnç + Güç (Ω, W)']]]],['Bilinen değerler',[['a','Gerilim (V)','24'],['b','Direnç (Ω)','120']]]],
+ label:v=>{const L=[['Gerilim (V)','Direnç (Ω)'],['Gerilim (V)','Akım (A)'],['Akım (A)','Direnç (Ω)'],['Gerilim (V)','Güç (W)'],['Akım (A)','Güç (W)'],['Direnç (Ω)','Güç (W)']][v.mode];return{a:L[0],b:L[1]}},
+ calc:v=>{const{a,b,mode:m}=v;if(!pos(a,b))throw Error('Bilinen iki değer de sıfırdan büyük olmalı.');let V,I,R,P;
+  if(m===0){V=a;R=b;I=V/R}else if(m===1){V=a;I=b;R=V/I}else if(m===2){I=a;R=b;V=I*R}else if(m===3){V=a;P=b;I=P/V;R=V/I}else if(m===4){I=a;P=b;V=P/I;R=V/I}else{R=a;P=b;V=Math.sqrt(P*R);I=Math.sqrt(P/R)}
+  P=V*I;const key=['I','P','V','I','V','V'][m],all={V,I,R,P},nm={V:'Gerilim',I:'Akım',R:'Direnç',P:'Güç'},un={V:'V',I:'A',R:'Ω',P:'W'};
+  return{main:fmt(all[key])+' '+un[key],det:Object.keys(all).filter(k=>k!==key).map(k=>`${nm[k]}: ${fmt(all[k])} ${un[k]}`)}},
+ formula:'İdeal dirençli DC devreler: V = I × R; P = V × I = I² × R = V² / R.'},
+{id:'energy',icon:'ϟ',title:'Enerji maliyeti',sub:'Cihazın ne kadar harcıyor?',cat:'ELEKTRİK ATÖLYESİ',desc:'Güç, kullanım süresi ve birim fiyatla maliyeti tahmin et.',rl:'Tahmini maliyet',
+ groups:[['Kullanım süresi',[['b','Günlük kullanım (saat)','3'],['d','Gün sayısı','30']]],['Güç ve birim fiyat',[['a','Cihaz gücü (W)','2000'],['c','Birim fiyat (₺/kWh)','3']]]],
+ calc:v=>{if([v.a,v.b,v.c,v.d].some(x=>x<0)||v.b>24)throw Error('Değerler negatif olamaz; günlük süre en fazla 24 saat.');const e=v.a/1000*v.b*v.d;
+  return{main:fmt(e*v.c)+' ₺',det:[`Tüketim: ${fmt(e)} kWh`,`${fmt(v.d)} günlük tahmin`]}},
+ formula:'Enerji = (W / 1000) × saat × gün. Birim fiyatı faturandan gir; sabit güç varsayılır.'}
+];
+
+/* ---------- Durum ---------- */
+let cur=T[0],els={},groupEls=[],valid=false,out=null,only=false;
+let favs=read('ca-favs',[],Array.isArray).filter(x=>typeof x==='string');
+let hist=read('ca-history',[],x=>Array.isArray(x)&&x.every(h=>h&&typeof h.id==='string'&&typeof h.result==='string')).slice(0,15);
+
+/* ---------- Gezinme ---------- */
+function nav(){const focus=document.activeElement?.closest?.('#nav button')?.dataset.id,q=$('search').value.toLocaleLowerCase('tr'),box=$('nav');box.replaceChildren();
+ const list=T.filter(t=>(!only||favs.includes(t.id))&&[t.title,t.sub,t.cat,t.desc].join(' ').toLocaleLowerCase('tr').includes(q));
+ for(const t of list){const b=document.createElement('button');b.dataset.id=t.id;b.type='button';
+  const i=document.createElement('span');i.className='ico';i.textContent=t.icon;const m=document.createElement('span');m.append(t.title);const s=document.createElement('small');s.textContent=t.sub;m.append(s);
+  const st=document.createElement('span');st.className='star';st.textContent=favs.includes(t.id)?'★':'›';b.append(i,m,st);b.onclick=()=>openTool(t);box.append(b)}
+ if(!list.length){const p=document.createElement('p');p.className='empty';p.textContent=only?'Henüz favori araç yok.':'Aramana uyan araç yok.';box.append(p)}
+ markActive();if(focus)box.querySelector(`[data-id="${focus}"]`)?.focus()}
+function markActive(){$('nav').querySelectorAll('button').forEach(b=>{const on=b.dataset.id===cur.id;b.classList.toggle('active',on);if(on)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')})}
+function favState(){const f=favs.includes(cur.id);$('fav').textContent=f?'★':'☆';$('fav').setAttribute('aria-pressed',f);$('fav').setAttribute('aria-label',f?'Favorilerden çıkar':'Favorilere ekle')}
+
+/* ---------- Form ---------- */
+function openTool(t,inputs){cur=t;els={};groupEls=[];lastX=null;
+ $('title').textContent=t.title;$('desc').textContent=t.desc;$('category').textContent=t.cat;$('formula').textContent=t.formula;favState();
+ const box=$('fields');box.replaceChildren();
+ for(const [h,fs,hint] of t.groups){const g=document.createElement('fieldset');g.className='field-group';const lg=document.createElement('legend');lg.textContent=h;const row=document.createElement('div');row.className='field-row';g.append(lg,row);
+  for(const [id,label,def,idx] of fs){const l=document.createElement('label');l.htmlFor=id;const s=document.createElement('span');s.className='field-label';s.textContent=label;
+   const sel=typeof def!=='string',el=document.createElement(sel?'select':'input');el.id=id;
+   if(sel){if(Array.isArray(def))def.forEach(o=>el.add(new Option(o,o)))}else{el.value=def;el.inputMode=t.neg?.includes(id)?'text':'decimal';el.autocomplete='off';el.spellcheck=false}
+   l.append(s,el);row.append(l);els[id]={el,l,s,def,idx};el.addEventListener('input',()=>onInput(id))}
+  if(hint){const p=document.createElement('p');p.className='group-note';p.textContent=hint;g.append(p)}
+  groupEls.push([g,fs.map(f=>f[0])]);box.append(g)}
+ sync();if(inputs)for(const id in els)if(id in inputs){els[id].el.value=inputs[id];sync()}
+ markActive();calculate()}
+function vals(){const v={};for(const id in els){const e=els[id].el;if(e.tagName==='SELECT'){v[id]=e.selectedIndex;v['$'+id]=e.value}else v[id]=num(e.value)}return v}
+function sync(){const v=vals();for(const id in els){const f=els[id];if(typeof f.def!=='function')continue;const o=f.def(v),k=o.join('|');if(f.el.dataset.k===k)continue;
+ const old=f.el.value;f.el.replaceChildren();o.forEach(x=>f.el.add(new Option(x,x)));f.el.dataset.k=k;f.el.value=o.includes(old)?old:o[Math.min(f.idx||0,o.length-1)]}}
+function onInput(id){if(cur.id==='signal'&&lastX&&(id==='mode'||id==='kind'))keepPosition();calculate()}
+function keepPosition(){const v=vals(),k=v.kind,lo=k===0?4:k===1?0:v.d,hi=k===0?20:k===1?10:v.e;if(![lo,hi,v.b,v.c].every(Number.isFinite)||!(hi>lo)||!(v.c>v.b))return;
+ const f=lastX.f,val=v.mode===1?v.b+f*(v.c-v.b):lo+f*(hi-lo);setValue('a',val)}
+function setValue(id,val){els[id].el.value=String(Number(val.toFixed(8))).replace('.',',')}
+
+function calculate(){sync();const v=vals(),hid=cur.hide?cur.hide(v):[],lab=cur.label?cur.label(v):{};
+ for(const id in els){els[id].l.hidden=hid.includes(id);if(lab[id])els[id].s.textContent=lab[id]}
+ for(const [g,ids] of groupEls){const vis=ids.filter(i=>!hid.includes(i));g.hidden=!vis.length;ids.forEach(i=>els[i].l.classList.toggle('wide',vis.length===1&&vis[0]===i))}
+ const rl=cur.rl;$('resultlabel').textContent=(Array.isArray(rl)?rl[v.mode]:rl)||'SONUÇ';
+ const det=$('detail');det.classList.remove('error');
+ try{for(const id in els)if(els[id].el.tagName==='INPUT'&&!hid.includes(id)&&!Number.isFinite(v[id]))throw Error('Tüm alanlara geçerli bir sayı gir.');
+  out=cur.calc(v);if(/—/.test(out.main+out.det.join()))throw Error('Sonuç hesaplanamıyor; değerleri kontrol et.');
+  $('number').textContent=out.main;det.replaceChildren(...out.det.map(t=>{const s=document.createElement('span');s.textContent=t;return s}));valid=true}
+ catch(e){$('number').textContent='—';det.textContent=e.message;det.classList.add('error');valid=false;out=null}
+ $('save').disabled=$('copy').disabled=!valid;visual()}
+
+/* ---------- Sinyal grafiği ---------- */
+let lastX=null;
+function visual(){const p=$('sv');p.hidden=cur.id!=='signal';if(p.hidden){lastX=null;return}
+ const x=valid&&out.x;lastX=x||null;const dis=!x;$('sv-slider').disabled=dis;$('stops').querySelectorAll('button').forEach(b=>b.disabled=dis);
+ const st=$('sv-state');
+ if(!x){$('sv-sig').textContent=$('sv-mea').textContent=$('sv-pct').textContent='—';$('pt').style.display='none';$('cross').setAttribute('d','');
+  ['c-top','c-bot','c-left','c-right','c-xt'].forEach(i=>$(i).textContent='');st.className='sv-state';st.textContent='Grafik için geçerli değerler ve minimumdan büyük bir maksimum gir.';return}
+ const pct=x.f*100,inside=x.f>=0&&x.f<=1,u=x.u?' '+x.u:'';
+ $('sv-sig').textContent=fmt(x.sig)+u;$('sv-mea').textContent=fmt(x.mea);$('sv-pct').textContent='%'+fmt(pct);$('sv-slider').value=Math.max(0,Math.min(100,pct));
+ $('sv-slider').setAttribute('aria-valuetext',`${fmt(x.sig)}${u}; ölçüm ${fmt(x.mea)}; yüzde ${fmt(pct)}`);
+ $('c-top').textContent=fmt(x.mx);$('c-bot').textContent=fmt(x.mn);$('c-left').textContent=fmt(x.lo);$('c-right').textContent=fmt(x.hi);$('c-xt').textContent=x.u?'Elektrik sinyali ('+x.u+')':'Giriş değeri';
+ const cx=60+375*x.f,cy=180-145*x.f;$('pt').style.display=inside?'':'none';$('pt').setAttribute('cx',cx);$('pt').setAttribute('cy',cy);$('cross').setAttribute('d',inside?`M60 ${cy}H${cx}V180`:'');
+ st.className='sv-state'+(inside?'':' warn');
+ st.textContent=inside?`${fmt(x.sig)}${u} → ${fmt(x.mea)} çıkış değeri. Ölçüm birimi, tanımladığın çıkış aralığına bağlıdır.`:'Girilen değer aralık dışında. Sayısal sonuç korunur; nokta grafikte gösterilmez.';
+ $('stops').querySelectorAll('button').forEach(b=>b.classList.toggle('active',Math.abs(Number(b.dataset.p)-pct)<1e-5))}
+function setPercent(p){if(!lastX)return;const x=lastX,f=Math.max(0,Math.min(100,p))/100;setValue('a',x.rev?x.mn+f*(x.mx-x.mn):x.lo+f*(x.hi-x.lo));calculate()}
+$('sv-slider').addEventListener('input',e=>setPercent(Number(e.target.value)));
+$('stops').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setPercent(Number(b.dataset.p))});
+
+/* ---------- Kayıtlar ---------- */
+function renderHistory(){const box=$('history');box.replaceChildren();
+ if(!hist.length){const p=document.createElement('p');p.className='empty';p.textContent='Bir hesabı kaydet; ihtiyaç duyduğunda burada bul.';box.append(p);return}
+ hist.forEach(h=>{const b=document.createElement('button');b.type='button';b.className='history';b.title='Girdileri geri yükle';
+  const d=document.createElement('div');d.textContent=h.title;const s=document.createElement('span');s.textContent=h.detail||'';d.append(s);const r=document.createElement('strong');r.textContent=h.result;
+  b.append(d,r);b.onclick=()=>{const t=T.find(t=>t.id===h.id);if(t){openTool(t,h.inputs||{});window.scrollTo({top:0,behavior:'smooth'})}};box.append(b)})}
+$('save').onclick=()=>{if(!valid)return;const inputs={};for(const id in els)inputs[id]=els[id].el.value;
+ hist.unshift({id:cur.id,title:cur.title,result:out.main,detail:out.det.join(' • '),inputs});hist=hist.slice(0,15);store('ca-history',hist);renderHistory();toast('Hesap kaydedildi')};
+$('copy').onclick=async()=>{if(!valid)return;try{await navigator.clipboard.writeText(`${cur.title}: ${out.main}\n${out.det.join('\n')}`);toast('Sonuç kopyalandı')}catch{toast('Kopyalama izni verilmedi.')}};
+$('clear').onclick=()=>{hist=[];store('ca-history',hist);renderHistory()};
+$('fav').onclick=()=>{favs=favs.includes(cur.id)?favs.filter(i=>i!==cur.id):[...favs,cur.id];store('ca-favs',favs);favState();nav()};
+$('search').oninput=nav;
+function filter(v){only=v;$('all').classList.toggle('selected',!v);$('favorites').classList.toggle('selected',v);nav()}
+$('all').onclick=()=>filter(false);$('favorites').onclick=()=>filter(true);
+
+/* ---------- Tema ve PWA ---------- */
+const stored=read('ca-dark',null,x=>typeof x==='boolean');
+document.body.classList.toggle('dark',stored??matchMedia('(prefers-color-scheme: dark)').matches);
+$('theme').onclick=()=>{document.body.classList.toggle('dark');store('ca-dark',document.body.classList.contains('dark'))};
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+nav();openTool(T[0]);renderHistory();
+})();
+</script>
+</body>
+</html>
