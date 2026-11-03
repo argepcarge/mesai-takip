@@ -1,5 +1,5 @@
 /* Cep Atölyesi V0.3 — sürüm değiştikçe CACHE_NAME'i artır. */
-const CACHE_NAME = 'cep-atolyesi-v0.3';
+const CACHE_NAME = 'cep-atolyesi-v0.4';
 const CACHE_PREFIX = 'cep-atolyesi-';
 const APP_FILES = ['./', './index.html', './manifest.json'];
 
