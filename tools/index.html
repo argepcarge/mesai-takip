@@ -2,14 +2,16 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#183c32">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f4f3ed" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.json">
 <title>Cep Atölyesi</title>
 <style>
 :root{--bg:#f4f3ed;--card:#fff;--ink:#203d35;--line:#e2e5dc;--muted:#748179;--accent:#d9f36b;--warn:#a44c24}
 body.dark{--bg:#0b0b0d;--card:#18181b;--ink:#f1f1f2;--line:#343438;--muted:#a3a3aa;--warn:#ffc48d}
 *{box-sizing:border-box}[hidden]{display:none!important}
+html{touch-action:manipulation}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,sans-serif}
 button,input,select{font:inherit}button{cursor:pointer}
 button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #a9c858;outline-offset:3px}
@@ -82,7 +84,7 @@ nav{display:grid;grid-template-columns:1fr 1fr;gap:3px}nav button{padding:12px 8
 </style>
 </head>
 <body>
-<header><div class="brand"><span class="logo">⌘</span>Cep Atölyesi<span style="color:#91a082">.</span></div><button class="theme" id="theme" aria-label="Temayı değiştir">◐ Görünüm</button></header>
+<header><div class="brand"><span class="logo">⌘</span>Cep Atölyesi<span style="color:#91a082">.</span></div></header>
 <main class="wrap">
 <section class="intro"><div class="eyebrow">AZ DOKUNUŞ. NET SONUÇ.</div><h1>Küçük hesaplar,<br>büyük kolaylık.</h1><p class="muted" style="margin:0">Günlük hayattan atölyeye, ihtiyacın olan hesaplar tek yerde.</p></section>
 <div class="layout">
@@ -292,9 +294,10 @@ function filter(v){only=v;$('all').classList.toggle('selected',!v);$('favorites'
 $('all').onclick=()=>filter(false);$('favorites').onclick=()=>filter(true);
 
 /* ---------- Tema ve PWA ---------- */
-const stored=read('ca-dark',null,x=>typeof x==='boolean');
-document.body.classList.toggle('dark',stored??matchMedia('(prefers-color-scheme: dark)').matches);
-$('theme').onclick=()=>{document.body.classList.toggle('dark');store('ca-dark',document.body.classList.contains('dark'))};
+const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
+const applySystemTheme=()=>document.body.classList.toggle('dark',systemTheme.matches);
+applySystemTheme();
+systemTheme.addEventListener('change',applySystemTheme);
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 nav();openTool(T[0]);renderHistory();
