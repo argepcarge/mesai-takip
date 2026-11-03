@@ -6,7 +6,8 @@
 <meta name="theme-color" content="#f4f3ed" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.json">
-<title>Cep Atölyesi V0.4</title>
+<meta name="app-version" content="0.5">
+<title>Cep Atölyesi V0.5</title>
 <style>
 :root{color-scheme:light;--bg:#f4f3ed;--card:#fff;--ink:#203d35;--line:#d6ded3;--muted:#596c62;--accent:#d9f36b;--warn:#a44c24;--field:#f8faf6;--field-border:#aabcb0;--focus:#517c32;--eyebrow:#536c56}
 body.dark{color-scheme:dark;--bg:#0b0b0d;--card:#18181b;--ink:#f1f1f2;--line:#414149;--muted:#b3b3bc;--warn:#ffc48d;--field:#242428;--field-border:#6a6a75;--focus:#d9f36b;--eyebrow:#bed1af}
@@ -111,7 +112,7 @@ nav{display:grid;grid-template-columns:1fr 1fr;gap:3px}nav button{padding:12px 8
 
 </section>
 </div>
-<footer><span>Cep Atölyesi • Her gün için küçük bir yardımcı</span><span>V0.4 • Hesaplamalar kaydedilmez.</span></footer>
+<footer><span>Cep Atölyesi • Her gün için küçük bir yardımcı</span><span>V0.5 • Hesaplamalar kaydedilmez.</span></footer>
 </main>
 <div id="toast" role="status"></div>
 <script>
@@ -278,6 +279,32 @@ $('stops').addEventListener('click',e=>{const b=e.target.closest('button');if(b)
 $('copy').onclick=async()=>{if(!valid)return;try{await navigator.clipboard.writeText(`${cur.title}: ${out.main}\n${out.det.join('\n')}`);toast('Sonuç kopyalandı')}catch{toast('Kopyalama izni verilmedi.')}};
 $('search').oninput=nav;
 
+/* ---------- Otomatik HTML sürüm kontrolü ---------- */
+// Her yeni HTML sürümünde yukarıdaki app-version meta değerini de güncelle.
+const APP_VERSION = document.querySelector('meta[name="app-version"]').content;
+let checkingHtml = false;
+let navigatingToUpdate = false;
+async function checkHtmlUpdate() {
+  if (checkingHtml || navigatingToUpdate || !navigator.onLine || document.visibilityState === 'hidden') return;
+  checkingHtml = true;
+  try {
+    // Benzersiz sorgu parametresi, tarayıcı/ara önbellekteki eski HTML'yi atlatmaya yardımcı olur.
+    const url = new URL('./index.html', location.href);
+    url.searchParams.set('_check', String(Date.now()));
+    const response = await fetch(url, {cache: 'no-store'});
+    if (!response.ok) return;
+    const html = await response.text();
+    const remoteVersion = html.match(/<meta\s+name=["']app-version["']\s+content=["']([^"']+)["']/i)?.[1];
+    if (!remoteVersion || remoteVersion === APP_VERSION) return;
+    navigatingToUpdate = true;
+    // Sürüm değiştiyse yeni belgeyi doğrudan iste; yerel veri saklanmaz.
+    const nextUrl = new URL('./index.html', location.href);
+    nextUrl.searchParams.set('_v', remoteVersion);
+    location.replace(nextUrl.href);
+  } catch { /* Çevrimdışı/erişim hatasında açık sürüm çalışmaya devam eder. */ }
+  finally { checkingHtml = false; }
+}
+
 /* ---------- Tema ve PWA ---------- */
 const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
 const applySystemTheme=()=>document.body.classList.toggle('dark',systemTheme.matches);
@@ -305,6 +332,14 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
     })
     .catch(() => {});
 }
+
+// Açılışta, internet geri geldiğinde, uygulamaya dönüldüğünde ve açıkken 5 dakikada bir denetle.
+window.addEventListener('online', checkHtmlUpdate);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') checkHtmlUpdate();
+});
+setInterval(checkHtmlUpdate, 5 * 60 * 1000);
+checkHtmlUpdate();
 
 nav();openTool(T[0]);
 })();
