@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f4f3ed" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.json">
-<title>Cep Atölyesi V0.2</title>
+<title>Cep Atölyesi V0.3</title>
 <style>
 :root{--bg:#f4f3ed;--card:#fff;--ink:#203d35;--line:#e2e5dc;--muted:#748179;--accent:#d9f36b;--warn:#a44c24}
 body.dark{--bg:#0b0b0d;--card:#18181b;--ink:#f1f1f2;--line:#343438;--muted:#a3a3aa;--warn:#ffc48d}
@@ -105,7 +105,7 @@ nav{display:grid;grid-template-columns:1fr 1fr;gap:3px}nav button{padding:12px 8
 
 </section>
 </div>
-<footer><span>Cep Atölyesi • Her gün için küçük bir yardımcı</span><span>V0.2 • Hesaplamalar kaydedilmez.</span></footer>
+<footer><span>Cep Atölyesi • Her gün için küçük bir yardımcı</span><span>V0.3 • Hesaplamalar kaydedilmez.</span></footer>
 </main>
 <div id="toast" role="status"></div>
 <script>
@@ -277,7 +277,28 @@ const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
 const applySystemTheme=()=>document.body.classList.toggle('dark',systemTheme.matches);
 applySystemTheme();
 systemTheme.addEventListener('change',applySystemTheme);
-if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  // Yeni Service Worker kontrolü devraldığında sayfayı yalnızca bir kez yenile.
+  let reloadOnUpdate = Boolean(navigator.serviceWorker.controller);
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloadOnUpdate && !reloading) {
+      reloading = true;
+      location.reload();
+    }
+    reloadOnUpdate = true;
+  });
+  navigator.serviceWorker.register('./sw.js', {updateViaCache: 'none'})
+    .then(reg => {
+      const check = () => { if (navigator.onLine) reg.update().catch(() => {}); };
+      check();
+      window.addEventListener('online', check);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') check();
+      });
+    })
+    .catch(() => {});
+}
 
 nav();openTool(T[0]);
 })();
