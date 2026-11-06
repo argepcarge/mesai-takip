@@ -16,7 +16,7 @@ function toggleUnitRate(button) {
 }
 
 const APP_VERSION = '2026.11.02-beta.15';
-const JS_REV = 7;
+const JS_REV = 8;
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -1465,7 +1465,16 @@ function calc() {
 
   const totalDeductionMoney = cutFrom1_5_Val + cutFrom2_0_Val + cutFromSalaryVal;
   const netOvertimePay = ((mins1_5 - cut1_5) * normalMin * 1.5) + ((mins2_0 - cut2_0) * normalMin * 2.0);
-  // Net mesai yalnızca çizelgedeki fazla mesailerden yapılan kesintileri içerir.
+  // Yol-yemek sütunundaki yalnızca sayısal YOL değerleri toplanır.
+  // Günlük mesai ücretlerine ve kesinti hesaplarına yol ücreti karıştırılmaz.
+  const fullTicketPrice = Number(String(document.getElementById('ticketPrice')?.value || '0').replace(/\D/g, '')) || 0;
+  let totalTrips = 0;
+  for (let day = 1; day <= currentDaysCount; day++) {
+    const raw = (document.getElementById('meal' + day)?.value || '').trim();
+    if (/^\d+$/.test(raw)) totalTrips += Number(raw);
+  }
+  const totalTravelPay = totalTrips * 2 * fullTicketPrice;
+  const netPayWithTravel = netOvertimePay + totalTravelPay;
 
   document.getElementById('card15Hours').textContent = `${formatSummaryDuration(mins1_5)}`;
   document.getElementById('card15Pay').textContent = `${money(pay1_5)} ₺`;
@@ -1476,7 +1485,8 @@ function calc() {
 
   setTextOrVal('overtimePay', `${money(grossOvertimePay)} ₺`);
   setTextOrVal('deduction', `${money(totalDeductionMoney)} ₺`);
-  setTextOrVal('netPay', `${money(netOvertimePay)} ₺`);
+  setTextOrVal('travelPay', `${money(totalTravelPay)} ₺`);
+  setTextOrVal('netPay', `${money(netPayWithTravel)} ₺`);
 }
 
 let toastTimer = null;
@@ -1537,6 +1547,8 @@ function restore() {
   const deductionMinutesEl = document.getElementById('deductionMinutes');
   if (deductionHoursEl) deductionHoursEl.value = '0';
   if (deductionMinutesEl) deductionMinutesEl.value = '0';
+  const ticketPriceEl = document.getElementById('ticketPrice');
+  if (ticketPriceEl) ticketPriceEl.value = '0'; // Yeni ayda önceki ayın bilet fiyatını taşıma.
 
   try {
     const o = JSON.parse(localStorage.getItem(getStorageKey()) || '{}');
