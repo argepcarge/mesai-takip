@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="html-revision" content="6">
+<meta name="html-revision" content="7">
 <title id="pageTitle">FAZLA MESAİ ÇİZELGESİ</title>
 <link rel="manifest" href="manifest.json">
 <script src="./libs/jspdf.umd.min.js"></script>
@@ -180,13 +180,13 @@
             <input
               id="ticketPrice"
               type="text"
-              inputmode="numeric"
-              pattern="[0-9]*"
+              inputmode="decimal"
+              pattern="[0-9]+([,.][0-9]{0,2})?"
               value="0"
               aria-label="1 tam bilet fiyatı"
               onfocus="clearZeroOnFocus(this)"
-              oninput="formatSalaryLive(this);scheduleSaveCalc()"
-              onblur="restoreZeroOnBlur(this);scheduleSaveCalc();flushPendingSaveCalc()">
+              oninput="formatTicketPriceLive(this);scheduleSaveCalc()"
+              onblur="normalizeTicketPrice(this);scheduleSaveCalc();flushPendingSaveCalc()">
             <span class="salary-unit">₺</span>
           </div>
         </div>
