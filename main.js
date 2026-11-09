@@ -16,7 +16,7 @@ function toggleUnitRate(button) {
 }
 
 const APP_VERSION = '2026.11.02-beta.15';
-const JS_REV = 8;
+const JS_REV = 9;
 
 const monthNames = [
   "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN",
@@ -1203,6 +1203,36 @@ function formatSalaryLive(input) {
   } catch(e) {}
 }
 
+// Bilet fiyatında 35,75 veya 35.75 girişine izin ver; en fazla 2 kuruş basamağı.
+function formatTicketPriceLive(input) {
+  const raw = String(input.value || '').replace(/[^\d,.]/g, '').replace(/\./g, ',');
+  const separatorAt = raw.indexOf(',');
+  if (separatorAt < 0) {
+    input.value = raw.slice(0, 12);
+  } else {
+    const whole = raw.slice(0, separatorAt).slice(0, 12);
+    const fraction = raw.slice(separatorAt + 1).replace(/,/g, '').slice(0, 2);
+    input.value = `${whole},${fraction}`;
+  }
+}
+
+function normalizeTicketPrice(input) {
+  formatTicketPriceLive(input);
+  if (!input.value || input.value === ',') {
+    input.value = '0';
+  } else if (input.value.startsWith(',')) {
+    input.value = `0${input.value}`;
+  } else if (input.value.endsWith(',')) {
+    input.value = input.value.slice(0, -1);
+  }
+}
+
+function getTicketPrice() {
+  const raw = String(document.getElementById('ticketPrice')?.value || '0').replace(',', '.');
+  const price = Number(raw);
+  return Number.isFinite(price) && price >= 0 ? price : 0;
+}
+
 function money(x) {
   return isFinite(x)
     ? x.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
@@ -1467,7 +1497,7 @@ function calc() {
   const netOvertimePay = ((mins1_5 - cut1_5) * normalMin * 1.5) + ((mins2_0 - cut2_0) * normalMin * 2.0);
   // Yol-yemek sütunundaki yalnızca sayısal YOL değerleri toplanır.
   // Günlük mesai ücretlerine ve kesinti hesaplarına yol ücreti karıştırılmaz.
-  const fullTicketPrice = Number(String(document.getElementById('ticketPrice')?.value || '0').replace(/\D/g, '')) || 0;
+  const fullTicketPrice = getTicketPrice();
   let totalTrips = 0;
   for (let day = 1; day <= currentDaysCount; day++) {
     const raw = (document.getElementById('meal' + day)?.value || '').trim();
